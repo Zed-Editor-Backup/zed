@@ -4381,17 +4381,42 @@ impl Editor {
                             let delay_ms = EditorSettings::get_global(cx)
                                 .completion_documentation_secondary_query_debounce;
                             let delay = Duration::from_millis(delay_ms);
+                            let menu_completions = completions.clone();
+                            let menu_buffer = buffer.clone();
                             editor
                                 .completion_documentation_pre_resolve_debounce
                                 .fire_new(delay, cx, |editor, cx| {
                                     CompletionsMenu::pre_resolve_completion_documentation(
-                                        buffer,
-                                        completions,
+                                        menu_buffer,
+                                        menu_completions,
                                         matches,
                                         editor,
                                         cx,
                                     )
                                 });
+
+                            let completions_read = completions.read();
+                            let completions_are_empty = completions.read().is_empty();
+                            drop(completions_read);
+                            if !completions_are_empty {
+                                if let Some(provider) = editor.completion_provider.as_ref() {
+                                    let resolve_task = provider.resolve_completions(
+                                        buffer,
+                                        vec![0],
+                                        completions,
+                                        cx,
+                                    );
+                                    menu.selected_completion_documentation_resolve_debounce
+                                        .lock()
+                                        .fire_new(delay, cx, move |_, cx| {
+                                            cx.spawn(move |this, mut cx| async move {
+                                                if let Some(true) = resolve_task.await.log_err() {
+                                                    this.update(&mut cx, |_, cx| cx.notify()).ok();
+                                                }
+                                            })
+                                        });
+                                }
+                            }
                         })
                         .ok();
                         Some(menu)
@@ -4471,18 +4496,11 @@ impl Editor {
             .selected_completion_documentation_resolve_debounce
             .lock();
         let selected_completion_resolve = resolve_task_store.start_now();
-        let menu_pre_resolve = self
-            .completion_documentation_pre_resolve_debounce
-            .start_now();
         drop(resolve_task_store);
 
         Some(cx.spawn(|editor, mut cx| async move {
-            match (selected_completion_resolve, menu_pre_resolve) {
-                (None, None) => {}
-                (Some(resolve), None) | (None, Some(resolve)) => resolve.await,
-                (Some(resolve_1), Some(resolve_2)) => {
-                    futures::join!(resolve_1, resolve_2);
-                }
+            if let Some(resolve) = dbg!(selected_completion_resolve) {
+                resolve.await;
             }
             if let Some(apply_edits_task) = editor.update(&mut cx, |editor, cx| {
                 editor.apply_resolved_completion(completions_menu, item_ix, intent, cx)
