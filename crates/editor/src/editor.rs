@@ -1333,9 +1333,14 @@ impl CompletionsMenu {
                 // We do want to strike a balance here between what the language server tells us
                 // to sort by (the sort_text) and what are "obvious" good matches (i.e. when you type
                 // `Creat` and there is a local variable called `CreateComponent`).
-                // So what we do is: we bucket all matches into two buckets
+                // So what we do is: we bucket all matches into thre buckets
+                // - Exact matches
                 // - Strong matches
                 // - Weak matches
+                //
+                // Exact matches are the one where completion item's label exactly matches the query.
+                // Those are pushed to the top of the list and sorted by the language-server's score.
+                //
                 // Strong matches are the ones with a high fuzzy-matcher score (the "obvious" matches)
                 // and the Weak matches are the rest.
                 //
@@ -1347,6 +1352,11 @@ impl CompletionsMenu {
 
                 #[derive(PartialEq, Eq, PartialOrd, Ord)]
                 enum MatchScore<'a> {
+                    Exact {
+                        sort_text: Option<&'a str>,
+                        score: Reverse<OrderedFloat<f64>>,
+                        sort_key: (usize, &'a str),
+                    },
                     Strong {
                         sort_text: Option<&'a str>,
                         score: Reverse<OrderedFloat<f64>>,
@@ -1364,7 +1374,13 @@ impl CompletionsMenu {
                 let sort_text = completion.lsp_completion.sort_text.as_deref();
                 let score = Reverse(OrderedFloat(mat.score));
 
-                if mat.score >= 0.2 {
+                if query == Some(&completion.label.text) {
+                    MatchScore::Exact {
+                        sort_text,
+                        score,
+                        sort_key,
+                    }
+                } else if mat.score >= 0.2 {
                     MatchScore::Strong {
                         sort_text,
                         score,
