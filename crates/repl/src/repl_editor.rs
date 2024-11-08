@@ -10,9 +10,7 @@ use language::{BufferSnapshot, Language, LanguageName, Point};
 
 use crate::repl_store::ReplStore;
 use crate::session::SessionEvent;
-use crate::{
-    ClearOutputs, Interrupt, JupyterSettings, KernelSpecification, Restart, Session, Shutdown,
-};
+use crate::{KernelSpecification, Session};
 
 pub fn assign_kernelspec(
     kernel_specification: KernelSpecification,
@@ -240,60 +238,6 @@ pub fn restart(editor: WeakView<Editor>, cx: &mut WindowContext) {
         session.restart(cx);
         cx.notify();
     });
-}
-
-pub fn setup_editor_session_actions(editor: &mut Editor, editor_handle: WeakView<Editor>) {
-    editor
-        .register_action({
-            let editor_handle = editor_handle.clone();
-            move |_: &ClearOutputs, cx| {
-                if !JupyterSettings::enabled(cx) {
-                    return;
-                }
-
-                crate::clear_outputs(editor_handle.clone(), cx);
-            }
-        })
-        .detach();
-
-    editor
-        .register_action({
-            let editor_handle = editor_handle.clone();
-            move |_: &Interrupt, cx| {
-                if !JupyterSettings::enabled(cx) {
-                    return;
-                }
-
-                crate::interrupt(editor_handle.clone(), cx);
-            }
-        })
-        .detach();
-
-    editor
-        .register_action({
-            let editor_handle = editor_handle.clone();
-            move |_: &Shutdown, cx| {
-                if !JupyterSettings::enabled(cx) {
-                    return;
-                }
-
-                crate::shutdown(editor_handle.clone(), cx);
-            }
-        })
-        .detach();
-
-    editor
-        .register_action({
-            let editor_handle = editor_handle.clone();
-            move |_: &Restart, cx| {
-                if !JupyterSettings::enabled(cx) {
-                    return;
-                }
-
-                crate::restart(editor_handle.clone(), cx);
-            }
-        })
-        .detach();
 }
 
 fn cell_range(buffer: &BufferSnapshot, start_row: u32, end_row: u32) -> Range<Point> {
