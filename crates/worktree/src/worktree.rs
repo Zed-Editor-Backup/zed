@@ -4175,6 +4175,7 @@ impl BackgroundScanner {
         swap_to_front(&mut child_paths, *DOT_GIT);
 
         let mut child_paths = VecDeque::from(child_paths);
+        let mut processed_deleted_directorirs = HashSet::default();
         while let Some(child_abs_path) = child_paths.pop_front() {
             let child_abs_path: Arc<Path> = child_abs_path.into();
             let child_name = child_abs_path.file_name().unwrap();
@@ -4194,6 +4195,7 @@ impl BackgroundScanner {
                         .log_err()
                         .unwrap_or_default();
                     log::trace!("computed git status in {:?}", t0.elapsed());
+                    // Git produces relative file paths, no directories.
                     for (deleted_file_path, _) in statuses
                         .entries
                         .iter()
@@ -4201,16 +4203,36 @@ impl BackgroundScanner {
                     {
                         let deleted_file_canonical_path = root_canonical_path
                             .as_ref()
-                            .map(|path| path.join(deleted_file_path))
-                            .map(Box::from);
-                        // TODO kb this is not enough, need to add all intermediate dirs, but once
+                            .map(|path| path.join(deleted_file_path));
+
+                        for deleted_directory_path in deleted_file_path.0.ancestors().skip(1) {
+                            let deleted_directory_canonical_path = deleted_file_canonical_path
+                                .as_ref()
+                                .and_then(|path| path.parent());
+                            if processed_deleted_directorirs.insert(
+                                deleted_directory_canonical_path
+                                    .unwrap_or(&deleted_directory_path)
+                                    .to_owned(),
+                            ) {
+                                new_entries.push(Entry::new_deleted(
+                                    Arc::from(deleted_directory_path),
+                                    &next_entry_id,
+                                    root_char_bag,
+                                    deleted_directory_canonical_path.map(Box::from),
+                                    EntryKind::Dir,
+                                ));
+                                new_jobs.push(None);
+                            }
+                        }
+
                         new_entries.push(Entry::new_deleted(
                             Arc::from(deleted_file_path.0.as_path()),
                             &next_entry_id,
                             root_char_bag,
-                            deleted_file_canonical_path,
+                            deleted_file_canonical_path.map(Box::from),
                             EntryKind::File,
                         ));
+                        new_jobs.push(None);
                     }
 
                     containing_repository = Some(ScanJobContainingRepository {
