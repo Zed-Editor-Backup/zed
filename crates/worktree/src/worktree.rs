@@ -3438,6 +3438,31 @@ impl Entry {
         }
     }
 
+    fn new_deleted(
+        path: Arc<Path>,
+        next_entry_id: &AtomicUsize,
+        root_char_bag: CharBag,
+        canonical_path: Option<Box<Path>>,
+        kind: EntryKind,
+    ) -> Self {
+        let char_bag = char_bag_for_path(root_char_bag, &path);
+        Self {
+            id: ProjectEntryId::new(next_entry_id),
+            kind,
+            path,
+            inode: 0,
+            mtime: None,
+            size: 0,
+            canonical_path,
+            is_ignored: false,
+            is_private: false,
+            is_external: true,
+            git_status: Some(GitFileStatus::Deleted),
+            char_bag,
+            is_fifo: false,
+        }
+    }
+
     pub fn is_created(&self) -> bool {
         self.mtime.is_some()
     }
@@ -4149,7 +4174,8 @@ impl BackgroundScanner {
         swap_to_front(&mut child_paths, *GITIGNORE);
         swap_to_front(&mut child_paths, *DOT_GIT);
 
-        for child_abs_path in child_paths {
+        let mut child_paths = VecDeque::from(child_paths);
+        while let Some(child_abs_path) = child_paths.pop_front() {
             let child_abs_path: Arc<Path> = child_abs_path.into();
             let child_name = child_abs_path.file_name().unwrap();
             let child_path: Arc<Path> = job.path.join(child_name).into();
@@ -4167,8 +4193,26 @@ impl BackgroundScanner {
                         .status(&[PathBuf::from("")])
                         .log_err()
                         .unwrap_or_default();
-                    dbg!(("~~~~TODO kb", &statuses));
                     log::trace!("computed git status in {:?}", t0.elapsed());
+                    for (deleted_file_path, _) in statuses
+                        .entries
+                        .iter()
+                        .filter(|(_, git_status)| matches!(git_status, GitFileStatus::Deleted))
+                    {
+                        let deleted_file_canonical_path = root_canonical_path
+                            .as_ref()
+                            .map(|path| path.join(deleted_file_path))
+                            .map(Box::from);
+                        // TODO kb this is not enough, need to add all intermediate dirs, but once
+                        new_entries.push(Entry::new_deleted(
+                            Arc::from(deleted_file_path.0.as_path()),
+                            &next_entry_id,
+                            root_char_bag,
+                            deleted_file_canonical_path,
+                            EntryKind::File,
+                        ));
+                    }
+
                     containing_repository = Some(ScanJobContainingRepository {
                         work_directory,
                         statuses,
