@@ -4121,7 +4121,12 @@ impl BackgroundScanner {
         let mut ignore_stack = job.ignore_stack.clone();
         let mut containing_repository = job.containing_repository.clone();
         let mut new_ignore = None;
-        let mut root_canonical_path = None;
+        let mut root_canonical_path = self
+            .fs
+            .canonicalize(&root_abs_path)
+            .await
+            .with_context(|| format!("Canonicalizing path {root_abs_path:?}"))
+            .ok();
         let mut new_entries: Vec<Entry> = Vec::new();
         let mut new_jobs: Vec<Option<ScanJob>> = Vec::new();
         let mut child_paths = self
@@ -4206,7 +4211,10 @@ impl BackgroundScanner {
                 &child_metadata,
                 &next_entry_id,
                 root_char_bag,
-                None,
+                root_canonical_path
+                    .as_ref()
+                    .map(|root_canonical_path: &PathBuf| root_canonical_path.join(child_name))
+                    .map(Box::from),
             );
 
             if job.is_external {
