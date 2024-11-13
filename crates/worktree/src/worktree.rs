@@ -4436,16 +4436,6 @@ impl BackgroundScanner {
         let mut state = self.state.lock();
         let doing_recursive_update = scan_queue_tx.is_some();
 
-        // Remove any entries for paths that no longer exist or are being recursively
-        // refreshed. Do this before adding any new entries, so that renames can be
-        // detected regardless of the order of the paths.
-        for (path, metadata) in relative_paths.iter().zip(metadata.iter()) {
-            if matches!(metadata, Ok(None)) || doing_recursive_update {
-                log::trace!("remove path {:?}", path);
-                state.remove_path(path);
-            }
-        }
-
         // Group all relative paths by their git repository.
         let mut paths_by_git_repo = HashMap::default();
         for relative_path in relative_paths.iter() {
@@ -4471,6 +4461,34 @@ impl BackgroundScanner {
                     map.extend(repo_paths.into_git_file_statuses());
                     map
                 });
+
+        // Remove any entries for paths that no longer exist or are being recursively
+        // refreshed.
+        // Preserve the git removed files as we need them for the UI.
+        // Do this before adding any new entries, so that renames can be
+        // detected regardless of the order of the paths.
+        for (path, metadata) in relative_paths.iter().zip(metadata.iter()) {
+            let remove = doing_recursive_update
+                || match &metadata {
+                    Ok(None) => {
+                        if let Some(GitFileStatus::Deleted) =
+                            git_statuses_by_relative_path.get(path)
+                        {
+                            false
+                        } else {
+                            true
+                        }
+                    }
+                    Err(_) | Ok(Some(_)) => {
+                        // Will log the error later, the rest is present ondisk
+                        false
+                    }
+                };
+            if remove {
+                log::trace!("removing path that is not ok disk: {path:?}");
+                state.remove_path(path);
+            }
+        }
 
         for (path, metadata) in relative_paths.iter().zip(metadata.into_iter()) {
             let abs_path: Arc<Path> = root_abs_path.join(path).into();
@@ -4515,7 +4533,13 @@ impl BackgroundScanner {
                     state.insert_entry(fs_entry.clone(), self.fs.as_ref(), self.watcher.as_ref());
                 }
                 Ok(None) => {
-                    self.remove_repo_path(path, &mut state.snapshot);
+                    if !matches!(
+                        git_statuses_by_relative_path.get(path),
+                        Some(GitFileStatus::Deleted)
+                    ) {
+                        self.remove_repo_path(path, &mut state.snapshot);
+                    }
+                    //TODO kb is it correct? What if more deleted entries are added?
                 }
                 Err(err) => {
                     log::error!("error reading file {abs_path:?} on event: {err:#}");
@@ -5085,6 +5109,12 @@ impl RepoPaths {
             for (repo_path, relative_path) in self.repo_paths.into_iter().zip(self.relative_paths) {
                 if let Some(path_status) = status.get(&repo_path) {
                     statuses.insert(relative_path, path_status);
+                    // TODO kb reorder the state to look it up quicker
+                } else if status.entries.iter().any(|(entry, status)| {
+                    matches!(status, GitFileStatus::Deleted)
+                        && entry.as_path().starts_with(&repo_path)
+                }) {
+                    statuses.insert(relative_path, GitFileStatus::Deleted);
                 }
             }
         }
