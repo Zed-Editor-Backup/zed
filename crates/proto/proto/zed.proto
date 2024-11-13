@@ -1774,6 +1774,7 @@ enum GitStatus {
     Added = 0;
     Modified = 1;
     Conflict = 2;
+    Deleted = 3;
 }
 
 message BufferState {

@@ -1548,6 +1548,7 @@ pub fn entry_git_aware_label_color(
             Some(GitFileStatus::Added) => Color::Created,
             Some(GitFileStatus::Modified) => Color::Modified,
             Some(GitFileStatus::Conflict) => Color::Conflict,
+            Some(GitFileStatus::Deleted) => Color::Deleted,
             None => entry_label_color(selected),
         }
     }

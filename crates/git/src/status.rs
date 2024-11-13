@@ -6,7 +6,7 @@ use std::{
     sync::Arc,
 };
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct GitStatus {
     pub entries: Arc<[(RepoPath, GitFileStatus)]>,
 }
@@ -68,6 +68,7 @@ impl GitStatus {
                         RepoPath(PathBuf::from(path)),
                         match status {
                             "A" | "??" => GitFileStatus::Added,
+                            "D" => GitFileStatus::Deleted,
                             "M" => GitFileStatus::Modified,
                             _ => return None,
                         },

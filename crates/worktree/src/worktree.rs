@@ -3497,6 +3497,7 @@ impl sum_tree::Item for Entry {
                 GitFileStatus::Added => statuses.added = 1,
                 GitFileStatus::Modified => statuses.modified = 1,
                 GitFileStatus::Conflict => statuses.conflict = 1,
+                GitFileStatus::Deleted => statuses.deleted = 1,
             }
         }
 
@@ -4161,6 +4162,7 @@ impl BackgroundScanner {
                         .status(&[PathBuf::from("")])
                         .log_err()
                         .unwrap_or_default();
+                    dbg!(("~~~~TODO kb", &statuses));
                     log::trace!("computed git status in {:?}", t0.elapsed());
                     containing_repository = Some(ScanJobContainingRepository {
                         work_directory,
@@ -5220,6 +5222,7 @@ struct GitStatuses {
     added: usize,
     modified: usize,
     conflict: usize,
+    deleted: usize,
 }
 
 impl AddAssign for GitStatuses {
@@ -5238,6 +5241,7 @@ impl Sub for GitStatuses {
             added: self.added - rhs.added,
             modified: self.modified - rhs.modified,
             conflict: self.conflict - rhs.conflict,
+            deleted: self.deleted - rhs.deleted,
         }
     }
 }
@@ -5475,6 +5479,7 @@ fn git_status_from_proto(git_status: Option<i32>) -> Option<GitFileStatus> {
             proto::GitStatus::Added => GitFileStatus::Added,
             proto::GitStatus::Modified => GitFileStatus::Modified,
             proto::GitStatus::Conflict => GitFileStatus::Conflict,
+            proto::GitStatus::Deleted => GitFileStatus::Deleted,
         })
     })
 }
@@ -5484,6 +5489,7 @@ fn git_status_to_proto(status: GitFileStatus) -> i32 {
         GitFileStatus::Added => proto::GitStatus::Added as i32,
         GitFileStatus::Modified => proto::GitStatus::Modified as i32,
         GitFileStatus::Conflict => proto::GitStatus::Conflict as i32,
+        GitFileStatus::Deleted => proto::GitStatus::Deleted as i32,
     }
 }
 
