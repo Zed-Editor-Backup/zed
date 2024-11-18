@@ -1762,7 +1762,8 @@ impl Buffer {
         let Some(file) = self.file.as_ref() else {
             return false;
         };
-        file.is_deleted() || (file.mtime() > self.saved_mtime && self.has_unsaved_edits())
+        (file.is_deleted() && !file.is_created())
+            || (file.mtime() > self.saved_mtime && self.has_unsaved_edits())
     }
 
     /// Gets a [`Subscription`] that tracks all of the changes to the buffer's text.
