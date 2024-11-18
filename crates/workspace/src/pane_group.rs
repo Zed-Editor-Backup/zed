@@ -98,7 +98,7 @@ impl PaneGroup {
     }
 
     #[allow(clippy::too_many_arguments)]
-    pub(crate) fn render(
+    pub fn render(
         &self,
         project: &Model<Project>,
         follower_states: &HashMap<PeerId, FollowerState>,
