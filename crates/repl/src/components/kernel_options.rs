@@ -156,55 +156,42 @@ impl PickerDelegate for KernelPickerDelegate {
                     h_flex()
                         .w_full()
                         .gap_3()
+                        .child(icon.color(Color::Default).size(IconSize::Medium))
                         .child(
-                            h_flex()
+                            v_flex()
                                 .flex_grow()
-                                .gap_3()
-                                .child(icon.color(Color::Default).size(IconSize::Medium))
+                                .gap_0p5()
                                 .child(
-                                    v_flex()
-                                        .gap_0p5()
+                                    h_flex()
+                                        .justify_between()
                                         .child(
                                             Label::new(name)
                                                 .weight(FontWeight::MEDIUM)
                                                 .size(LabelSize::Default),
                                         )
-                                        .child(
-                                            h_flex()
-                                                .gap_1()
-                                                .child(
-                                                    Label::new(kernelspec.language())
-                                                        .size(LabelSize::Small)
-                                                        .color(Color::Muted),
-                                                )
-                                                .child(
-                                                    Label::new(kernel_type)
-                                                        .size(LabelSize::Small)
-                                                        .color(Color::Muted),
-                                                ),
-                                        ),
-                                ),
-                        )
-                        .when_some(path_or_url, |flex, path| {
-                            flex.child(
-                                div().flex_grow().child(
+                                        .when_some(path_or_url.clone(), |flex, path| {
+                                            flex.child(
+                                                Label::new(path)
+                                                    .size(LabelSize::Small)
+                                                    .color(Color::Muted),
+                                            )
+                                        }),
+                                )
+                                .child(
                                     h_flex()
-                                        .justify_end()
                                         .gap_1()
                                         .child(
-                                            div()
-                                                .w(px(1.))
-                                                .h(rems(2.))
-                                                .bg(cx.theme().colors().border_variant),
+                                            Label::new(kernelspec.language())
+                                                .size(LabelSize::Small)
+                                                .color(Color::Muted),
                                         )
                                         .child(
-                                            Label::new(path)
+                                            Label::new(kernel_type)
                                                 .size(LabelSize::Small)
                                                 .color(Color::Muted),
                                         ),
                                 ),
-                            )
-                        }),
+                        ),
                 )
                 .when(is_selected, |item| {
                     item.end_slot(
