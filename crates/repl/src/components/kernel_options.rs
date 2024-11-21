@@ -39,9 +39,8 @@ fn truncate_path(path: &SharedString, max_length: usize) -> SharedString {
     if path.len() <= max_length {
         path.to_string().into()
     } else {
-        let mut truncated = path.chars().take(max_length - 3).collect::<String>();
-        truncated.push_str("...");
-        truncated.into()
+        let truncated = path.chars().rev().take(max_length - 3).collect::<String>();
+        format!("...{}", truncated.chars().rev().collect::<String>()).into()
     }
 }
 
@@ -138,12 +137,12 @@ impl PickerDelegate for KernelPickerDelegate {
             KernelSpecification::PythonEnv(_) => (
                 kernelspec.name(),
                 "Python Env",
-                Some(truncate_path(&kernelspec.path(), 64)),
+                Some(truncate_path(&kernelspec.path(), 42)),
             ),
             KernelSpecification::Remote(_) => (
                 kernelspec.name(),
                 "Remote",
-                Some(truncate_path(&kernelspec.path(), 64)),
+                Some(truncate_path(&kernelspec.path(), 42)),
             ),
         };
 
@@ -165,12 +164,14 @@ impl PickerDelegate for KernelPickerDelegate {
                                     h_flex()
                                         .justify_between()
                                         .child(
-                                            Label::new(name)
-                                                .weight(FontWeight::MEDIUM)
-                                                .size(LabelSize::Default),
+                                            div().w_48().text_ellipsis().child(
+                                                Label::new(name)
+                                                    .weight(FontWeight::MEDIUM)
+                                                    .size(LabelSize::Default),
+                                            ),
                                         )
                                         .when_some(path_or_url.clone(), |flex, path| {
-                                            flex.child(
+                                            flex.text_ellipsis().child(
                                                 Label::new(path)
                                                     .size(LabelSize::Small)
                                                     .color(Color::Muted),
