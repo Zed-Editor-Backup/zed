@@ -138,12 +138,12 @@ impl PickerDelegate for KernelPickerDelegate {
             KernelSpecification::PythonEnv(_) => (
                 kernelspec.name(),
                 "Python Env",
-                Some(truncate_path(&kernelspec.path(), 30)),
+                Some(truncate_path(&kernelspec.path(), 64)),
             ),
             KernelSpecification::Remote(_) => (
                 kernelspec.name(),
                 "Remote",
-                Some(truncate_path(&kernelspec.path(), 20)),
+                Some(truncate_path(&kernelspec.path(), 64)),
             ),
         };
 
@@ -158,6 +158,7 @@ impl PickerDelegate for KernelPickerDelegate {
                         .gap_3()
                         .child(
                             h_flex()
+                                .flex_grow()
                                 .gap_3()
                                 .child(icon.color(Color::Default).size(IconSize::Medium))
                                 .child(
@@ -186,8 +187,9 @@ impl PickerDelegate for KernelPickerDelegate {
                         )
                         .when_some(path_or_url, |flex, path| {
                             flex.child(
-                                div().flex_grow().justify_end().child(
+                                div().flex_grow().child(
                                     h_flex()
+                                        .justify_end()
                                         .gap_1()
                                         .child(
                                             div()
