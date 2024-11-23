@@ -6379,8 +6379,6 @@ dependencies = [
 [[package]]
 name = "jupyter-protocol"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f3e9d36f282f7e0400de20921d283121a97c5a5a6db2c1bb0c0853defff9934"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -6397,8 +6395,6 @@ dependencies = [
 [[package]]
 name = "jupyter-serde"
 version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11adb69edaf2eb03d5e84249f68f870dd03d4c8f955314b5a32b2db5798e9b9a"
 dependencies = [
  "anyhow",
  "serde",
@@ -6410,8 +6406,6 @@ dependencies = [
 [[package]]
 name = "jupyter-websocket-client"
 version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8d315d037789a652084877b0919615e937d2f2e877b01aa4ba8fcc1ab07cb58b"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -7440,8 +7434,6 @@ dependencies = [
 [[package]]
 name = "nbformat"
 version = "0.6.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "187de1b1f1430353ef9b5208096d84f7bf089ee1593f14213d122b7fbb1f3dee"
 dependencies = [
  "anyhow",
  "chrono",
@@ -10261,8 +10253,6 @@ dependencies = [
 [[package]]
 name = "runtimelib"
 version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2db079f82c110e25c3202d20c7cd29dcbfa93d96de7c5bb8bb6f294f477567cf"
 dependencies = [
  "anyhow",
  "async-dispatcher",
