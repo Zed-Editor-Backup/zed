@@ -691,7 +691,7 @@
       "cmd-c": "terminal::Copy",
       "cmd-v": "terminal::Paste",
       "cmd-a": "editor::SelectAll",
-      "cmd-shift-k": "terminal::Clear",
+      "cmd-k": "terminal::Clear",
       "ctrl-enter": "assistant::InlineAssist",
       // Some nice conveniences
       "cmd-backspace": ["terminal::SendText", "\u0015"],
@@ -719,7 +719,11 @@
       "cmd-end": "terminal::ScrollToBottom",
       "shift-home": "terminal::ScrollToTop",
       "shift-end": "terminal::ScrollToBottom",
-      "ctrl-shift-space": "terminal::ToggleViMode"
+      "ctrl-shift-space": "terminal::ToggleViMode",
+      "ctrl-k up": "pane::SplitUp",
+      "ctrl-k down": "pane::SplitDown",
+      "ctrl-k left": "pane::SplitLeft",
+      "ctrl-k right": "pane::SplitRight"
     }
   }
 ]

@@ -50,7 +50,6 @@ impl AssistantPanel {
                 NewThread.boxed_clone(),
                 cx,
             );
-            pane.set_can_split(false, cx);
             pane.set_can_navigate(true, cx);
 
             pane
