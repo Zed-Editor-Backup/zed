@@ -1,6 +1,10 @@
 use std::{cmp, ops::ControlFlow, path::PathBuf, sync::Arc, time::Duration};
 
-use crate::{default_working_directory, TerminalView};
+use crate::{
+    default_working_directory,
+    persistence::{TerminalDb, TERMINAL_DB},
+    TerminalView,
+};
 use breadcrumbs::Breadcrumbs;
 use collections::{HashMap, HashSet};
 use db::kvp::KEY_VALUE_STORE;
@@ -31,8 +35,8 @@ use workspace::{
     move_item, pane,
     ui::IconName,
     ActivateNextPane, ActivatePane, ActivatePaneInDirection, ActivatePreviousPane, DraggedTab,
-    ItemId, NewTerminal, Pane, PaneGroup, SerializedPaneGroup, SplitDirection, SwapPaneInDirection,
-    ToggleZoom, Workspace,
+    ItemId, NewTerminal, Pane, PaneGroup, SplitDirection, SwapPaneInDirection, ToggleZoom,
+    Workspace,
 };
 
 use anyhow::Result;
@@ -647,10 +651,14 @@ impl TerminalPanel {
     }
 
     fn serialize(&mut self, cx: &mut ViewContext<Self>) {
+        let workspace = self.workspace.clone();
         self.pending_serialization = cx.spawn(|terminal_panel, mut cx| async move {
             cx.background_executor()
                 .timer(Duration::from_millis(100))
                 .await;
+            let workspace_id = workspace
+                .update(&mut cx, |workspace, _| workspace.database_id())
+                .ok()?;
             let (items, height, width, center_group, active_item_id) = terminal_panel
                 .update(&mut cx, |terminal_panel, cx| {
                     let mut items_to_serialize = HashSet::default();
@@ -695,6 +703,13 @@ impl TerminalPanel {
                             })?,
                         )
                         .await?;
+                    if let Some(workspace_id) = workspace_id {
+                        TERMINAL_DB
+                            .write(move |conn| {
+                                TerminalDb::save_pane_group(conn, workspace_id, &center_group, None)
+                            })
+                            .await?;
+                    }
                     anyhow::Ok(())
                 })
                 .await

@@ -1,8 +1,14 @@
-use anyhow::Result;
+use anyhow::{Context as _, Result};
 use std::path::PathBuf;
 
-use db::{define_connection, query, sqlez::statement::Statement, sqlez_macros::sql};
-use workspace::{ItemId, WorkspaceDb, WorkspaceId};
+use db::{
+    define_connection, query,
+    sqlez::{connection::Connection, statement::Statement},
+    sqlez_macros::sql,
+};
+use workspace::{ItemId, SerializedPaneGroup, WorkspaceDb, WorkspaceId};
+
+pub type GroupId = i64;
 
 define_connection! {
     pub static ref TERMINAL_DB: TerminalDb<WorkspaceDb> =
@@ -41,14 +47,14 @@ define_connection! {
         sql!(
             CREATE TABLE terminal_pane_groups(
                 group_id INTEGER PRIMARY KEY,
-                workspace_id INTEGER NOT NULL,
-                item_id INTEGER NOT NULL,
+                workspace_id INTEGER,
+                item_id INTEGER,
                 parent_group_id INTEGER, // NULL indicates that this is a root node
                 position INTEGER, // NULL indicates that this is a root node
                 axis TEXT NOT NULL, // Enum: 'Vertical' / 'Horizontal'
                 flexes TEXT,
                 FOREIGN KEY(workspace_id, item_id) REFERENCES terminals(workspace_id, item_id)
-                ON UPDATE CASCADE ON DELETE CASCADE,
+                ON DELETE CASCADE,
                 FOREIGN KEY(parent_group_id) REFERENCES terminal_pane_groups(group_id) ON DELETE CASCADE
             ) STRICT;
         )];
@@ -78,7 +84,11 @@ impl TerminalDb {
             working_directory: PathBuf
         ) -> Result<()> {
             INSERT OR REPLACE INTO terminals(item_id, workspace_id, working_directory)
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?);
+
+            UPDATE terminal_pane_groups
+            SET workspace_id = ?
+            WHERE workspace_id = ? AND item_id = ?
         }
     }
 
@@ -114,5 +124,56 @@ impl TerminalDb {
             statement.exec()
         })
         .await
+    }
+
+    pub fn save_pane_group(
+        conn: &Connection,
+        workspace_id: WorkspaceId,
+        pane_group: &SerializedPaneGroup,
+        parent: Option<(GroupId, usize)>,
+    ) -> Result<()> {
+        match dbg!(pane_group) {
+            SerializedPaneGroup::Group {
+                axis,
+                children,
+                flexes,
+            } => {
+                let (parent_id, position) = parent.unzip();
+
+                let flex_string = flexes
+                    .as_ref()
+                    .map(|flexes| serde_json::json!(flexes).to_string());
+
+                let group_id = conn.select_row_bound::<_, i64>(sql!(
+                    INSERT INTO terminal_pane_groups(
+                        workspace_id,
+                        parent_group_id,
+                        position,
+                        axis,
+                        flexes
+                    )
+                    VALUES (?, ?, ?, ?, ?)
+                    RETURNING group_id
+                ))?((
+                    workspace_id,
+                    parent_id,
+                    position,
+                    *axis,
+                    flex_string,
+                ))?
+                .context("Retrieving retrieve group_id from inserted pane_group")?;
+
+                for (position, group) in children.iter().enumerate() {
+                    Self::save_pane_group(conn, workspace_id, group, Some((group_id, position)))?
+                }
+
+                Ok(())
+            }
+            SerializedPaneGroup::Pane(pane) => {
+                // TODO kb is it the right way? items are stored in the KV store already
+                // Self::save_pane(conn, workspace_id, pane, parent)?;
+                Ok(())
+            }
+        }
     }
 }
