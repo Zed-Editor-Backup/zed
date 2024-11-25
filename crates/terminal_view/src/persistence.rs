@@ -39,7 +39,7 @@ define_connection! {
 
         // Terminal splits data
         sql!(
-            CREATE TABLE pane_groups(
+            CREATE TABLE terminal_pane_groups(
                 group_id INTEGER PRIMARY KEY,
                 workspace_id INTEGER NOT NULL,
                 item_id INTEGER NOT NULL,
@@ -49,7 +49,7 @@ define_connection! {
                 flexes TEXT,
                 FOREIGN KEY(workspace_id, item_id) REFERENCES terminals(workspace_id, item_id)
                 ON UPDATE CASCADE ON DELETE CASCADE,
-                FOREIGN KEY(parent_group_id) REFERENCES pane_groups(group_id) ON DELETE CASCADE
+                FOREIGN KEY(parent_group_id) REFERENCES terminal_pane_groups(group_id) ON DELETE CASCADE
             ) STRICT;
         )];
 }
@@ -62,6 +62,10 @@ impl TerminalDb {
             item_id: ItemId
         ) -> Result<()> {
             UPDATE terminals
+            SET workspace_id = ?
+            WHERE workspace_id = ? AND item_id = ?;
+
+            UPDATE terminal_pane_groups
             SET workspace_id = ?
             WHERE workspace_id = ? AND item_id = ?
         }
