@@ -29,7 +29,8 @@ use model::{
 use self::model::{DockStructure, LocalPathsOrder, SerializedWorkspaceLocation};
 
 #[derive(Copy, Clone, Debug, PartialEq)]
-pub(crate) struct SerializedAxis(pub(crate) gpui::Axis);
+pub struct SerializedAxis(pub(crate) gpui::Axis);
+
 impl sqlez::bindable::StaticColumnCount for SerializedAxis {}
 impl sqlez::bindable::Bind for SerializedAxis {
     fn bind(

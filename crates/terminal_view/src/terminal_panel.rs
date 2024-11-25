@@ -1,4 +1,4 @@
-use std::{cmp, ops::ControlFlow, path::PathBuf, sync::Arc};
+use std::{cmp, ops::ControlFlow, path::PathBuf, sync::Arc, time::Duration};
 
 use crate::{default_working_directory, TerminalView};
 use breadcrumbs::Breadcrumbs;
@@ -24,15 +24,15 @@ use ui::{
     div, h_flex, ButtonCommon, Clickable, ContextMenu, IconButton, IconSize, InteractiveElement,
     PopoverMenu, Selectable, Tooltip,
 };
-use util::{ResultExt, TryFutureExt};
+use util::ResultExt;
 use workspace::{
     dock::{DockPosition, Panel, PanelEvent},
     item::SerializableItem,
     move_item, pane,
     ui::IconName,
     ActivateNextPane, ActivatePane, ActivatePaneInDirection, ActivatePreviousPane, DraggedTab,
-    ItemId, NewTerminal, Pane, PaneGroup, SplitDirection, SwapPaneInDirection, ToggleZoom,
-    Workspace,
+    ItemId, NewTerminal, Pane, PaneGroup, SerializedPaneGroup, SplitDirection, SwapPaneInDirection,
+    ToggleZoom, Workspace,
 };
 
 use anyhow::Result;
@@ -209,7 +209,6 @@ impl TerminalPanel {
                     cx.notify();
                     panel.height = serialized_panel.height.map(|h| h.round());
                     panel.width = serialized_panel.width.map(|w| w.round());
-                    // TODO kb (de)serialization of the center pane
                     panel.active_pane.update(cx, |_, cx| {
                         serialized_panel
                             .items
@@ -648,47 +647,60 @@ impl TerminalPanel {
     }
 
     fn serialize(&mut self, cx: &mut ViewContext<Self>) {
-        let mut items_to_serialize = HashSet::default();
-        let items = self
-            .active_pane
-            .read(cx)
-            .items()
-            .filter_map(|item| {
-                let terminal_view = item.act_as::<TerminalView>(cx)?;
-                if terminal_view.read(cx).terminal().read(cx).task().is_some() {
-                    None
-                } else {
-                    let id = item.item_id().as_u64();
-                    items_to_serialize.insert(id);
-                    Some(id)
-                }
-            })
-            .collect::<Vec<_>>();
-        let active_item_id = self
-            .active_pane
-            .read(cx)
-            .active_item()
-            .map(|item| item.item_id().as_u64())
-            .filter(|active_id| items_to_serialize.contains(active_id));
-        let height = self.height;
-        let width = self.width;
-        self.pending_serialization = cx.background_executor().spawn(
-            async move {
-                KEY_VALUE_STORE
-                    .write_kvp(
-                        TERMINAL_PANEL_KEY.into(),
-                        serde_json::to_string(&SerializedTerminalPanel {
-                            items,
-                            active_item_id,
-                            height,
-                            width,
-                        })?,
-                    )
-                    .await?;
-                anyhow::Ok(())
-            }
-            .log_err(),
-        );
+        self.pending_serialization = cx.spawn(|terminal_panel, mut cx| async move {
+            cx.background_executor()
+                .timer(Duration::from_millis(100))
+                .await;
+            let (items, height, width, center_group, active_item_id) = terminal_panel
+                .update(&mut cx, |terminal_panel, cx| {
+                    let mut items_to_serialize = HashSet::default();
+                    let items = terminal_panel
+                        .active_pane
+                        .read(cx)
+                        .items()
+                        .filter_map(|item| {
+                            let terminal_view = item.act_as::<TerminalView>(cx)?;
+                            if terminal_view.read(cx).terminal().read(cx).task().is_some() {
+                                None
+                            } else {
+                                let id = item.item_id().as_u64();
+                                items_to_serialize.insert(id);
+                                Some(id)
+                            }
+                        })
+                        .collect::<Vec<_>>();
+                    let active_item_id = terminal_panel
+                        .active_pane
+                        .read(cx)
+                        .active_item()
+                        .map(|item| item.item_id().as_u64())
+                        .filter(|active_id| items_to_serialize.contains(active_id));
+                    let height = terminal_panel.height;
+                    let width = terminal_panel.width;
+                    let center_group = workspace::serialize_pane_group(&terminal_panel.center, cx);
+                    (items, height, width, center_group, active_item_id)
+                })
+                .ok()?;
+
+            cx.background_executor()
+                .spawn(async move {
+                    KEY_VALUE_STORE
+                        .write_kvp(
+                            TERMINAL_PANEL_KEY.into(),
+                            serde_json::to_string(&SerializedTerminalPanel {
+                                items,
+                                active_item_id,
+                                height,
+                                width,
+                            })?,
+                        )
+                        .await?;
+                    anyhow::Ok(())
+                })
+                .await
+                .log_err()?;
+            Some(())
+        });
     }
 
     fn replace_terminal(

@@ -53,7 +53,7 @@ use notifications::{
 pub use pane::*;
 pub use pane_group::*;
 pub use persistence::{
-    model::{ItemId, LocalPaths, SerializedWorkspaceLocation},
+    model::{ItemId, LocalPaths, SerializedPaneGroup, SerializedWorkspaceLocation},
     WorkspaceDb, DB as WORKSPACE_DB,
 };
 use persistence::{
@@ -105,7 +105,7 @@ pub use workspace_settings::{
 
 use crate::notifications::NotificationId;
 use crate::persistence::{
-    model::{DockData, DockStructure, SerializedItem, SerializedPane, SerializedPaneGroup},
+    model::{DockData, DockStructure, SerializedItem, SerializedPane},
     SerializedAxis,
 };
 
@@ -551,6 +551,56 @@ pub fn register_serializable_item<I: SerializableItem>(cx: &mut AppContext) {
     registry
         .descriptors_by_type
         .insert(TypeId::of::<I>(), descriptor);
+}
+
+pub fn serialize_pane_group(pane_group: &PaneGroup, cx: &WindowContext) -> SerializedPaneGroup {
+    build_serialized_pane_group(&pane_group.root, cx)
+}
+
+fn build_serialized_pane_group(pane_group: &Member, cx: &WindowContext) -> SerializedPaneGroup {
+    match pane_group {
+        Member::Axis(PaneAxis {
+            axis,
+            members,
+            flexes,
+            bounding_boxes: _,
+        }) => SerializedPaneGroup::Group {
+            axis: SerializedAxis(*axis),
+            children: members
+                .iter()
+                .map(|member| build_serialized_pane_group(member, cx))
+                .collect::<Vec<_>>(),
+            flexes: Some(flexes.lock().clone()),
+        },
+        Member::Pane(pane_handle) => {
+            SerializedPaneGroup::Pane(serialize_pane_handle(pane_handle, cx))
+        }
+    }
+}
+
+fn serialize_pane_handle(pane_handle: &View<Pane>, cx: &WindowContext) -> SerializedPane {
+    let (items, active, pinned_count) = {
+        let pane = pane_handle.read(cx);
+        let active_item_id = pane.active_item().map(|item| item.item_id());
+        (
+            pane.items()
+                .filter_map(|handle| {
+                    let handle = handle.to_serializable_item_handle(cx)?;
+
+                    Some(SerializedItem {
+                        kind: Arc::from(handle.serialized_item_kind()),
+                        item_id: handle.item_id().as_u64(),
+                        active: Some(handle.item_id()) == active_item_id,
+                        preview: pane.is_active_preview_item(handle.item_id()),
+                    })
+                })
+                .collect::<Vec<_>>(),
+            pane.has_focus(cx),
+            pane.pinned_count(),
+        )
+    };
+
+    SerializedPane::new(items, active, pinned_count)
 }
 
 pub struct AppState {
@@ -4076,55 +4126,6 @@ impl Workspace {
             return Task::ready(());
         };
 
-        fn serialize_pane_handle(pane_handle: &View<Pane>, cx: &WindowContext) -> SerializedPane {
-            let (items, active, pinned_count) = {
-                let pane = pane_handle.read(cx);
-                let active_item_id = pane.active_item().map(|item| item.item_id());
-                (
-                    pane.items()
-                        .filter_map(|handle| {
-                            let handle = handle.to_serializable_item_handle(cx)?;
-
-                            Some(SerializedItem {
-                                kind: Arc::from(handle.serialized_item_kind()),
-                                item_id: handle.item_id().as_u64(),
-                                active: Some(handle.item_id()) == active_item_id,
-                                preview: pane.is_active_preview_item(handle.item_id()),
-                            })
-                        })
-                        .collect::<Vec<_>>(),
-                    pane.has_focus(cx),
-                    pane.pinned_count(),
-                )
-            };
-
-            SerializedPane::new(items, active, pinned_count)
-        }
-
-        fn build_serialized_pane_group(
-            pane_group: &Member,
-            cx: &WindowContext,
-        ) -> SerializedPaneGroup {
-            match pane_group {
-                Member::Axis(PaneAxis {
-                    axis,
-                    members,
-                    flexes,
-                    bounding_boxes: _,
-                }) => SerializedPaneGroup::Group {
-                    axis: SerializedAxis(*axis),
-                    children: members
-                        .iter()
-                        .map(|member| build_serialized_pane_group(member, cx))
-                        .collect::<Vec<_>>(),
-                    flexes: Some(flexes.lock().clone()),
-                },
-                Member::Pane(pane_handle) => {
-                    SerializedPaneGroup::Pane(serialize_pane_handle(pane_handle, cx))
-                }
-            }
-        }
-
         fn build_serialized_docks(this: &Workspace, cx: &mut WindowContext) -> DockStructure {
             let left_dock = this.left_dock.read(cx);
             let left_visible = left_dock.is_open();
@@ -4188,7 +4189,7 @@ impl Workspace {
         };
 
         if let Some(location) = location {
-            let center_group = build_serialized_pane_group(&self.center.root, cx);
+            let center_group = serialize_pane_group(&self.center, cx);
             let docks = build_serialized_docks(self, cx);
             let window_bounds = Some(SerializedWindowBounds(cx.window_bounds()));
             let serialized_workspace = SerializedWorkspace {

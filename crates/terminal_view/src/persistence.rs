@@ -35,6 +35,22 @@ define_connection! {
             DROP TABLE terminals;
 
             ALTER TABLE terminals2 RENAME TO terminals;
+        ),
+
+        // Terminal splits data
+        sql!(
+            CREATE TABLE pane_groups(
+                group_id INTEGER PRIMARY KEY,
+                workspace_id INTEGER NOT NULL,
+                item_id INTEGER NOT NULL,
+                parent_group_id INTEGER, // NULL indicates that this is a root node
+                position INTEGER, // NULL indicates that this is a root node
+                axis TEXT NOT NULL, // Enum: 'Vertical' / 'Horizontal'
+                flexes TEXT,
+                FOREIGN KEY(workspace_id, item_id) REFERENCES terminals(workspace_id, item_id)
+                ON UPDATE CASCADE ON DELETE CASCADE,
+                FOREIGN KEY(parent_group_id) REFERENCES pane_groups(group_id) ON DELETE CASCADE
+            ) STRICT;
         )];
 }
 
