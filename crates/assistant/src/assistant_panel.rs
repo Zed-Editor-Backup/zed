@@ -1415,7 +1415,7 @@ impl AssistantPanelDelegate for ConcreteAssistantPanelDelegate {
         panel.update(cx, |_, cx| {
             // Wait to create a new context until the workspace is no longer
             // being updated.
-            cx.defer_in(window, move |panel, window, cx| {
+            cx.eefer_in(window, move |panel, window, cx| {
                 if let Some(context) = panel
                     .active_context_editor(cx)
                     .or_else(|| panel.new_context(window, cx))
