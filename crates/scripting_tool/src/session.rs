@@ -68,6 +68,14 @@ impl Session {
             let lua = Lua::new();
             lua.set_memory_limit(2 * 1024 * 1024 * 1024)?; // 2 GB
             let globals = lua.globals();
+
+            // Use the project root dir as the script's current working dir.
+            if let Some(root_dir) = &root_dir {
+                if let Some(root_dir) = root_dir.to_str() {
+                    globals.set("cwd", root_dir)?;
+                }
+            }
+
             let stdout = Arc::new(Mutex::new(String::new()));
             globals.set(
                 "sb_print",

@@ -34,7 +34,6 @@ io.open = sb_io_open
 -- Add the sandboxed io library to the sandbox environment
 sandbox.io = io
 
-
 -- Load the script with the sandbox environment
 local user_script_fn, err = load(user_script, nil, "t", sandbox)
 
