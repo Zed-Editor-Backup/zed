@@ -17,6 +17,7 @@ use proto::Plan;
 use schemars::JsonSchema;
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use std::fmt;
+use std::ops::{Add, Sub};
 use std::{future::Future, sync::Arc};
 use thiserror::Error;
 use ui::IconName;
@@ -55,10 +56,16 @@ pub struct LanguageModelCacheConfiguration {
 /// A completion event from a language model.
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub enum LanguageModelCompletionEvent {
-    Stop(StopReason),
+    Stop {
+        reason: StopReason,
+        token_usage: TokenUsage,
+    },
     Text(String),
     ToolUse(LanguageModelToolUse),
-    StartMessage { message_id: String },
+    StartMessage {
+        message_id: String,
+        token_usage: TokenUsage,
+    },
 }
 
 #[derive(Debug, PartialEq, Clone, Copy, Serialize, Deserialize)]
@@ -67,6 +74,84 @@ pub enum StopReason {
     EndTurn,
     MaxTokens,
     ToolUse,
+}
+
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize, Default)]
+pub struct TokenUsage {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub input_tokens: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub output_tokens: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cache_creation_input_tokens: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cache_read_input_tokens: Option<u32>,
+}
+
+impl TokenUsage {
+    /// Overrides token usage data by preferring usage counts from `other`.
+    pub fn update(self, other: Self) -> Self {
+        Self {
+            input_tokens: other.input_tokens.or(self.input_tokens),
+            output_tokens: other.output_tokens.or(self.output_tokens),
+            cache_creation_input_tokens: other
+                .cache_creation_input_tokens
+                .or(self.cache_creation_input_tokens),
+            cache_read_input_tokens: other
+                .cache_read_input_tokens
+                .or(self.cache_read_input_tokens),
+        }
+    }
+}
+
+impl Add<TokenUsage> for TokenUsage {
+    type Output = Self;
+
+    fn add(self, other: Self) -> Self {
+        Self {
+            input_tokens: self.input_tokens.map_or(other.input_tokens, |tokens| {
+                Some(tokens + other.input_tokens.unwrap_or(0))
+            }),
+            output_tokens: self.output_tokens.map_or(other.output_tokens, |tokens| {
+                Some(tokens + other.output_tokens.unwrap_or(0))
+            }),
+            cache_creation_input_tokens: self
+                .cache_creation_input_tokens
+                .map_or(other.cache_creation_input_tokens, |tokens| {
+                    Some(tokens + other.cache_creation_input_tokens.unwrap_or(0))
+                }),
+            cache_read_input_tokens: self
+                .cache_read_input_tokens
+                .map_or(other.cache_read_input_tokens, |tokens| {
+                    Some(tokens + other.cache_read_input_tokens.unwrap_or(0))
+                }),
+        }
+    }
+}
+
+impl Sub<TokenUsage> for TokenUsage {
+    type Output = Self;
+
+    fn sub(self, other: Self) -> Self {
+        Self {
+            input_tokens: self.input_tokens.map_or(other.input_tokens, |tokens| {
+                Some(tokens - other.input_tokens.unwrap_or(0))
+            }),
+            output_tokens: self.output_tokens.map_or(other.output_tokens, |tokens| {
+                Some(tokens - other.output_tokens.unwrap_or(0))
+            }),
+            cache_creation_input_tokens: self
+                .cache_creation_input_tokens
+                .map_or(other.cache_creation_input_tokens, |tokens| {
+                    Some(tokens - other.cache_creation_input_tokens.unwrap_or(0))
+                }),
+            cache_read_input_tokens: self
+                .cache_read_input_tokens
+                .map_or(other.cache_read_input_tokens, |tokens| {
+                    Some(tokens - other.cache_read_input_tokens.unwrap_or(0))
+                }),
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
@@ -159,7 +244,7 @@ pub trait LanguageModel: Send + Sync {
 
             if let Some(first_event) = events.next().await {
                 match first_event {
-                    Ok(LanguageModelCompletionEvent::StartMessage { message_id: id }) => {
+                    Ok(LanguageModelCompletionEvent::StartMessage { message_id: id, .. }) => {
                         message_id = Some(id.clone());
                     }
                     Ok(LanguageModelCompletionEvent::Text(text)) => {
@@ -174,7 +259,7 @@ pub trait LanguageModel: Send + Sync {
                     match result {
                         Ok(LanguageModelCompletionEvent::StartMessage { .. }) => None,
                         Ok(LanguageModelCompletionEvent::Text(text)) => Some(Ok(text)),
-                        Ok(LanguageModelCompletionEvent::Stop(_)) => None,
+                        Ok(LanguageModelCompletionEvent::Stop { .. }) => None,
                         Ok(LanguageModelCompletionEvent::ToolUse(_)) => None,
                         Err(err) => Some(Err(err)),
                     }

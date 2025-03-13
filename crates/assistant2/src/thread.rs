@@ -11,7 +11,7 @@ use language_model::{
     LanguageModel, LanguageModelCompletionEvent, LanguageModelRegistry, LanguageModelRequest,
     LanguageModelRequestMessage, LanguageModelRequestTool, LanguageModelToolResult,
     LanguageModelToolUseId, MaxMonthlySpendReachedError, MessageContent, PaymentRequiredError,
-    Role, StopReason,
+    Role, StopReason, TokenUsage,
 };
 use project::Project;
 use prompt_store::{AssistantSystemPromptWorktree, PromptBuilder};
@@ -81,6 +81,7 @@ pub struct Thread {
     tool_use: ToolUseState,
     scripting_session: Entity<ScriptingSession>,
     scripting_tool_use: ToolUseState,
+    cumulative_token_usage: TokenUsage,
 }
 
 impl Thread {
@@ -109,6 +110,7 @@ impl Thread {
             tool_use: ToolUseState::new(),
             scripting_session,
             scripting_tool_use: ToolUseState::new(),
+            cumulative_token_usage: TokenUsage::default(),
         }
     }
 
@@ -158,6 +160,8 @@ impl Thread {
             tool_use,
             scripting_session,
             scripting_tool_use,
+            // TODO: persist token usage?
+            cumulative_token_usage: TokenUsage::default(),
         }
     }
 
@@ -490,17 +494,31 @@ impl Thread {
             let stream_completion = async {
                 let mut events = stream.await?;
                 let mut stop_reason = StopReason::EndTurn;
+                let mut start_token_usage = TokenUsage::default();
 
                 while let Some(event) = events.next().await {
                     let event = event?;
 
                     thread.update(&mut cx, |thread, cx| {
                         match event {
-                            LanguageModelCompletionEvent::StartMessage { .. } => {
+                            LanguageModelCompletionEvent::StartMessage { token_usage, .. } => {
                                 thread.insert_message(Role::Assistant, String::new(), cx);
+                                start_token_usage = token_usage.clone();
+                                thread.cumulative_token_usage =
+                                    thread.cumulative_token_usage.clone() + token_usage;
                             }
-                            LanguageModelCompletionEvent::Stop(reason) => {
+                            LanguageModelCompletionEvent::Stop {
+                                reason,
+                                token_usage,
+                            } => {
                                 stop_reason = reason;
+                                // The token_usage in StartMessage can include an initial output
+                                // token count that should be overriden.
+                                let token_usage = start_token_usage.clone().update(token_usage);
+                                // start_token_usage is subtracted as it was already included.
+                                thread.cumulative_token_usage =
+                                    thread.cumulative_token_usage.clone() + token_usage
+                                        - start_token_usage.clone();
                             }
                             LanguageModelCompletionEvent::Text(chunk) => {
                                 if let Some(last_message) = thread.messages.last_mut() {
@@ -842,6 +860,10 @@ impl Thread {
         }
 
         Ok(String::from_utf8_lossy(&markdown).to_string())
+    }
+
+    pub fn cumulative_token_usage(&self) -> TokenUsage {
+        self.cumulative_token_usage.clone()
     }
 }
 

@@ -659,11 +659,12 @@ pub fn map_to_language_model_completion_events(
                             return Some((
                                 Some(Ok(LanguageModelCompletionEvent::StartMessage {
                                     message_id: message.id,
+                                    token_usage: convert_usage(message.usage),
                                 })),
                                 state,
                             ))
                         }
-                        Event::MessageDelta { delta, .. } => {
+                        Event::MessageDelta { delta, usage } => {
                             if let Some(stop_reason) = delta.stop_reason.as_deref() {
                                 let stop_reason = match stop_reason {
                                     "end_turn" => StopReason::EndTurn,
@@ -673,7 +674,10 @@ pub fn map_to_language_model_completion_events(
                                 };
 
                                 return Some((
-                                    Some(Ok(LanguageModelCompletionEvent::Stop(stop_reason))),
+                                    Some(Ok(LanguageModelCompletionEvent::Stop {
+                                        reason: stop_reason,
+                                        token_usage: convert_usage(usage),
+                                    })),
                                     state,
                                 ));
                             }
@@ -696,6 +700,15 @@ pub fn map_to_language_model_completion_events(
         },
     )
     .filter_map(|event| async move { event })
+}
+
+fn convert_usage(usage: anthropic::Usage) -> language_model::TokenUsage {
+    language_model::TokenUsage {
+        input_tokens: usage.input_tokens,
+        output_tokens: usage.output_tokens,
+        cache_creation_input_tokens: usage.cache_creation_input_tokens,
+        cache_read_input_tokens: usage.cache_read_input_tokens,
+    }
 }
 
 struct ConfigurationView {

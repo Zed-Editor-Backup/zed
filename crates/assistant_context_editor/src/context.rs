@@ -2240,7 +2240,7 @@ impl AssistantContext {
 
                                 match event {
                                     LanguageModelCompletionEvent::StartMessage { .. } => {}
-                                    LanguageModelCompletionEvent::Stop(reason) => {
+                                    LanguageModelCompletionEvent::Stop { reason, .. } => {
                                         stop_reason = reason;
                                     }
                                     LanguageModelCompletionEvent::Text(chunk) => {
