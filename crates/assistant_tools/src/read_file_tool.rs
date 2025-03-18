@@ -78,27 +78,19 @@ impl Tool for ReadFileTool {
                 .await?;
 
             let result = buffer.read_with(&cx, |buffer, _cx| {
-                if buffer
-                    .file()
-                    .map_or(false, |file| file.disk_state().exists())
-                {
-                    let text = buffer.text();
-                    let string = if input.start_line.is_some() || input.line_count.is_some() {
-                        let lines = text.split('\n').skip(input.start_line.unwrap_or(0));
-                        if let Some(line_count) = input.line_count {
-                            Itertools::intersperse(lines.take(line_count), "\n").collect()
-                        } else {
-                            Itertools::intersperse(lines, "\n").collect()
-                        }
-                    } else {
-                        text
-                    };
+                let text = buffer.text();
 
-                    Ok(string)
+                if input.start_line.is_some() || input.line_count.is_some() {
+                    let lines = text.split('\n').skip(input.start_line.unwrap_or(0));
+                    if let Some(line_count) = input.line_count {
+                        Itertools::intersperse(lines.take(line_count), "\n").collect()
+                    } else {
+                        Itertools::intersperse(lines, "\n").collect()
+                    }
                 } else {
-                    Err(anyhow!("File does not exist"))
+                    text
                 }
-            })??;
+            })?;
 
             action_log.update(&mut cx, |log, cx| {
                 log.buffer_read(buffer, cx);
