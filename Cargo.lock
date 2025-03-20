@@ -4827,6 +4827,7 @@ dependencies = [
  "fuzzy",
  "gpui",
  "language",
+ "markdown",
  "num-format",
  "picker",
  "project",

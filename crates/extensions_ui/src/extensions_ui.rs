@@ -14,8 +14,9 @@ use fuzzy::{match_strings, StringMatchCandidate};
 use gpui::{
     actions, uniform_list, Action, App, ClipboardItem, Context, Entity, EventEmitter, Flatten,
     Focusable, InteractiveElement, KeyContext, ParentElement, Render, Styled, Task, TextStyle,
-    UniformListScrollHandle, WeakEntity, Window,
+    TextStyleRefinement, UniformListScrollHandle, WeakEntity, Window,
 };
+use markdown::{Markdown, MarkdownStyle};
 use num_format::{Locale, ToFormattedString};
 use project::DirectoryLister;
 use release_channel::ReleaseChannel;
@@ -469,7 +470,7 @@ impl ExtensionsPage {
     fn render_extensions(
         &mut self,
         range: Range<usize>,
-        _: &mut Window,
+        window: &mut Window,
         cx: &mut Context<Self>,
     ) -> Vec<ExtensionCard> {
         let dev_extension_entries_len = if self.filter.include_dev_extensions() {
@@ -486,7 +487,7 @@ impl ExtensionsPage {
                     let extension_ix =
                         self.filtered_remote_extension_indices[ix - dev_extension_entries_len];
                     let extension = &self.remote_extension_entries[extension_ix];
-                    self.render_remote_extension(extension, cx)
+                    self.render_remote_extension(extension, window, cx)
                 }
             })
             .collect()
@@ -601,6 +602,7 @@ impl ExtensionsPage {
     fn render_remote_extension(
         &self,
         extension: &ExtensionMetadata,
+        window: &mut Window,
         cx: &mut Context<Self>,
     ) -> ExtensionCard {
         let this = cx.entity().clone();
@@ -681,19 +683,21 @@ impl ExtensionsPage {
                 h_flex()
                     .gap_2()
                     .justify_between()
-                    .child(
-                        Label::new(format!(
-                            "{}: {}",
-                            if extension.manifest.authors.len() > 1 {
-                                "Authors"
-                            } else {
-                                "Author"
-                            },
-                            extension.manifest.authors.join(", ")
-                        ))
-                        .size(LabelSize::Small)
-                        .truncate(),
-                    )
+                    .child(cx.new(|cx| {
+                        SelectableAuthorText::new(
+                            format!(
+                                "{}: {}",
+                                if extension.manifest.authors.len() > 1 {
+                                    "Authors"
+                                } else {
+                                    "Author"
+                                },
+                                extension.manifest.authors.join(", ")
+                            ),
+                            window,
+                            cx,
+                        )
+                    }))
                     .child(
                         Label::new(format!(
                             "Downloads: {}",
@@ -1383,5 +1387,36 @@ impl Item for ExtensionsPage {
 
     fn to_item_events(event: &Self::Event, mut f: impl FnMut(workspace::item::ItemEvent)) {
         f(*event)
+    }
+}
+
+struct SelectableAuthorText {
+    markdown: Entity<Markdown>,
+}
+
+impl SelectableAuthorText {
+    fn new(text: String, window: &mut Window, cx: &mut Context<Self>) -> Self {
+        let settings = ThemeSettings::get_global(cx);
+        let mut base_text_style = window.text_style();
+        base_text_style.refine(&TextStyleRefinement {
+            font_family: Some(settings.ui_font.family.clone()),
+            font_size: Some(settings.ui_font_size(cx).into()),
+            color: Some(ui::Color::Muted.color(cx)),
+            ..Default::default()
+        });
+        let markdown_style = MarkdownStyle {
+            base_text_style,
+            selection_background_color: { cx.theme().players().local().selection },
+            ..Default::default()
+        };
+        Self {
+            markdown: cx.new(|cx| Markdown::new_text(text.into(), markdown_style, cx)),
+        }
+    }
+}
+
+impl Render for SelectableAuthorText {
+    fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
+        div().debug_bg_yellow().child(self.markdown.clone())
     }
 }
