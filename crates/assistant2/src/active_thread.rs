@@ -23,6 +23,7 @@ use std::time::Duration;
 use theme::ThemeSettings;
 use ui::{prelude::*, Disclosure, IconButton, KeyBinding, Tooltip};
 use util::ResultExt as _;
+use workspace::{notifications::NotificationId, Toast};
 use workspace::{OpenOptions, Workspace};
 
 use crate::context_store::{refresh_context_store_text, ContextStore};
@@ -363,8 +364,6 @@ impl ActiveThread {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
-        use platform::notifications::show_notification;
-
         match event {
             ThreadEvent::ShowError(error) => {
                 self.last_error = Some(error.clone());
@@ -373,12 +372,20 @@ impl ActiveThread {
                 self.save_thread(cx);
             }
             ThreadEvent::DoneStreaming => {
-                show_notification(
-                    "Thread finished",
-                    "The assistant has completed its response",
-                    cx,
-                )
-                .log_err();
+                if !self.thread.read(cx).is_generating() {
+                    if let Some(workspace) = self.workspace.upgrade() {
+                        struct ThreadFinishedToast;
+                        workspace.update(cx, |workspace, cx| {
+                            workspace.show_toast(
+                                Toast::new(
+                                    NotificationId::unique::<ThreadFinishedToast>(),
+                                    "Thread finished: The assistant has completed its response"
+                                ).autohide(),
+                                cx,
+                            );
+                        });
+                    }
+                }
             }
             ThreadEvent::StreamedAssistantText(message_id, text) => {
                 if let Some(rendered_message) = self.rendered_messages_by_id.get_mut(&message_id) {
