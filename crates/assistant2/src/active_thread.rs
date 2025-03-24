@@ -3,7 +3,7 @@ use crate::thread::{
     ThreadEvent, ThreadFeedback,
 };
 use crate::thread_store::ThreadStore;
-use crate::tool_use::{PendingToolUseStatus, ToolType, ToolUse, ToolUseStatus};
+use crate::tool_use::{PendingToolUseStatus, ToolUse, ToolUseStatus};
 use crate::ui::ContextPill;
 use collections::HashMap;
 use editor::{Editor, MultiBuffer};
@@ -1539,7 +1539,7 @@ impl ActiveThread {
                     c.ui_text.clone(),
                     c.input.clone(),
                     &c.messages,
-                    c.tool_type.clone(),
+                    c.tool.clone(),
                     cx,
                 );
             });

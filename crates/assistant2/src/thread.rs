@@ -33,7 +33,7 @@ use crate::thread_store::{
     SerializedMessage, SerializedMessageSegment, SerializedThread, SerializedToolResult,
     SerializedToolUse,
 };
-use crate::tool_use::{PendingToolUse, PendingToolUseStatus, ToolType, ToolUse, ToolUseState};
+use crate::tool_use::{PendingToolUse, PendingToolUseStatus, ToolUse, ToolUseState};
 
 #[derive(Debug, Clone, Copy)]
 pub enum RequestKind {
@@ -1164,7 +1164,7 @@ impl Thread {
                         tool_use.ui_text.clone(),
                         tool_use.input.clone(),
                         messages.clone(),
-                        ToolType::NonScriptingTool(tool),
+                        tool,
                     );
                 } else {
                     self.run_tool(
@@ -1172,7 +1172,7 @@ impl Thread {
                         tool_use.ui_text.clone(),
                         tool_use.input.clone(),
                         &messages,
-                        ToolType::NonScriptingTool(tool),
+                        tool,
                         cx,
                     );
                 }
@@ -1197,20 +1197,12 @@ impl Thread {
         ui_text: impl Into<SharedString>,
         input: serde_json::Value,
         messages: &[LanguageModelRequestMessage],
-        tool_type: ToolType,
+        tool: Arc<dyn Tool>,
         cx: &mut Context<'_, Thread>,
     ) {
-        match tool_type {
-            ToolType::ScriptingTool => {
-                // ScriptingTool functionality has been removed
-                log::warn!("ScriptingTool functionality has been removed");
-            }
-            ToolType::NonScriptingTool(tool) => {
-                let task = self.spawn_tool_use(tool_use_id.clone(), messages, input, tool, cx);
-                self.tool_use
-                    .run_pending_tool(tool_use_id, ui_text.into(), task);
-            }
-        }
+        let task = self.spawn_tool_use(tool_use_id.clone(), messages, input, tool, cx);
+        self.tool_use
+            .run_pending_tool(tool_use_id, ui_text.into(), task);
     }
 
     fn spawn_tool_use(
