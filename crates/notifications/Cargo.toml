@@ -22,6 +22,7 @@ test-support = [
 
 [dependencies]
 anyhow.workspace = true
+call.workspace = true
 channel.workspace = true
 client.workspace = true
 collections.workspace = true
@@ -29,8 +30,11 @@ component.workspace = true
 db.workspace = true
 gpui.workspace = true
 linkme.workspace = true
+release_channel.workspace = true
 rpc.workspace = true
+smallvec.workspace = true
 sum_tree.workspace = true
+theme.workspace = true
 time.workspace = true
 ui.workspace = true
 util.workspace = true

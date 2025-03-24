@@ -1,14 +1,98 @@
-use crate::notification_window_options;
-use crate::notifications::collab_notification::CollabNotification;
 use call::{room, ActiveCall};
 use client::User;
 use collections::HashMap;
-use gpui::{App, Size};
+use gpui::{App, Pixels, PlatformDisplay, Point, Bounds, Size, WindowBackgroundAppearance, WindowBounds, WindowDecorations, WindowKind, WindowOptions, img, AnyElement, SharedUri, Window};
+use release_channel::ReleaseChannel;
+use smallvec::SmallVec;
+use std::rc::Rc;
 use std::sync::{Arc, Weak};
-
-use ui::{prelude::*, Button, Label};
+use theme;
+use ui::{prelude::*, Button, Label, h_flex, v_flex, px};
 use util::ResultExt;
 use workspace::AppState;
+
+#[derive(IntoElement)]
+struct CollabNotification {
+    avatar_uri: SharedUri,
+    accept_button: Button,
+    dismiss_button: Button,
+    children: SmallVec<[AnyElement; 2]>,
+}
+
+impl CollabNotification {
+    fn new(
+        avatar_uri: impl Into<SharedUri>,
+        accept_button: Button,
+        dismiss_button: Button,
+    ) -> Self {
+        Self {
+            avatar_uri: avatar_uri.into(),
+            accept_button,
+            dismiss_button,
+            children: SmallVec::new(),
+        }
+    }
+}
+
+impl ParentElement for CollabNotification {
+    fn extend(&mut self, elements: impl IntoIterator<Item = AnyElement>) {
+        self.children.extend(elements)
+    }
+}
+
+impl RenderOnce for CollabNotification {
+    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+        h_flex()
+            .text_ui(cx)
+            .justify_between()
+            .size_full()
+            .overflow_hidden()
+            .elevation_3(cx)
+            .p_2()
+            .gap_2()
+            .child(img(self.avatar_uri).w_12().h_12().rounded_full())
+            .child(v_flex().overflow_hidden().children(self.children))
+            .child(
+                v_flex()
+                    .child(self.accept_button)
+                    .child(self.dismiss_button),
+            )
+    }
+}
+
+fn notification_window_options(
+    screen: Rc<dyn PlatformDisplay>,
+    size: Size<Pixels>,
+    cx: &App,
+) -> WindowOptions {
+    let notification_margin_width = px(16.);
+    let notification_margin_height = px(-48.);
+
+    let bounds = Bounds::<Pixels> {
+        origin: screen.bounds().top_right()
+            - Point::new(
+                size.width + notification_margin_width,
+                notification_margin_height,
+            ),
+        size,
+    };
+
+    let app_id = ReleaseChannel::global(cx).app_id();
+
+    WindowOptions {
+        window_bounds: Some(WindowBounds::Windowed(bounds)),
+        titlebar: None,
+        focus: false,
+        show: true,
+        kind: WindowKind::PopUp,
+        is_movable: false,
+        display_id: Some(screen.id()),
+        window_background: WindowBackgroundAppearance::Transparent,
+        app_id: Some(app_id.to_owned()),
+        window_min_size: None,
+        window_decorations: Some(WindowDecorations::Client),
+    }
+}
 
 pub fn init(app_state: &Arc<AppState>, cx: &mut App) {
     let app_state = Arc::downgrade(app_state);

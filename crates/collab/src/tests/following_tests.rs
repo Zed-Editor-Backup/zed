@@ -2,16 +2,14 @@
 use crate::tests::TestServer;
 use call::{ActiveCall, ParticipantLocation};
 use client::ChannelId;
-use collab_ui::{
-    channel_view::ChannelView,
-    notifications::project_shared_notification::ProjectSharedNotification,
-};
+use collab_ui::channel_view::ChannelView;
 use editor::{Editor, ExcerptRange, MultiBuffer};
 use gpui::{
     point, AppContext as _, BackgroundExecutor, BorrowAppContext, Entity, SharedString,
     TestAppContext, VisualTestContext,
 };
 use language::Capability;
+use notifications::ProjectSharedNotification;
 use project::WorktreeSettings;
 use rpc::proto::PeerId;
 use serde_json::json;

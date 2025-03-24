@@ -8566,6 +8566,7 @@ name = "notifications"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "call",
  "channel",
  "client",
  "collections",
@@ -8573,9 +8574,12 @@ dependencies = [
  "db",
  "gpui",
  "linkme",
+ "release_channel",
  "rpc",
  "settings",
+ "smallvec",
  "sum_tree",
+ "theme",
  "time",
  "ui",
  "util",
