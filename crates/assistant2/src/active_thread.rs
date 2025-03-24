@@ -363,6 +363,8 @@ impl ActiveThread {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
+        use platform::notifications::show_notification;
+
         match event {
             ThreadEvent::ShowError(error) => {
                 self.last_error = Some(error.clone());
@@ -370,7 +372,14 @@ impl ActiveThread {
             ThreadEvent::StreamedCompletion | ThreadEvent::SummaryChanged => {
                 self.save_thread(cx);
             }
-            ThreadEvent::DoneStreaming => {}
+            ThreadEvent::DoneStreaming => {
+                show_notification(
+                    "Thread finished",
+                    "The assistant has completed its response",
+                    cx,
+                )
+                .log_err();
+            }
             ThreadEvent::StreamedAssistantText(message_id, text) => {
                 if let Some(rendered_message) = self.rendered_messages_by_id.get_mut(&message_id) {
                     rendered_message.append_text(text, window, cx);

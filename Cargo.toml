@@ -309,6 +309,7 @@ outline_panel = { path = "crates/outline_panel" }
 paths = { path = "crates/paths" }
 panel = { path = "crates/panel" }
 picker = { path = "crates/picker" }
+platform = { path = "crates/platform" }
 plugin = { path = "crates/plugin" }
 plugin_macros = { path = "crates/plugin_macros" }
 prettier = { path = "crates/prettier" }
