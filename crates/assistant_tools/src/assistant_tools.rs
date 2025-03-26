@@ -57,4 +57,7 @@ pub fn init(http_client: Arc<HttpClientWithUrl>, cx: &mut App) {
     registry.register_tool(RegexSearchTool);
     registry.register_tool(ThinkingTool);
     registry.register_tool(FetchTool::new(http_client));
+
+    // For now, disable the edit-files tool by default.
+    registry.unregister_tool_by_name("edit-files");
 }
