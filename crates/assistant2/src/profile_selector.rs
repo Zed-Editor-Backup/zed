@@ -1,6 +1,5 @@
 use std::sync::Arc;
 
-use crate::ToggleProfileSelector;
 use assistant_settings::{AgentProfile, AssistantSettings};
 use fs::Fs;
 use gpui::{prelude::*, Action, Entity, FocusHandle, Subscription, WeakEntity};
@@ -9,22 +8,21 @@ use settings::{update_settings_file, Settings as _, SettingsStore};
 use ui::{prelude::*, ContextMenu, ContextMenuEntry, KeyBinding, PopoverMenu, PopoverMenuHandle};
 use util::ResultExt as _;
 
-use crate::{ManageProfiles, ThreadStore};
+use crate::{ManageProfiles, ThreadStore, ToggleProfileSelector};
 
 pub struct ProfileSelector {
     profiles: IndexMap<Arc<str>, AgentProfile>,
     fs: Arc<dyn Fs>,
     thread_store: WeakEntity<ThreadStore>,
-    _subscriptions: Vec<Subscription>,
     menu_handle: PopoverMenuHandle<ContextMenu>,
     focus_handle: FocusHandle,
+    _subscriptions: Vec<Subscription>,
 }
 
 impl ProfileSelector {
     pub fn new(
         fs: Arc<dyn Fs>,
         thread_store: WeakEntity<ThreadStore>,
-        menu_handle: PopoverMenuHandle<ContextMenu>,
         focus_handle: FocusHandle,
         cx: &mut Context<Self>,
     ) -> Self {
@@ -36,13 +34,17 @@ impl ProfileSelector {
             profiles: IndexMap::default(),
             fs,
             thread_store,
-            _subscriptions: vec![settings_subscription],
-            menu_handle,
             focus_handle,
+            menu_handle: PopoverMenuHandle::default(),
+            _subscriptions: vec![settings_subscription],
         };
         this.refresh_profiles(cx);
 
         this
+    }
+
+    pub fn menu_handle(&self) -> PopoverMenuHandle<ContextMenu> {
+        self.menu_handle.clone()
     }
 
     fn refresh_profiles(&mut self, cx: &mut Context<Self>) {
@@ -98,10 +100,6 @@ impl ProfileSelector {
             menu
         })
     }
-
-    pub fn toggle(&self, window: &mut Window, cx: &mut Context<Self>) {
-        self.menu_handle.toggle(window, cx);
-    }
 }
 
 impl Render for ProfileSelector {
@@ -120,9 +118,10 @@ impl Render for ProfileSelector {
             _ => IconName::Folder,
         };
 
-        let focus_handle = self.focus_handle.clone();
         let this = cx.entity().clone();
-        PopoverMenu::new("tool-selector")
+        let focus_handle = self.focus_handle.clone();
+
+        PopoverMenu::new("profile-selector")
             .menu(move |window, cx| {
                 Some(this.update(cx, |this, cx| this.build_context_menu(window, cx)))
             })
