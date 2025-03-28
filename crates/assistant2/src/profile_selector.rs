@@ -113,9 +113,9 @@ impl Render for ProfileSelector {
             .unwrap_or_else(|| "Unknown".into());
 
         let icon = match profile_id.as_ref() {
-            "code-writer" => IconName::Folder,
-            "read-only" => IconName::Folder,
-            _ => IconName::Folder,
+            "write" => IconName::Pencil,
+            "ask" => IconName::MessageBubbles,
+            _ => IconName::UserRoundPen,
         };
 
         let this = cx.entity().clone();
@@ -129,7 +129,7 @@ impl Render for ProfileSelector {
                 Button::new("profile-selector-button", selected_profile)
                     .icon(icon)
                     .icon_position(IconPosition::Start)
-                    .icon_size(IconSize::Small)
+                    .icon_size(IconSize::XSmall)
                     .label_size(LabelSize::Small)
                     .color(Color::Muted)
                     .key_binding({
