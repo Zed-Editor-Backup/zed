@@ -51,7 +51,7 @@ impl ProfileSelector {
     ) -> Entity<ContextMenu> {
         ContextMenu::build(window, cx, |mut menu, _window, cx| {
             let settings = AssistantSettings::get_global(cx);
-            let icon_position = IconPosition::Start;
+            let icon_position = IconPosition::End;
 
             menu = menu.header("Profiles");
             for (profile_id, profile) in self.profiles.clone() {
@@ -82,14 +82,11 @@ impl ProfileSelector {
             }
 
             menu = menu.separator();
-            menu = menu.item(
-                ContextMenuEntry::new("Configure Profiles")
-                    .icon(IconName::Pencil)
-                    .icon_color(Color::Muted)
-                    .handler(move |window, cx| {
-                        window.dispatch_action(ManageProfiles.boxed_clone(), cx);
-                    }),
-            );
+            menu = menu.item(ContextMenuEntry::new("Configure Profiles").handler(
+                move |window, cx| {
+                    window.dispatch_action(ManageProfiles.boxed_clone(), cx);
+                },
+            ));
 
             menu
         })
@@ -99,11 +96,18 @@ impl ProfileSelector {
 impl Render for ProfileSelector {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let settings = AssistantSettings::get_global(cx);
-        let profile = settings
-            .profiles
-            .get(&settings.default_profile)
+        let profile_id = &settings.default_profile;
+        let profile = settings.profiles.get(profile_id);
+
+        let selected_profile = profile
             .map(|profile| profile.name.clone())
             .unwrap_or_else(|| "Unknown".into());
+
+        let icon = match profile_id.as_ref() {
+            "code-writer" => IconName::Folder,
+            "read-only" => IconName::Folder,
+            _ => IconName::Folder,
+        };
 
         let this = cx.entity().clone();
         PopoverMenu::new("tool-selector")
@@ -111,9 +115,12 @@ impl Render for ProfileSelector {
                 Some(this.update(cx, |this, cx| this.build_context_menu(window, cx)))
             })
             .trigger_with_tooltip(
-                Button::new("profile-selector-button", profile)
-                    .style(ButtonStyle::Filled)
-                    .label_size(LabelSize::Small),
+                Button::new("profile-selector-button", selected_profile)
+                    .icon(icon)
+                    .icon_position(IconPosition::Start)
+                    .icon_size(IconSize::Small)
+                    .label_size(LabelSize::Small)
+                    .color(Color::Muted),
                 Tooltip::text("Change Profile"),
             )
             .anchor(gpui::Corner::BottomLeft)
