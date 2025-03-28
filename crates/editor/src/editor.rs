@@ -17428,9 +17428,12 @@ impl Editor {
 
         dbg!(("4", &buffer_path, workspace_id, pane_id));
         // TODO kb config option to disable this behavior
-        let item_id = dbg!(DB.most_relevant_editor_item(&buffer_path, workspace_id, pane_id))
-            // TODO kb something very broken is happening with the persisted IDs
-            .log_err()?? as u64;
+        let item_id = dbg!(DB.most_relevant_editor_item(
+            &buffer_path.to_string_lossy(),
+            workspace_id,
+            pane_id
+        ))
+        .log_err()?? as u64;
         dbg!("5");
 
         // TODO kb do not overwrite non-default values

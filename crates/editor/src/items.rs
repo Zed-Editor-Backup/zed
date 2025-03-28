@@ -1212,6 +1212,9 @@ impl SerializableItem for Editor {
 
         let is_dirty = buffer.read(cx).is_dirty();
         let mtime = buffer.read(cx).saved_mtime();
+        let pane_id = workspace
+            .pane_for(&cx.entity())
+            .and_then(|pane| pane.read(cx).db_id());
 
         let snapshot = buffer.read(cx).snapshot();
 
@@ -1231,7 +1234,7 @@ impl SerializableItem for Editor {
                     language,
                     mtime,
                 };
-                DB.save_serialized_editor(item_id, workspace_id, editor)
+                DB.save_serialized_editor(item_id, workspace_id, pane_id, editor)
                     .await
                     .context("failed to save serialized editor")
             })
@@ -1815,7 +1818,7 @@ mod tests {
                 mtime: Some(mtime),
             };
 
-            DB.save_serialized_editor(item_id, workspace_id, serialized_editor.clone())
+            DB.save_serialized_editor(item_id, workspace_id, None, serialized_editor.clone())
                 .await
                 .unwrap();
 
@@ -1847,7 +1850,7 @@ mod tests {
                 mtime: None,
             };
 
-            DB.save_serialized_editor(item_id, workspace_id, serialized_editor)
+            DB.save_serialized_editor(item_id, workspace_id, None, serialized_editor)
                 .await
                 .unwrap();
 
@@ -1883,7 +1886,7 @@ mod tests {
                 mtime: None,
             };
 
-            DB.save_serialized_editor(item_id, workspace_id, serialized_editor)
+            DB.save_serialized_editor(item_id, workspace_id, None, serialized_editor)
                 .await
                 .unwrap();
 
@@ -1920,7 +1923,7 @@ mod tests {
                 mtime: Some(old_mtime),
             };
 
-            DB.save_serialized_editor(item_id, workspace_id, serialized_editor)
+            DB.save_serialized_editor(item_id, workspace_id, None, serialized_editor)
                 .await
                 .unwrap();
 

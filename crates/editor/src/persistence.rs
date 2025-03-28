@@ -3,7 +3,7 @@ use db::sqlez::bindable::{Bind, Column, StaticColumnCount};
 use db::sqlez::statement::Statement;
 use fs::MTime;
 use itertools::Itertools as _;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 use db::sqlez_macros::sql;
 use db::{define_connection, query};
@@ -88,6 +88,7 @@ define_connection!(
     // editors(
     //   item_id: usize,
     //   workspace_id: usize,
+    //   pane_id: Option<usize>,
     //   path: Option<PathBuf>,
     //   scroll_top_row: usize,
     //   scroll_vertical_offset: f32,
@@ -188,6 +189,11 @@ define_connection!(
                 ON DELETE CASCADE
             ) STRICT;
         ),
+        // TODO kb this is more a hack than a solution,
+        // as relies on editors in DB not cleaned up after editors are closed during regular work in Zed
+        sql! (
+            ALTER TABLE editors ADD COLUMN pane_id INTEGER;
+        ),
     ];
 );
 
@@ -205,20 +211,21 @@ impl EditorDb {
     }
 
     query! {
-        pub async fn save_serialized_editor(item_id: ItemId, workspace_id: WorkspaceId, serialized_editor: SerializedEditor) -> Result<()> {
+        pub async fn save_serialized_editor(item_id: ItemId, workspace_id: WorkspaceId, pane_id: Option<PaneId>, serialized_editor: SerializedEditor) -> Result<()> {
             INSERT INTO editors
-                (item_id, workspace_id, path, buffer_path, contents, language, mtime_seconds, mtime_nanos)
+                (item_id, workspace_id, pane_id, path, buffer_path, contents, language, mtime_seconds, mtime_nanos)
             VALUES
-                (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+                (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
             ON CONFLICT DO UPDATE SET
                 item_id = ?1,
                 workspace_id = ?2,
-                path = ?3,
-                buffer_path = ?4,
-                contents = ?5,
-                language = ?6,
-                mtime_seconds = ?7,
-                mtime_nanos = ?8
+                pane_id = ?3,
+                path = ?4,
+                buffer_path = ?5,
+                contents = ?6,
+                language = ?7,
+                mtime_seconds = ?8,
+                mtime_nanos = ?9
         }
     }
 
@@ -401,17 +408,15 @@ VALUES {placeholders};
 
     query! {
         pub fn most_relevant_editor_item(
-            buffer_path: &Path,
+            buffer_path: &str,
             workspace_id: WorkspaceId,
             pane_id: PaneId
         ) -> Result<Option<usize>> {
             SELECT e.item_id
             FROM editors e
-                     JOIN items i
-                          ON e.item_id = i.item_id
             WHERE e.buffer_path = ?1
             AND e.workspace_id = ?2
-            ORDER BY i.pane_id = ?3 DESC, i.item_id DESC
+            ORDER BY e.pane_id = ?3 DESC, e.item_id DESC
             LIMIT 1
         }
     }
@@ -432,7 +437,7 @@ mod tests {
             mtime: None,
         };
 
-        DB.save_serialized_editor(1234, workspace_id, serialized_editor.clone())
+        DB.save_serialized_editor(1234, workspace_id, None, serialized_editor.clone())
             .await
             .unwrap();
 
@@ -450,7 +455,7 @@ mod tests {
             mtime: None,
         };
 
-        DB.save_serialized_editor(1234, workspace_id, serialized_editor.clone())
+        DB.save_serialized_editor(1234, workspace_id, None, serialized_editor.clone())
             .await
             .unwrap();
 
@@ -468,7 +473,7 @@ mod tests {
             mtime: None,
         };
 
-        DB.save_serialized_editor(1234, workspace_id, serialized_editor.clone())
+        DB.save_serialized_editor(1234, workspace_id, None, serialized_editor.clone())
             .await
             .unwrap();
 
@@ -486,7 +491,7 @@ mod tests {
             mtime: Some(MTime::from_seconds_and_nanos(100, 42)),
         };
 
-        DB.save_serialized_editor(1234, workspace_id, serialized_editor.clone())
+        DB.save_serialized_editor(1234, workspace_id, None, serialized_editor.clone())
             .await
             .unwrap();
 
