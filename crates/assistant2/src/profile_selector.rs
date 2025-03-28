@@ -5,7 +5,10 @@ use fs::Fs;
 use gpui::{prelude::*, Action, Entity, FocusHandle, Subscription, WeakEntity};
 use indexmap::IndexMap;
 use settings::{update_settings_file, Settings as _, SettingsStore};
-use ui::{prelude::*, ContextMenu, ContextMenuEntry, KeyBinding, PopoverMenu, PopoverMenuHandle};
+use ui::{
+    prelude::*, ButtonLike, ContextMenu, ContextMenuEntry, KeyBinding, PopoverMenu,
+    PopoverMenuHandle,
+};
 use util::ResultExt as _;
 
 use crate::{ManageProfiles, ThreadStore, ToggleProfileSelector};
@@ -126,17 +129,31 @@ impl Render for ProfileSelector {
                 Some(this.update(cx, |this, cx| this.build_context_menu(window, cx)))
             })
             .trigger(
-                Button::new("profile-selector-button", selected_profile)
-                    .icon(icon)
-                    .icon_position(IconPosition::Start)
-                    .icon_size(IconSize::XSmall)
-                    .label_size(LabelSize::Small)
-                    .color(Color::Muted)
-                    .key_binding({
-                        let focus_handle = focus_handle.clone();
-                        KeyBinding::for_action_in(&ToggleProfileSelector, &focus_handle, window, cx)
+                ButtonLike::new("profile-selector-button").child(
+                    h_flex()
+                        .gap_1()
+                        .child(Icon::new(icon).size(IconSize::XSmall).color(Color::Muted))
+                        .child(
+                            Label::new(selected_profile)
+                                .size(LabelSize::Small)
+                                .color(Color::Muted),
+                        )
+                        .child(
+                            Icon::new(IconName::ChevronDown)
+                                .size(IconSize::XSmall)
+                                .color(Color::Muted),
+                        )
+                        .child(div().opacity(0.5).children({
+                            let focus_handle = focus_handle.clone();
+                            KeyBinding::for_action_in(
+                                &ToggleProfileSelector,
+                                &focus_handle,
+                                window,
+                                cx,
+                            )
                             .map(|kb| kb.size(rems_from_px(10.)))
-                    }),
+                        })),
+                ),
             )
             .anchor(gpui::Corner::BottomLeft)
             .with_handle(self.menu_handle.clone())
