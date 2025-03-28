@@ -29,7 +29,9 @@ use crate::context_strip::{ContextStrip, ContextStripEvent, SuggestContextKind};
 use crate::profile_selector::ProfileSelector;
 use crate::thread::{RequestKind, Thread};
 use crate::thread_store::ThreadStore;
-use crate::{Chat, ChatMode, RemoveAllContext, ThreadEvent, ToggleContextPicker};
+use crate::{
+    Chat, ChatMode, RemoveAllContext, ThreadEvent, ToggleContextPicker, ToggleProfileSelector,
+};
 
 pub struct MessageEditor {
     thread: Entity<Thread>,
@@ -60,6 +62,7 @@ impl MessageEditor {
         let context_picker_menu_handle = PopoverMenuHandle::default();
         let inline_context_picker_menu_handle = PopoverMenuHandle::default();
         let model_selector_menu_handle = PopoverMenuHandle::default();
+        let profile_selector_menu_handle = PopoverMenuHandle::default();
 
         let editor = cx.new(|cx| {
             let mut editor = Editor::auto_height(10, window, cx);
@@ -135,7 +138,15 @@ impl MessageEditor {
                     cx,
                 )
             }),
-            profile_selector: cx.new(|cx| ProfileSelector::new(fs, thread_store, cx)),
+            profile_selector: cx.new(|cx| {
+                ProfileSelector::new(
+                    fs,
+                    thread_store,
+                    profile_selector_menu_handle,
+                    editor.focus_handle(cx),
+                    cx,
+                )
+            }),
             _subscriptions: subscriptions,
         }
     }
@@ -564,6 +575,10 @@ impl Render for MessageEditor {
                     .on_action(cx.listener(|this, _: &ToggleModelSelector, window, cx| {
                         this.model_selector
                             .update(cx, |model_selector, cx| model_selector.toggle(window, cx));
+                    }))
+                    .on_action(cx.listener(|this, _: &ToggleProfileSelector, window, cx| {
+                        this.profile_selector
+                            .update(cx, |profile_selector, cx| profile_selector.toggle(window, cx));
                     }))
                     .on_action(cx.listener(Self::toggle_context_picker))
                     .on_action(cx.listener(Self::remove_all_context))
