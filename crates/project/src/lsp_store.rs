@@ -8367,7 +8367,6 @@ impl LspStore {
         self.buffer_store.update(cx, |buffer_store, cx| {
             for buffer in buffer_store.buffers() {
                 buffer.update(cx, |buffer, cx| {
-                    // TODO kb clean inlays
                     buffer.update_diagnostics(server_id, DiagnosticSet::new([], buffer), cx);
                     buffer.set_completion_triggers(server_id, Default::default(), cx);
                 });
