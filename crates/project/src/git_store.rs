@@ -258,7 +258,7 @@ pub enum RepositoryState {
 
 #[derive(Clone, Debug)]
 pub enum RepositoryEvent {
-    Updated,
+    Updated { full_scan: bool },
     MergeHeadsChanged,
 }
 
@@ -285,6 +285,12 @@ enum GitJobKey {
     BatchReadIndex,
     RefreshStatuses,
     ReloadGitState,
+}
+
+impl GitJobKey {
+    fn supersedes(&self, other: &Self) -> bool {
+        self == other || (self == &Self::ReloadGitState && other == &Self::RefreshStatuses)
+    }
 }
 
 impl GitStore {
@@ -3512,7 +3518,7 @@ impl Repository {
         if update.is_last_update {
             self.snapshot.scan_id = update.scan_id;
         }
-        cx.emit(RepositoryEvent::Updated);
+        cx.emit(RepositoryEvent::Updated { full_scan: true });
         Ok(())
     }
 
@@ -3657,10 +3663,15 @@ impl Repository {
 
                 if let Some(job) = jobs.pop_front() {
                     if let Some(current_key) = &job.key {
-                        if jobs
-                            .iter()
-                            .any(|other_job| other_job.key.as_ref() == Some(current_key))
-                        {
+                        if jobs.iter().any(|other_job| {
+                            other_job
+                                .key
+                                .as_ref()
+                                .is_some_and(|other| other.supersedes(current_key))
+                        }) {
+                            log::debug!(
+                                "skipping git job because it's superseded by a later queued job"
+                            );
                             continue;
                         }
                     }
@@ -3856,7 +3867,7 @@ impl Repository {
                                 .ok();
                         }
                     }
-                    cx.emit(RepositoryEvent::Updated);
+                    cx.emit(RepositoryEvent::Updated { full_scan: false });
                 })
             },
         );
@@ -4096,7 +4107,7 @@ async fn compute_snapshot(
         || branch != prev_snapshot.branch
         || statuses_by_path != prev_snapshot.statuses_by_path
     {
-        events.push(RepositoryEvent::Updated);
+        events.push(RepositoryEvent::Updated { full_scan: true });
     }
 
     let mut current_merge_conflicts = TreeSet::default();
