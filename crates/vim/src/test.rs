@@ -1972,3 +1972,25 @@ async fn test_delete_unmatched_brace(cx: &mut gpui::TestAppContext) {
         .await
         .assert_eq("  oth(wow)\n  oth(wow)\n");
 }
+
+#[gpui::test]
+async fn test_ctrl_p(cx: &mut gpui::TestAppContext) {
+    let mut cx = NeovimBackedTestContext::new(cx).await;
+    cx.set_shared_state(indoc! {
+        "beta
+         alpha
+         ˇ
+        }
+        "
+    })
+    .await;
+    cx.simulate_shared_keystrokes("i ctrl-p enter").await;
+    cx.shared_state().await.assert_eq(indoc! {
+        "beta
+         alpha
+         alpha
+         ˇ
+        }
+        "
+    });
+}
