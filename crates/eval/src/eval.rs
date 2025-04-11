@@ -26,7 +26,7 @@ fn main() {
     app.run(move |cx| {
         let app_state = init(cx);
 
-        let model = find_model("claude-3-7-sonnet-latest", cx).unwrap();
+        let model = find_model("claude-3-7-sonnet-thinking-latest", cx).unwrap();
 
         LanguageModelRegistry::global(cx).update(cx, |registry, cx| {
             registry.set_default_model(Some(model.clone()), cx);
@@ -41,8 +41,9 @@ fn main() {
 
             let example =
                 Example::load_from_directory("./crates/eval/examples/find_and_replace_diff_card")?;
-            // example.setup().await?;
-            // cx.update(|cx| example.run(model, app_state, cx))?.await?;
+            example.setup().await?;
+            cx.update(|cx| example.run(model.clone(), app_state, cx))?
+                .await?;
             let diff = example.repository_diff().await?;
             example.judge(model, diff, cx).await?;
 
