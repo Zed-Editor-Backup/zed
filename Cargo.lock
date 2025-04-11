@@ -7669,6 +7669,7 @@ dependencies = [
 name = "language_model_selector"
 version = "0.1.0"
 dependencies = [
+ "collections",
  "feature_flags",
  "gpui",
  "language_model",
