@@ -49,7 +49,8 @@ pub struct Example {
     /// Path to the example's directory
     pub path: PathBuf,
 
-    /// Contents of the base.toml file
+    /// Project name derived from directory name
+    #[allow(dead_code)]
     pub name: String,
     /// Content of `base.toml`
     pub base: ExampleBase,
@@ -67,21 +68,10 @@ pub struct RunOutput {
     pub diagnostics: String,
     pub response_count: usize,
     pub token_usage: TokenUsage,
-}
-
     /// Content of the criteria.md file
     pub criteria: String,
-
-    /// Log file to output results
-    pub log_file: Arc<Mutex<File>>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct RunOutput {
-    pub repository_diff: String,
-    pub diagnostics: String,
-    pub response_count: usize,
-    pub token_usage: TokenUsage,
+    #[serde(skip)] // Skip this field during serialization/deserialization
+    pub log_file: Option<Arc<Mutex<File>>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -99,7 +89,6 @@ pub struct JudgeOutput {
 impl Example {
     /// Load an example from a directory containing base.toml, prompt.md, and criteria.md
     pub fn load_from_directory(dir_path: &Path, run_dir: &Path) -> Result<Self> {
-        let name = dir_path.file_name().unwrap().to_string_lossy().to_string();
         let base_path = dir_path.join("base.toml");
         let prompt_path = dir_path.join("prompt.md");
         let criteria_path = dir_path.join("criteria.md");
@@ -114,6 +103,7 @@ impl Example {
 
         Ok(Example {
             path: dir_path.to_path_buf(),
+            name: dir_path.file_name().unwrap().to_string_lossy().to_string(),
             base: toml::from_str(&fs::read_to_string(&base_path)?)?,
             prompt: fs::read_to_string(prompt_path.clone())?,
             criteria: fs::read_to_string(criteria_path.clone())?,
@@ -397,6 +387,8 @@ impl Example {
                     diagnostics,
                     response_count,
                     token_usage: thread.cumulative_token_usage(),
+                    criteria: this.criteria.clone(),
+                    log_file: Some(this.log_file.clone()),
                 }
             })
         })
