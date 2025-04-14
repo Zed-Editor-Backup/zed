@@ -212,6 +212,7 @@ async fn run_example(
     app_state: Arc<AgentAppState>,
     cx: &mut AsyncApp,
 ) -> Result<JudgeOutput> {
+    example.setup().await?;
     cx.update(|cx| example.run(model.clone(), app_state, cx))?
         .await?;
     let diff = example.repository_diff().await?;

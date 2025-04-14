@@ -50,10 +50,24 @@ pub struct Example {
     pub path: PathBuf,
 
     /// Contents of the base.toml file
+    pub name: String,
+    /// Content of `base.toml`
     pub base: ExampleBase,
-
-    /// Content of the prompt.md file
+    /// Content of `prompt.md`
     pub prompt: String,
+    /// Content of `criteria.md`
+    pub criteria: String,
+    /// Markdown log file to append to
+    pub log_file: Arc<Mutex<File>>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct RunOutput {
+    pub repository_diff: String,
+    pub diagnostics: String,
+    pub response_count: usize,
+    pub token_usage: TokenUsage,
+}
 
     /// Content of the criteria.md file
     pub criteria: String,
@@ -85,6 +99,7 @@ pub struct JudgeOutput {
 impl Example {
     /// Load an example from a directory containing base.toml, prompt.md, and criteria.md
     pub fn load_from_directory(dir_path: &Path, run_dir: &Path) -> Result<Self> {
+        let name = dir_path.file_name().unwrap().to_string_lossy().to_string();
         let base_path = dir_path.join("base.toml");
         let prompt_path = dir_path.join("prompt.md");
         let criteria_path = dir_path.join("criteria.md");
