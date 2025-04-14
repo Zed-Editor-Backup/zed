@@ -71,6 +71,12 @@ pub enum Model {
     FourOmni,
     #[serde(rename = "gpt-4o-mini", alias = "gpt-4o-mini")]
     FourOmniMini,
+    #[serde(rename = "gpt-4.1", alias = "gpt-4.1")]
+    FourPointOne,
+    #[serde(rename = "gpt-4.1-mini", alias = "gpt-4.1-mini")]
+    FourPointOneMini,
+    #[serde(rename = "gpt-4.1-nano", alias = "gpt-4.1-nano")]
+    FourPointOneNano,
     #[serde(rename = "o1", alias = "o1")]
     O1,
     #[serde(rename = "o1-preview", alias = "o1-preview")]
@@ -99,6 +105,7 @@ impl Model {
             "gpt-4-turbo-preview" => Ok(Self::FourTurbo),
             "gpt-4o" => Ok(Self::FourOmni),
             "gpt-4o-mini" => Ok(Self::FourOmniMini),
+            "gpt-4.1" => Ok(Self::FourPointOne),
             "o1" => Ok(Self::O1),
             "o1-preview" => Ok(Self::O1Preview),
             "o1-mini" => Ok(Self::O1Mini),
@@ -114,6 +121,9 @@ impl Model {
             Self::FourTurbo => "gpt-4-turbo",
             Self::FourOmni => "gpt-4o",
             Self::FourOmniMini => "gpt-4o-mini",
+            Self::FourPointOne => "gpt-4.1",
+            Self::FourPointOneMini => "gpt-4.1-mini",
+            Self::FourPointOneNano => "gpt-4.1-nano",
             Self::O1 => "o1",
             Self::O1Preview => "o1-preview",
             Self::O1Mini => "o1-mini",
@@ -129,6 +139,9 @@ impl Model {
             Self::FourTurbo => "gpt-4-turbo",
             Self::FourOmni => "gpt-4o",
             Self::FourOmniMini => "gpt-4o-mini",
+            Self::FourPointOne => "gpt-4.1",
+            Self::FourPointOneMini => "gpt-4.1-mini",
+            Self::FourPointOneNano => "gpt-4.1-nano",
             Self::O1 => "o1",
             Self::O1Preview => "o1-preview",
             Self::O1Mini => "o1-mini",
@@ -146,6 +159,9 @@ impl Model {
             Self::FourTurbo => 128_000,
             Self::FourOmni => 128_000,
             Self::FourOmniMini => 128_000,
+            Self::FourPointOne => 128_000,
+            Self::FourPointOneMini => 128_000,
+            Self::FourPointOneNano => 128_000,
             Self::O1 => 200_000,
             Self::O1Preview => 128_000,
             Self::O1Mini => 128_000,
@@ -173,6 +189,7 @@ impl Model {
             | Self::FourTurbo
             | Self::FourOmni
             | Self::FourOmniMini
+            | Self::FourPointOne
             | Self::O1
             | Self::O1Preview
             | Self::O1Mini => true,
