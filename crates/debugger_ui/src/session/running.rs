@@ -657,6 +657,10 @@ impl RunningState {
         }
     }
 
+    pub(crate) fn has_open_context_menu(&self, cx: &App) -> bool {
+        self.variable_list.read(cx).has_open_context_menu()
+    }
+
     pub fn session(&self) -> &Entity<Session> {
         &self.session
     }
