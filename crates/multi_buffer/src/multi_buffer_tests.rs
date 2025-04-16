@@ -746,7 +746,7 @@ fn test_expand_excerpts(cx: &mut App) {
     drop(snapshot);
 
     multibuffer.update(cx, |multibuffer, cx| {
-        let line_five = multibuffer.snapshot(cx).anchor_before(Point::new(5, 0));
+        let line_five = multibuffer.snapshot(cx).anchor_before(Point::new(2, 0));
         multibuffer.expand_excerpts(
             multibuffer.excerpt_ids(),
             1,
@@ -754,7 +754,7 @@ fn test_expand_excerpts(cx: &mut App) {
             cx,
         );
         let snapshot = multibuffer.snapshot(cx);
-        let line_three = snapshot.anchor_before(Point::new(3, 0));
+        let line_three = snapshot.anchor_before(Point::new(0, 0));
         assert_eq!(
             line_three.cmp(&line_five, &snapshot),
             cmp::Ordering::Less,

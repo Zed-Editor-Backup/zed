@@ -6999,6 +6999,7 @@ impl ExcerptId {
     pub fn cmp(&self, other: &Self, snapshot: &MultiBufferSnapshot) -> cmp::Ordering {
         let a = snapshot.excerpt_locator_for_id(*self);
         let b = snapshot.excerpt_locator_for_id(*other);
+        dbg!((a, b));
         a.cmp(b).then_with(|| self.0.cmp(&other.0))
     }
 }
