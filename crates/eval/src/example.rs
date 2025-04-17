@@ -55,7 +55,7 @@ impl ExampleBase {
     pub fn repo_name(&self) -> String {
         self.url
             .split('/')
-            .last()
+            .next_back()
             .unwrap_or(&"")
             .trim_end_matches(".git")
             .into()
@@ -361,7 +361,7 @@ impl Example {
 
                     request_count += 1;
                     let messages_file_path = example_dir_path.join(format!("{request_count}.messages.md"));
-                    let last_messages_file_path = example_dir_path.join(format!("last.messages.md"));
+                    let last_messages_file_path = example_dir_path.join("last.messages.md");
                     let request_markdown = RequestMarkdown::new(request);
                     let response_events_markdown = response_events_to_markdown(response_events);
 
@@ -370,7 +370,7 @@ impl Example {
                     fs::write(last_messages_file_path, messages).expect("failed to write last messages file");
 
                     if request_count == 1 {
-                        let tools_file_path = example_dir_path.join(format!("tools.md"));
+                        let tools_file_path = example_dir_path.join("tools.md");
                         fs::write(tools_file_path, request_markdown.tools).expect("failed to write tools file");
                     }
                 });
