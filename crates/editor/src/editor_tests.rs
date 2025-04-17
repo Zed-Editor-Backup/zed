@@ -10104,7 +10104,7 @@ async fn test_completion_with_mode_specified_by_action(cx: &mut TestAppContext) 
 }
 
 #[gpui::test]
-async fn test_completion_replacing_suffix_in_multicursors(cx: &mut TestAppContext) {
+async fn test_completion_replacing_surrounding_text_with_multicursors(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
         lsp::ServerCapabilities {
@@ -10118,6 +10118,7 @@ async fn test_completion_replacing_suffix_in_multicursors(cx: &mut TestAppContex
     )
     .await;
 
+    // scenario: surrounding text matches completion text
     let initial_state = indoc! {"
         1. buf.to_offˇsuffix
         2. buf.to_offˇsuf
@@ -10164,24 +10165,19 @@ async fn test_completion_replacing_suffix_in_multicursors(cx: &mut TestAppContex
 
         buf.to_offsetˇ  // newest cursor
     "};
-
     cx.set_state(initial_state);
     cx.update_editor(|editor, window, cx| {
         editor.show_completions(&ShowCompletions { trigger: None }, window, cx);
     });
-
-    let counter = Arc::new(AtomicUsize::new(0));
     handle_completion_request_with_insert_and_replace(
         &mut cx,
         completion_marked_buffer,
         vec![completion_text],
-        counter.clone(),
+        Arc::new(AtomicUsize::new(0)),
     )
     .await;
     cx.condition(|editor, _| editor.context_menu_visible())
         .await;
-    assert_eq!(counter.load(atomic::Ordering::Acquire), 1);
-
     let apply_additional_edits = cx.update_editor(|editor, window, cx| {
         editor
             .confirm_completion_replace(&ConfirmCompletionReplace, window, cx)
@@ -10190,6 +10186,86 @@ async fn test_completion_replacing_suffix_in_multicursors(cx: &mut TestAppContex
     cx.assert_editor_state(expected);
     handle_resolve_completion_request(&mut cx, None).await;
     apply_additional_edits.await.unwrap();
+
+    // scenario: surrounding text matches surroundings of newest cursor, inserting at the end
+    let initial_state = indoc! {"
+        1. ooanbˇ
+        2. zooanbˇ
+        3. ooanbˇz
+
+        ooanb
+    "};
+
+    // foo_and_bar
+
+    let completion_marked_buffer = indoc! {"
+        1. ooanb
+        2. zooanb
+        3. ooanbz
+
+        ooanb
+    "};
+    let completion_text = "to_offset";
+    let expected = indoc! {"
+        1. buf.to_offsetˇ
+        2. buf.to_offsetˇsuf
+        3. buf.to_offsetˇfix
+        4. buf.to_offsetˇ
+        5. into_offsetˇensive
+        6. to_offsetˇsuffix
+        7. let to_offsetˇ //
+        8. aato_offsetˇzz
+        9. buf.to_offsetˇ
+        10. buf.to_offsetˇsuffix
+        11. to_offsetˇ
+
+        buf.to_offsetˇ  // newest cursor
+    "};
+    cx.set_state(initial_state);
+    cx.update_editor(|editor, window, cx| {
+        editor.show_completions(&ShowCompletions { trigger: None }, window, cx);
+    });
+    handle_completion_request_with_insert_and_replace(
+        &mut cx,
+        completion_marked_buffer,
+        vec![completion_text],
+        Arc::new(AtomicUsize::new(0)),
+    )
+    .await;
+    cx.condition(|editor, _| editor.context_menu_visible())
+        .await;
+    assert_eq!(counter.load(atomic::Ordering::Acquire), 1);
+    let apply_additional_edits = cx.update_editor(|editor, window, cx| {
+        editor
+            .confirm_completion_replace(&ConfirmCompletionReplace, window, cx)
+            .unwrap()
+    });
+    cx.assert_editor_state(expected);
+    handle_resolve_completion_request(&mut cx, None).await;
+    apply_additional_edits.await.unwrap();
+
+    // // scenario: surrounding text matches surroundings of newest cursor, replacing at the middle
+    // let initial_state = indoc! {"
+    //     foo_and_bar
+    //     1. ooanb,
+    //     1. zooanb,
+    //     2. ooanbz,
+    //     3. <oo|anb>, // FIX THIS THIS IS WRONG -----------------------
+
+    //     1. buf.to_offˇsuffix
+    //     2. buf.to_offˇsuf
+    //     3. buf.to_offˇfix
+    //     4. buf.to_offˇ
+    //     5. into_offˇensive
+    //     6. ˇsuffix
+    //     7. let ˇ //
+    //     8. aaˇzz
+    //     9. buf.to_off«zzzzzˇ»suffix
+    //     10. buf.«ˇzzzzz»suffix
+    //     11. to_off«ˇzzzzz»
+
+    //     buf.to_offˇsuffix  // newest cursor
+    // "};
 }
 
 // This used to crash
