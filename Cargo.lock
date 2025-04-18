@@ -10985,6 +10985,7 @@ dependencies = [
  "theme",
  "ui",
  "util",
+ "uuid",
  "workspace",
  "workspace-hack",
  "zed_actions",
@@ -18320,6 +18321,7 @@ dependencies = [
  "gpui",
  "schemars",
  "serde",
+ "uuid",
  "workspace-hack",
 ]
 
