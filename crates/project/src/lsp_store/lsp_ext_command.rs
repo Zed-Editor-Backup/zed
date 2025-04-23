@@ -434,6 +434,7 @@ pub struct CargoRunnableArgs {
     // command, --package and --lib stuff
     pub cargo_args: Vec<String>,
     // stuff after --
+    #[serde(default)]
     pub executable_args: Vec<String>,
 }
 
