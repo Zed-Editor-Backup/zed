@@ -64,8 +64,11 @@ pub struct WorktreeContext {
 #[derive(Debug, Clone, Serialize)]
 pub struct RulesFileContext {
     pub path_in_worktree: Arc<Path>,
-    pub abs_path: Arc<Path>,
     pub text: String,
+    // This used for opening rules files. TODO: Since it isn't related to prompt templating, this
+    // should be moved elsewhere.
+    #[serde(skip)]
+    pub project_entry_id: usize,
 }
 
 #[derive(Serialize)]
