@@ -460,14 +460,16 @@ pub fn into_google(
             .collect(),
         generation_config: Some(google_ai::GenerationConfig {
             candidate_count: Some(1),
-            stop_sequences: Some(request.stop),
+            stop_sequences: request.stop,
             max_output_tokens: None,
             temperature: request.temperature.map(|t| t as f64).or(Some(1.0)),
             top_p: None,
             top_k: None,
         }),
-        safety_settings: None,
-        tools: (request.tools.len() > 0).then(|| {
+        safety_settings: vec![],
+        tools: if request.tools.is_empty() {
+            vec![]
+        } else {
             vec![google_ai::Tool {
                 function_declarations: request
                     .tools
@@ -479,7 +481,7 @@ pub fn into_google(
                     })
                     .collect(),
             }]
-        }),
+        },
         tool_config: None,
     }
 }
