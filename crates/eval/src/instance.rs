@@ -1,4 +1,4 @@
-use agent::ThreadStore;
+use agent::{Thread, ThreadStore};
 use anyhow::{Context, Result, anyhow, bail};
 use assistant_tool::ToolWorkingSet;
 use client::proto::LspWorkProgress;
@@ -60,7 +60,7 @@ pub struct RunOutput {
     pub response_count: usize,
     pub token_usage: TokenUsage,
     pub tool_metrics: ToolMetrics,
-    pub last_request: LanguageModelRequest,
+    pub all_messages: String,
     pub programmatic_assertions: AssertionsReport,
 }
 
@@ -309,19 +309,15 @@ impl ExampleInstance {
             let thread_store = thread_store.await?;
             let thread =
                 thread_store.update(cx, |thread_store, cx| thread_store.create_thread(cx))?;
-            let last_request = Rc::new(RefCell::new(None));
 
             thread.update(cx, |thread, _cx| {
                 let mut request_count = 0;
-                let last_request = Rc::clone(&last_request);
                 let previous_diff = Rc::new(RefCell::new("".to_string()));
                 let example_output_dir = this.run_directory.clone();
                 let last_diff_file_path = last_diff_file_path.clone();
                 let messages_json_file_path = example_output_dir.join("last.messages.json");
                 let this = this.clone();
                 thread.set_request_callback(move |request, response_events| {
-                    *last_request.borrow_mut() = Some(request.clone());
-
                     request_count += 1;
                     let messages_file_path = example_output_dir.join(format!("{request_count}.messages.md"));
                     let diff_file_path = example_output_dir.join(format!("{request_count}.diff"));
@@ -397,10 +393,6 @@ impl ExampleInstance {
 
             }
 
-            let Some(last_request) = last_request.borrow_mut().take() else {
-                return Err(anyhow!("No requests ran."));
-            };
-
             if let Some(diagnostics_before) = &diagnostics_before {
                 fs::write(this.run_directory.join("diagnostics_before.txt"), diagnostics_before)?;
             }
@@ -423,7 +415,7 @@ impl ExampleInstance {
                     response_count,
                     token_usage: thread.cumulative_token_usage(),
                     tool_metrics: example_cx.tool_metrics.lock().unwrap().clone(),
-                    last_request,
+                    all_messages: thread_to_markdown(thread),
                     programmatic_assertions: example_cx.assertions,
                 }
             })
@@ -526,23 +518,23 @@ impl ExampleInstance {
 
         if thread_assertions.is_empty() {
             return (
-                "No diff assertions".to_string(),
+                "No thread assertions".to_string(),
                 AssertionsReport::default(),
             );
         }
 
         let judge_thread_prompt = include_str!("judge_thread_prompt.hbs");
-        let judge_diff_prompt_name = "judge_thread_prompt";
+        let judge_thread_prompt_name = "judge_thread_prompt";
         let mut hbs = Handlebars::new();
-        hbs.register_template_string(judge_diff_prompt_name, judge_thread_prompt)
+        hbs.register_template_string(judge_thread_prompt_name, judge_thread_prompt)
             .unwrap();
 
-        let request_markdown = RequestMarkdown::new(&run_output.last_request);
+        let complete_messages = &run_output.all_messages;
         let to_prompt = |assertion: String| {
             hbs.render(
-                judge_diff_prompt_name,
+                judge_thread_prompt_name,
                 &JudgeThreadInput {
-                    messages: request_markdown.messages.clone(),
+                    messages: complete_messages.clone(),
                     assertion,
                 },
             )
@@ -815,6 +807,30 @@ pub async fn run_git(repo_path: &Path, args: &[&str]) -> Result<String> {
             String::from_utf8_lossy(&output.stdout),
         ))
     }
+}
+
+pub fn thread_to_markdown(thread: &Thread) -> String {
+    let mut messages = String::new();
+    let mut assistant_message_number: u32 = 1;
+
+    for message in thread.messages() {
+        match message.role {
+            Role::System => messages.push_str("# u2699ufe0f SYSTEM\n\n"),
+            Role::User => messages.push_str("# ud83dudc64 USER\n\n"),
+            Role::Assistant => {
+                messages.push_str(&format!(
+                    "# ud83eudd16 ASSISTANT {assistant_message_number}\n\n"
+                ));
+                assistant_message_number += 1;
+            }
+        };
+
+        // Format message content
+        messages.push_str(&message.to_string());
+        messages.push_str("\n\n");
+    }
+
+    messages
 }
 
 pub async fn send_language_model_request(
