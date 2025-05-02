@@ -1,5 +1,6 @@
 use std::{
     borrow::{Borrow, Cow},
+    collections::BTreeMap,
     sync::atomic::{self, AtomicBool},
 };
 
@@ -50,7 +51,7 @@ impl<'a> Matcher<'a> {
 
     /// Filter and score fuzzy match candidates. Results are returned unsorted, in the same order as
     /// the input candidates.
-    pub fn match_candidates<C, R, F, T>(
+    pub(crate) fn match_candidates<C, R, F, T>(
         &mut self,
         prefix: &[char],
         lowercase_prefix: &[char],
@@ -65,6 +66,7 @@ impl<'a> Matcher<'a> {
     {
         let mut candidate_chars = Vec::new();
         let mut lowercase_candidate_chars = Vec::new();
+        let mut lowercase_increments = BTreeMap::new();
 
         for candidate in candidates {
             if !candidate.borrow().has_chars(self.query_char_bag) {
@@ -77,9 +79,14 @@ impl<'a> Matcher<'a> {
 
             candidate_chars.clear();
             lowercase_candidate_chars.clear();
-            for c in candidate.borrow().to_string().chars() {
+            lowercase_increments.clear();
+            for (i, c) in candidate.borrow().to_string().chars().enumerate() {
                 candidate_chars.push(c);
-                lowercase_candidate_chars.append(&mut c.to_lowercase().collect::<Vec<_>>());
+                let mut char_lowercased = c.to_lowercase().collect::<Vec<_>>();
+                if char_lowercased.len() > 1 {
+                    lowercase_increments.insert(i, char_lowercased.len());
+                }
+                lowercase_candidate_chars.append(&mut char_lowercased);
             }
 
             if !self.find_last_positions(lowercase_prefix, &lowercase_candidate_chars) {
@@ -97,6 +104,7 @@ impl<'a> Matcher<'a> {
                 &lowercase_candidate_chars,
                 prefix,
                 lowercase_prefix,
+                &lowercase_increments,
             );
 
             if score > 0.0 {
@@ -131,18 +139,20 @@ impl<'a> Matcher<'a> {
     fn score_match(
         &mut self,
         path: &[char],
-        path_cased: &[char],
+        path_lowercased: &[char],
         prefix: &[char],
         lowercase_prefix: &[char],
+        lowercase_increments: &BTreeMap<usize, usize>,
     ) -> f64 {
         let score = self.recursive_score_match(
             path,
-            path_cased,
+            path_lowercased,
             prefix,
             lowercase_prefix,
             0,
             0,
             self.query.len() as f64,
+            lowercase_increments,
         ) * self.query.len() as f64;
 
         if score <= 0.0 {
@@ -173,12 +183,13 @@ impl<'a> Matcher<'a> {
     fn recursive_score_match(
         &mut self,
         path: &[char],
-        path_cased: &[char],
+        path_lowercased: &[char],
         prefix: &[char],
         lowercase_prefix: &[char],
         query_idx: usize,
         path_idx: usize,
         cur_score: f64,
+        lowercase_increments: &BTreeMap<usize, usize>,
     ) -> f64 {
         use std::path::MAIN_SEPARATOR;
 
@@ -199,11 +210,20 @@ impl<'a> Matcher<'a> {
         let limit = self.last_positions[query_idx];
 
         let mut last_slash = 0;
-        for j in path_idx..=limit {
+        for j in path_idx..=dbg!(limit) {
             let path_char = if j < prefix.len() {
                 lowercase_prefix[j]
             } else {
-                path_cased[j - prefix.len()]
+                let mut target_i = j - prefix.len();
+                target_i -= dbg!(
+                    lowercase_increments
+                        .iter()
+                        .take_while(|(i, _)| i < &&target_i)
+                        .map(|(_, increment)| increment)
+                        .sum::<usize>()
+                );
+                dbg!(&path_lowercased);
+                path_lowercased[dbg!(target_i)]
             };
             let is_path_sep = path_char == MAIN_SEPARATOR;
 
@@ -279,12 +299,13 @@ impl<'a> Matcher<'a> {
 
                 let new_score = self.recursive_score_match(
                     path,
-                    path_cased,
+                    path_lowercased,
                     prefix,
                     lowercase_prefix,
                     query_idx + 1,
                     j + 1,
                     next_score,
+                    lowercase_increments,
                 ) * multiplier;
 
                 if new_score > score {
