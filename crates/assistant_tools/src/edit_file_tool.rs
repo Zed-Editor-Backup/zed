@@ -5,10 +5,10 @@ use crate::{
 use anyhow::{Context as _, Result, anyhow};
 use assistant_tool::{ActionLog, AnyToolCard, Tool, ToolCard, ToolResult, ToolUseStatus};
 use buffer_diff::{BufferDiff, BufferDiffSnapshot};
-use editor::{Editor, EditorMode, MultiBuffer, PathKey};
+use editor::{Editor, EditorMode, EditorStyle, MultiBuffer, PathKey};
 use gpui::{
     Animation, AnimationExt, AnyWindowHandle, App, AppContext, AsyncApp, Context, Entity, EntityId,
-    Task, WeakEntity, pulsating_between,
+    Task, TextStyle, WeakEntity, pulsating_between,
 };
 use language::{
     Anchor, Buffer, Capability, LanguageRegistry, LineEnding, OffsetRangeExt, Rope, TextBuffer,
@@ -18,11 +18,13 @@ use language_model::{LanguageModelRequestMessage, LanguageModelToolSchemaFormat}
 use project::{AgentLocation, Project};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use settings::Settings;
 use std::{
     path::{Path, PathBuf},
     sync::Arc,
     time::Duration,
 };
+use theme::ThemeSettings;
 use ui::{Disclosure, Tooltip, Window, prelude::*};
 use util::ResultExt;
 use workspace::Workspace;
@@ -403,7 +405,7 @@ impl ToolCard for EditFileToolCard {
     fn render(
         &mut self,
         status: &ToolUseStatus,
-        window: &mut Window,
+        _window: &mut Window,
         workspace: WeakEntity<Workspace>,
         cx: &mut Context<Self>,
     ) -> impl IntoElement {
@@ -539,15 +541,12 @@ impl ToolCard for EditFileToolCard {
                 )
             });
 
-        let (editor, editor_line_height) = self.editor.update(cx, |editor, cx| {
-            let line_height = editor
-                .style()
-                .map(|style| style.text.line_height_in_pixels(window.rem_size()))
-                .unwrap_or_default();
-
-            let element = editor.render(window, cx);
-            (element.into_any_element(), line_height)
-        });
+        let editor_font_size = ThemeSettings::get_global(cx).ui_font_size(cx);
+        let editor_line_height = editor_font_size * 1.3;
+        let editor_text_style = TextStyle {
+            font_size: editor_font_size.into(),
+            ..TextStyle::default() // todo! Use the actual default text style used by the editor. We're only adjusting the size.
+        };
 
         let (full_height_icon, full_height_tooltip_label) = if self.full_height_expanded {
             (IconName::ChevronUp, "Collapse Code Block")
@@ -670,7 +669,13 @@ impl ToolCard for EditFileToolCard {
                             .border_t_1()
                             .border_color(border_color)
                             .bg(cx.theme().colors().editor_background)
-                            .child(editor)
+                            .child(editor::EditorElement::new(
+                                &self.editor,
+                                EditorStyle {
+                                    text: editor_text_style,
+                                    ..Default::default()
+                                },
+                            ))
                             .when(
                                 !self.full_height_expanded && is_collapsible,
                                 |editor_container| editor_container.child(gradient_overlay),
