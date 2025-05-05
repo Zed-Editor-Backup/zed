@@ -2359,11 +2359,13 @@ impl Render for AssistantPanel {
             .on_action(cx.listener(Self::toggle_options_menu))
             .child(self.render_toolbar(window, cx))
             .map(|parent| match &self.active_view {
-                ActiveView::Thread { .. } => parent
-                    .child(self.render_active_thread_or_empty_state(window, cx))
-                    .children(self.render_tool_use_limit_reached(cx))
-                    .child(h_flex().child(self.message_editor.clone()))
-                    .children(self.render_last_error(cx)),
+                ActiveView::Thread { .. } => parent.child(
+                    self.render_drag_target()
+                        .child(self.render_active_thread_or_empty_state(window, cx))
+                        .children(self.render_tool_use_limit_reached(cx))
+                        .child(h_flex().child(self.message_editor.clone()))
+                        .children(self.render_last_error(cx)),
+                ),
                 ActiveView::History => parent.child(self.history.clone()),
                 ActiveView::PromptEditor {
                     context_editor,
@@ -2381,25 +2383,27 @@ impl Render for AssistantPanel {
                     );
                     BufferSearchBar::register(&mut registrar);
                     parent.child(
-                        registrar
-                            .into_div()
-                            .size_full()
-                            .map(|parent| {
-                                buffer_search_bar.update(cx, |buffer_search_bar, cx| {
-                                    if buffer_search_bar.is_dismissed() {
-                                        return parent;
-                                    }
-                                    parent.child(
-                                        div()
-                                            .p(DynamicSpacing::Base08.rems(cx))
-                                            .border_b_1()
-                                            .border_color(cx.theme().colors().border_variant)
-                                            .bg(cx.theme().colors().editor_background)
-                                            .child(buffer_search_bar.render(window, cx)),
-                                    )
+                        self.render_drag_target().child(
+                            registrar
+                                .into_div()
+                                .size_full()
+                                .map(|parent| {
+                                    buffer_search_bar.update(cx, |buffer_search_bar, cx| {
+                                        if buffer_search_bar.is_dismissed() {
+                                            return parent;
+                                        }
+                                        parent.child(
+                                            div()
+                                                .p(DynamicSpacing::Base08.rems(cx))
+                                                .border_b_1()
+                                                .border_color(cx.theme().colors().border_variant)
+                                                .bg(cx.theme().colors().editor_background)
+                                                .child(buffer_search_bar.render(window, cx)),
+                                        )
+                                    })
                                 })
-                            })
-                            .child(context_editor.clone()),
+                                .child(context_editor.clone()),
+                        ),
                     )
                 }
                 ActiveView::Configuration => parent.children(self.configuration.clone()),
