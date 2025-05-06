@@ -597,7 +597,7 @@ pub fn into_anthropic(
         }
     }
 
-    anthropic::Request {
+    dbg!(anthropic::Request {
         model,
         messages: new_messages,
         max_tokens: max_output_tokens,
@@ -626,7 +626,7 @@ pub fn into_anthropic(
         temperature: request.temperature.or(Some(default_temperature)),
         top_k: None,
         top_p: None,
-    }
+    })
 }
 
 pub struct AnthropicEventMapper {
