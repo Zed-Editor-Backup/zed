@@ -177,11 +177,13 @@ const ROW_COL_CAPTURE_REGEX: &str = r"(?xs)
     )
     |
     (.+?)(?:
-        \:+(\d+)\:(\d+)\:*$  # filename:row:column
+        \:+(\d+)\:(\d+)\:*$   # filename:row:column
         |
-        \:+(\d+)\:*()$       # filename:row
+        \:+(\d+)\:*()$        # filename:row
         |
-        \:*()()$             # filename:
+        \:+(\d+)\:([^\d].*)$  # filename:row:random_string
+        |
+        \:*()()$              # filename:
     )";
 
 /// A representation of a path-like string with optional row and column numbers.
@@ -679,6 +681,15 @@ mod tests {
                 path: PathBuf::from("/testing/out/src/file_finder.odin"),
                 row: Some(7),
                 column: Some(15),
+            }
+        );
+
+        assert_eq!(
+            PathWithPosition::parse_str("crates/language/src/buffer.rs:20:in"),
+            PathWithPosition {
+                path: PathBuf::from("crates/language/src/buffer.rs"),
+                row: Some(20),
+                column: None,
             }
         );
     }
