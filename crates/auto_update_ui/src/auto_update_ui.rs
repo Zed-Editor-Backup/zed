@@ -134,6 +134,7 @@ pub fn notify_if_app_was_updated(cx: &mut App) {
     let should_show_notification = updater.read(cx).should_show_update_notification(cx);
     cx.spawn(async move |cx| {
         let should_show_notification = true || should_show_notification.await?;
+        // TODO kb revert the commit
         loop {
             cx.background_executor().timer(Duration::from_secs(5)).await;
             if should_show_notification {
