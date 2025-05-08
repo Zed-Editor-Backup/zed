@@ -12,6 +12,7 @@ use gpui::{
     App, Pixels, PlatformDisplay, Size, WindowBackgroundAppearance, WindowBounds,
     WindowDecorations, WindowKind, WindowOptions, point,
 };
+pub use notification_panel::NotificationToast;
 use panel_settings::MessageEditorSettings;
 pub use panel_settings::{
     ChatPanelButton, ChatPanelSettings, CollaborationPanelSettings, NotificationPanelSettings,

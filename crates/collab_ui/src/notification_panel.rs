@@ -771,11 +771,11 @@ impl Panel for NotificationPanel {
 }
 
 pub struct NotificationToast {
-    notification_id: u64,
-    actor: Option<Arc<User>>,
-    text: String,
-    workspace: WeakEntity<Workspace>,
-    focus_handle: FocusHandle,
+    pub notification_id: u64,
+    pub actor: Option<Arc<User>>,
+    pub text: String,
+    pub workspace: WeakEntity<Workspace>,
+    pub focus_handle: FocusHandle,
 }
 
 impl Focusable for NotificationToast {
@@ -837,6 +837,7 @@ impl Render for NotificationToast {
                             cx,
                         )
                     })
+                    // TODO kb revert this commit
                     .on_click(cx.listener(|_, _, _, cx| cx.emit(SuppressEvent))),
             )
             .on_click(cx.listener(|this, _, window, cx| {

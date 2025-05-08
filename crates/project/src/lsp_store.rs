@@ -9683,7 +9683,7 @@ pub struct LanguageServerPromptRequest {
     pub message: String,
     pub actions: Vec<MessageActionItem>,
     pub lsp_name: String,
-    pub(crate) response_channel: Sender<MessageActionItem>,
+    pub response_channel: Sender<MessageActionItem>,
 }
 
 impl LanguageServerPromptRequest {

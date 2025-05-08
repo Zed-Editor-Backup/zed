@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use auto_update::AutoUpdater;
 use client::proto::UpdateNotification;
 use editor::{Editor, MultiBuffer};
@@ -131,39 +133,86 @@ pub fn notify_if_app_was_updated(cx: &mut App) {
     };
     let should_show_notification = updater.read(cx).should_show_update_notification(cx);
     cx.spawn(async move |cx| {
-        let should_show_notification = should_show_notification.await?;
-        if should_show_notification {
-            cx.update(|cx| {
-                let version = updater.read(cx).current_version();
-                let app_name = ReleaseChannel::global(cx).display_name();
-                show_app_notification(
-                    NotificationId::unique::<UpdateNotification>(),
-                    cx,
-                    move |cx| {
-                        let workspace_handle = cx.entity().downgrade();
-                        cx.new(|cx| {
-                            MessageNotification::new(
-                                format!("Updated to {app_name} {}", version),
-                                cx,
-                            )
-                            .primary_message("View Release Notes")
-                            .primary_on_click(move |window, cx| {
-                                if let Some(workspace) = workspace_handle.upgrade() {
-                                    workspace.update(cx, |workspace, cx| {
-                                        crate::view_release_notes_locally(workspace, window, cx);
-                                    })
-                                }
-                                cx.emit(DismissEvent);
+        let should_show_notification = true || should_show_notification.await?;
+        loop {
+            cx.background_executor().timer(Duration::from_secs(5)).await;
+            if should_show_notification {
+                cx.update(|cx| {
+                    let version = updater.read(cx).current_version();
+                    let app_name = ReleaseChannel::global(cx).display_name();
+                    show_app_notification(
+                        NotificationId::unique::<UpdateNotification>(),
+                        cx,
+                        move |cx| {
+                            let workspace_handle = cx.entity().downgrade();
+                            cx.new(|cx| {
+                                MessageNotification::new(
+                                    format!(
+                                        "UpdateNotification: Updated to {app_name} {}",
+                                        version
+                                    ),
+                                    cx,
+                                )
+                                .primary_message("View Release Notes")
+                                .primary_on_click(move |window, cx| {
+                                    if let Some(workspace) = workspace_handle.upgrade() {
+                                        workspace.update(cx, |workspace, cx| {
+                                            crate::view_release_notes_locally(
+                                                workspace, window, cx,
+                                            );
+                                        })
+                                    }
+                                    cx.emit(DismissEvent);
+                                })
+                                .secondary_message("Hey!")
+                                .secondary_icon(workspace::ui::IconName::AiEdit)
+                                .more_info_message("morere info")
+                                .more_info_url("www.com")
+                                // TODO kb do not show for update messages as pointless
+                                // .show_suppress_button(false)
                             })
-                        })
-                    },
-                );
-                updater.update(cx, |updater, cx| {
-                    updater
-                        .set_should_show_update_notification(false, cx)
-                        .detach_and_log_err(cx);
-                })
-            })?;
+                        },
+                    );
+                    show_app_notification(
+                        NotificationId::unique::<workspace::notifications::LanguageServerPrompt>(),
+                        cx,
+                        move |cx| {
+                            cx.new(|cx| {
+                                let (tx, _rx) = smol::channel::bounded(1);
+                                workspace::notifications::LanguageServerPrompt::new(
+                                    project::LanguageServerPromptRequest {
+                                        level: gpui::PromptLevel::Critical,
+                                        message: "LanguageServerPrompt: Hello from a test LSP nofitication".to_string(),
+                                        actions: Vec::new(),
+                                        lsp_name: "Test LSP Name".to_string(),
+                                        response_channel: tx,
+                                    },
+                                    cx,
+                                )
+                            })
+                        },
+                    );
+                    show_app_notification(
+                        NotificationId::unique::<collab_ui::NotificationToast>(),
+                        cx,
+                        move |cx| {
+                            let workspace = cx.entity().downgrade();
+                            cx.new(|cx| collab_ui::NotificationToast {
+                                notification_id: 1,
+                                actor: None,
+                                text: "NotificationToast: Test notification toast".to_string(),
+                                workspace,
+                                focus_handle: cx.focus_handle(),
+                            })
+                        },
+                    );
+                    updater.update(cx, |updater, cx| {
+                        updater
+                            .set_should_show_update_notification(false, cx)
+                            .detach_and_log_err(cx);
+                    })
+                })?;
+            }
         }
         anyhow::Ok(())
     })
