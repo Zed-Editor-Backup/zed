@@ -819,26 +819,32 @@ impl Render for NotificationToast {
             .id("notification_panel_toast")
             .elevation_3(cx)
             .p_2()
-            .gap_2()
+            .justify_between()
             .children(user.map(|user| Avatar::new(user.avatar_uri.clone())))
             .child(Label::new(self.text.clone()))
             .child(
-                IconButton::new("close", IconName::Close)
-                    .tooltip(|window, cx| Tooltip::for_action("Close", &menu::Cancel, window, cx))
-                    .on_click(cx.listener(|_, _, _, cx| cx.emit(DismissEvent))),
-            )
-            .child(
-                IconButton::new("suppress", IconName::SquareMinus)
-                    .tooltip(|window, cx| {
-                        Tooltip::for_action(
-                            "Do not show until restart",
-                            &SuppressNotification,
-                            window,
-                            cx,
-                        )
-                    })
-                    // TODO kb revert this commit
-                    .on_click(cx.listener(|_, _, _, cx| cx.emit(SuppressEvent))),
+                h_flex()
+                    .gap_2()
+                    .child(
+                        IconButton::new("suppress", IconName::SquareMinus)
+                            .tooltip(|window, cx| {
+                                Tooltip::for_action(
+                                    "Do not show until restart",
+                                    &SuppressNotification,
+                                    window,
+                                    cx,
+                                )
+                            })
+                            // TODO kb revert this commit
+                            .on_click(cx.listener(|_, _, _, cx| cx.emit(SuppressEvent))),
+                    )
+                    .child(
+                        IconButton::new("close", IconName::Close)
+                            .tooltip(|window, cx| {
+                                Tooltip::for_action("Close", &menu::Cancel, window, cx)
+                            })
+                            .on_click(cx.listener(|_, _, _, cx| cx.emit(DismissEvent))),
+                    ),
             )
             .on_click(cx.listener(|this, _, window, cx| {
                 this.focus_notification_panel(window, cx);
