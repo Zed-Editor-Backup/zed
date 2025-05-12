@@ -42,6 +42,7 @@ pub enum NotifyWhenAgentWaiting {
 
 #[derive(Clone, Debug, Serialize, Deserialize, JsonSchema, PartialEq)]
 #[serde(tag = "name", rename_all = "snake_case")]
+#[schemars(deny_unknown_fields)]
 pub enum AssistantProviderContentV1 {
     #[serde(rename = "zed.dev")]
     ZedDotDev { default_model: Option<CloudModel> },
@@ -166,6 +167,7 @@ impl LanguageModelParameters {
 
 /// Assistant panel settings
 #[derive(Clone, Serialize, Deserialize, Debug, Default)]
+#[schemars(deny_unknown_fields)]
 pub struct AssistantSettingsContent {
     #[serde(flatten)]
     pub inner: Option<AssistantSettingsContentInner>,
@@ -559,6 +561,7 @@ impl AssistantSettingsContent {
 
 #[derive(Clone, Serialize, Deserialize, JsonSchema, Debug)]
 #[serde(tag = "version")]
+#[schemars(deny_unknown_fields)]
 pub enum VersionedAssistantSettingsContent {
     #[serde(rename = "1")]
     V1(AssistantSettingsContentV1),
@@ -593,6 +596,7 @@ impl Default for VersionedAssistantSettingsContent {
 }
 
 #[derive(Clone, Serialize, Deserialize, JsonSchema, Debug, Default)]
+#[schemars(deny_unknown_fields)]
 pub struct AssistantSettingsContentV2 {
     /// Whether the Assistant is enabled.
     ///
@@ -755,6 +759,7 @@ pub struct ContextServerPresetContent {
 }
 
 #[derive(Clone, Serialize, Deserialize, JsonSchema, Debug)]
+#[schemars(deny_unknown_fields)]
 pub struct AssistantSettingsContentV1 {
     /// Whether the Assistant is enabled.
     ///
@@ -784,6 +789,7 @@ pub struct AssistantSettingsContentV1 {
 }
 
 #[derive(Clone, Serialize, Deserialize, JsonSchema, Debug)]
+#[schemars(deny_unknown_fields)]
 pub struct LegacyAssistantSettingsContent {
     /// Whether to show the assistant panel button in the status bar.
     ///

@@ -257,6 +257,7 @@ pub enum SnippetSortOrder {
 }
 
 #[derive(Clone, Default, Serialize, Deserialize, JsonSchema)]
+#[schemars(deny_unknown_fields)]
 pub struct EditorSettingsContent {
     /// Whether the cursor blinks in the editor.
     ///

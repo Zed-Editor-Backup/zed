@@ -6,6 +6,7 @@ use settings::{Settings, SettingsSources};
 
 /// Settings for slash commands.
 #[derive(Deserialize, Serialize, Debug, Default, Clone, JsonSchema)]
+#[schemars(deny_unknown_fields)]
 pub struct SlashCommandSettings {
     /// Settings for the `/docs` slash command.
     #[serde(default)]
