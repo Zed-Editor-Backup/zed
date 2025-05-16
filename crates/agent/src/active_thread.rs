@@ -2077,6 +2077,7 @@ impl ActiveThread {
                 if let Some(checkpoint) = checkpoint.filter(|_| !is_generating) {
                     let mut is_pending = false;
                     let mut error = None;
+
                     if let Some(last_restore_checkpoint) =
                         self.thread.read(cx).last_restore_checkpoint()
                     {
