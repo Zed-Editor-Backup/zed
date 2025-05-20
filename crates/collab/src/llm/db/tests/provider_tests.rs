@@ -11,7 +11,7 @@ test_llm_db!(
 
 async fn test_initialize_providers(db: &mut LlmDatabase) {
     let initial_providers = db.list_providers().await.unwrap();
-    assert_eq!(initial_providers, vec![]);
+    assert_eq!(initial_providers, Vec::new());
 
     db.initialize_providers().await.unwrap();
 

@@ -178,7 +178,7 @@ async fn test_extension_store(cx: &mut TestAppContext) {
                         version: "2.0.0".into(),
                         schema_version: SchemaVersion::ZERO,
                         description: None,
-                        authors: vec![],
+                        authors: Vec::new(),
                         repository: None,
                         themes: vec![
                             "themes/monokai-pro.json".into(),
@@ -356,7 +356,7 @@ async fn test_extension_store(cx: &mut TestAppContext) {
                 version: "1.0.0".into(),
                 schema_version: SchemaVersion::ZERO,
                 description: None,
-                authors: vec![],
+                authors: Vec::new(),
                 repository: None,
                 themes: vec!["themes/gruvbox.json".into()],
                 icon_themes: Vec::new(),

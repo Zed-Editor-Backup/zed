@@ -481,7 +481,7 @@ pub fn show_link_definition(
                     last_trigger_point: trigger_point.clone(),
                     symbol_range: None,
                     preferred_kind,
-                    links: vec![],
+                    links: Vec::new(),
                     task: None,
                 },
                 false,
@@ -1098,7 +1098,7 @@ mod tests {
             cx.lsp
                 .set_request_handler::<GotoDefinition, _, _>(move |_, _| async move {
                     // No definitions returned
-                    Ok(Some(lsp::GotoDefinitionResponse::Link(vec![])))
+                    Ok(Some(lsp::GotoDefinitionResponse::Link(Vec::new())))
                 });
         cx.simulate_mouse_move(hover_point, None, Modifiers::secondary_key());
 
@@ -1186,7 +1186,7 @@ mod tests {
             .set_request_handler::<GotoDefinition, _, _>(move |_, _| async move {
                 // Empty definition response to make sure we aren't hitting the lsp and using
                 // the cached location instead
-                Ok(Some(lsp::GotoDefinitionResponse::Link(vec![])))
+                Ok(Some(lsp::GotoDefinitionResponse::Link(Vec::new())))
             });
         cx.background_executor.run_until_parked();
         cx.assert_editor_state(indoc! {"

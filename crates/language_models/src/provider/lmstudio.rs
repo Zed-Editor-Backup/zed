@@ -259,7 +259,7 @@ impl LmStudioLanguageModel {
             max_tokens: Some(-1),
             stop: Some(request.stop),
             temperature: request.temperature.or(Some(0.0)),
-            tools: vec![],
+            tools: Vec::new(),
         }
     }
 }

@@ -391,14 +391,14 @@ impl LspCommand for PrepareRename {
                 only_unprepared_rename_supported: true,
                 start: None,
                 end: None,
-                version: vec![],
+                version: Vec::new(),
             },
             PrepareRenameResponse::InvalidPosition => proto::PrepareRenameResponse {
                 can_rename: false,
                 only_unprepared_rename_supported: false,
                 start: None,
                 end: None,
-                version: vec![],
+                version: Vec::new(),
             },
         }
     }
@@ -3557,7 +3557,7 @@ impl LspCommand for LinkedEditingRange {
                     .collect()
             })
         } else {
-            Ok(vec![])
+            Ok(Vec::new())
         }
     }
 

@@ -1118,7 +1118,7 @@ mod tests {
         });
         let prompt_builder = Arc::new(PromptBuilder::new(None).unwrap());
         let fs = FakeFs::new(cx.executor());
-        let project = Project::test(fs, vec![], cx).await;
+        let project = Project::test(fs, Vec::new(), cx).await;
         let codegen = cx.new(|cx| {
             CodegenAlternative::new(
                 buffer.clone(),
@@ -1185,7 +1185,7 @@ mod tests {
         });
         let prompt_builder = Arc::new(PromptBuilder::new(None).unwrap());
         let fs = FakeFs::new(cx.executor());
-        let project = Project::test(fs, vec![], cx).await;
+        let project = Project::test(fs, Vec::new(), cx).await;
         let codegen = cx.new(|cx| {
             CodegenAlternative::new(
                 buffer.clone(),
@@ -1254,7 +1254,7 @@ mod tests {
         });
         let prompt_builder = Arc::new(PromptBuilder::new(None).unwrap());
         let fs = FakeFs::new(cx.executor());
-        let project = Project::test(fs, vec![], cx).await;
+        let project = Project::test(fs, Vec::new(), cx).await;
         let codegen = cx.new(|cx| {
             CodegenAlternative::new(
                 buffer.clone(),
@@ -1323,7 +1323,7 @@ mod tests {
         });
         let prompt_builder = Arc::new(PromptBuilder::new(None).unwrap());
         let fs = FakeFs::new(cx.executor());
-        let project = Project::test(fs, vec![], cx).await;
+        let project = Project::test(fs, Vec::new(), cx).await;
         let codegen = cx.new(|cx| {
             CodegenAlternative::new(
                 buffer.clone(),
@@ -1380,7 +1380,7 @@ mod tests {
         });
         let prompt_builder = Arc::new(PromptBuilder::new(None).unwrap());
         let fs = FakeFs::new(cx.executor());
-        let project = Project::test(fs, vec![], cx).await;
+        let project = Project::test(fs, Vec::new(), cx).await;
         let codegen = cx.new(|cx| {
             CodegenAlternative::new(
                 buffer.clone(),

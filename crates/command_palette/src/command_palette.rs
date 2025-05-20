@@ -177,7 +177,7 @@ impl CommandPaletteDelegate {
         Self {
             command_palette,
             all_commands: commands.clone(),
-            matches: vec![],
+            matches: Vec::new(),
             commands,
             selected_ix: 0,
             previous_focus_handle,
@@ -204,7 +204,7 @@ impl CommandPaletteDelegate {
             intercept_results = vec![CommandInterceptResult {
                 action: OpenZedUrl { url: query.clone() }.boxed_clone(),
                 string: query.clone(),
-                positions: vec![],
+                positions: Vec::new(),
             }]
         }
 

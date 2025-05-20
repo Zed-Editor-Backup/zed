@@ -48,8 +48,8 @@ async fn test_diagnostics(cx: &mut TestAppContext) {
 
             "main.rs": "
                 fn main() {
-                    let x = vec![];
-                    let y = vec![];
+                    let x = Vec::new();
+                    let y = Vec::new();
                     a(x);
                     b(y);
                     // comment 1
@@ -126,10 +126,10 @@ async fn test_diagnostics(cx: &mut TestAppContext) {
             "§ main.rs
              § -----
              fn main() {
-                 let x = vec![];
+                 let x = Vec::new();
              § move occurs because `x` has type `Vec<char>`, which does not implement
              § the `Copy` trait (back)
-                 let y = vec![];
+                 let y = Vec::new();
              § move occurs because `y` has type `Vec<char>`, which does not implement
              § the `Copy` trait (back)
                  a(x); § value moved here (back)
@@ -200,10 +200,10 @@ async fn test_diagnostics(cx: &mut TestAppContext) {
              § main.rs
              § -----
              fn main() {
-                 let x = vec![];
+                 let x = Vec::new();
              § move occurs because `x` has type `Vec<char>`, which does not implement
              § the `Copy` trait (back)
-                 let y = vec![];
+                 let y = Vec::new();
              § move occurs because `y` has type `Vec<char>`, which does not implement
              § the `Copy` trait (back)
                  a(x); § value moved here (back)
@@ -285,10 +285,10 @@ async fn test_diagnostics(cx: &mut TestAppContext) {
              § main.rs
              § -----
              fn main() {
-                 let x = vec![];
+                 let x = Vec::new();
              § move occurs because `x` has type `Vec<char>`, which does not implement
              § the `Copy` trait (back)
-                 let y = vec![];
+                 let y = Vec::new();
              § move occurs because `y` has type `Vec<char>`, which does not implement
              § the `Copy` trait (back)
                  a(x); § value moved here (back)
@@ -559,7 +559,7 @@ async fn test_diagnostics_multiple_servers(cx: &mut TestAppContext) {
                 server_id_2,
                 lsp::PublishDiagnosticsParams {
                     uri: lsp::Url::from_file_path(path!("/test/main.rs")).unwrap(),
-                    diagnostics: vec![],
+                    diagnostics: Vec::new(),
                     version: None,
                 },
                 &[],

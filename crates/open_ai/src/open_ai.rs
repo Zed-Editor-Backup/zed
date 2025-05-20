@@ -303,7 +303,7 @@ pub enum MessageContent {
 
 impl MessageContent {
     pub fn empty() -> Self {
-        MessageContent::Multipart(vec![])
+        MessageContent::Multipart(Vec::new())
     }
 
     pub fn push_part(&mut self, part: MessagePart) {

@@ -80,7 +80,7 @@ impl DebugPanel {
 
             let debug_panel = Self {
                 size: px(300.),
-                sessions: vec![],
+                sessions: Vec::new(),
                 active_session: None,
                 focus_handle,
                 project,

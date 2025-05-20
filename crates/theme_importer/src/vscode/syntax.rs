@@ -216,7 +216,7 @@ impl ZedSyntaxToken {
                 "entity.name.function",
                 "variable.function",
             ],
-            ZedSyntaxToken::Hint => vec![],
+            ZedSyntaxToken::Hint => Vec::new(),
             ZedSyntaxToken::Keyword => vec![
                 "keyword",
                 "keyword.other.fn.rust",
@@ -236,13 +236,13 @@ impl ZedSyntaxToken {
             ZedSyntaxToken::LinkUri => vec!["markup.underline.link", "string.other.link"],
             ZedSyntaxToken::Number => vec!["constant.numeric", "number"],
             ZedSyntaxToken::Operator => vec!["operator", "keyword.operator"],
-            ZedSyntaxToken::Predictive => vec![],
+            ZedSyntaxToken::Predictive => Vec::new(),
             ZedSyntaxToken::Preproc => vec![
                 "preproc",
                 "meta.preprocessor",
                 "punctuation.definition.preprocessor",
             ],
-            ZedSyntaxToken::Primary => vec![],
+            ZedSyntaxToken::Primary => Vec::new(),
             ZedSyntaxToken::Property => vec![
                 "variable.member",
                 "support.type.property-name",

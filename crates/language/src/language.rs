@@ -91,8 +91,8 @@ pub fn init(cx: &mut App) {
     language_settings::init(cx);
 }
 
-static QUERY_CURSORS: Mutex<Vec<QueryCursor>> = Mutex::new(vec![]);
-static PARSERS: Mutex<Vec<Parser>> = Mutex::new(vec![]);
+static QUERY_CURSORS: Mutex<Vec<QueryCursor>> = Mutex::new(Vec::new());
+static PARSERS: Mutex<Vec<Parser>> = Mutex::new(Vec::new());
 
 pub fn with_parser<F, R>(func: F) -> R
 where
@@ -2085,7 +2085,7 @@ impl Default for FakeLspAdapter {
             prettier_plugins: Vec::new(),
             language_server_binary: LanguageServerBinary {
                 path: "/the/fake/lsp/path".into(),
-                arguments: vec![],
+                arguments: Vec::new(),
                 env: Default::default(),
             },
             label_for_completion: None,

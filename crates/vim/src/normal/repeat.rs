@@ -83,7 +83,7 @@ pub struct Replayer(Rc<RefCell<ReplayerState>>);
 impl Replayer {
     pub fn new() -> Self {
         Self(Rc::new(RefCell::new(ReplayerState {
-            actions: vec![],
+            actions: Vec::new(),
             running: false,
             ix: 0,
         })))
@@ -184,7 +184,7 @@ impl Vim {
             return;
         };
 
-        let mut repeated_actions = vec![];
+        let mut repeated_actions = Vec::new();
         while count > 0 {
             repeated_actions.extend(actions.iter().cloned());
             count -= 1

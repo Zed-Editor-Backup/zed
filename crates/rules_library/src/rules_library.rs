@@ -363,7 +363,7 @@ impl RulesLibrary {
                 .map_or(0, |(ix, _)| ix);
             (selected_index, matches)
         } else {
-            (0, vec![])
+            (0, Vec::new())
         };
 
         let delegate = RulePickerDelegate {

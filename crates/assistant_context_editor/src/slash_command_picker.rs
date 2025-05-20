@@ -129,7 +129,7 @@ impl PickerDelegate for SlashCommandDelegate {
     }
 
     fn separators_after_indices(&self) -> Vec<usize> {
-        let mut ret = vec![];
+        let mut ret = Vec::new();
         let mut previous_is_advert = false;
 
         for (index, command) in self.filtered_commands.iter().enumerate() {

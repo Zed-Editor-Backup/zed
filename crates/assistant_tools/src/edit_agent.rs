@@ -954,7 +954,7 @@ mod tests {
 
         chunks_tx.unbounded_send("<old_text>a").unwrap();
         cx.run_until_parked();
-        assert_eq!(drain_events(&mut events), vec![]);
+        assert_eq!(drain_events(&mut events), Vec::new());
         assert_eq!(
             buffer.read_with(cx, |buffer, _| buffer.snapshot().text()),
             "abc\ndef\nghi"
@@ -966,7 +966,7 @@ mod tests {
 
         chunks_tx.unbounded_send("bc</old_text>").unwrap();
         cx.run_until_parked();
-        assert_eq!(drain_events(&mut events), vec![]);
+        assert_eq!(drain_events(&mut events), Vec::new());
         assert_eq!(
             buffer.read_with(cx, |buffer, _| buffer.snapshot().text()),
             "abc\ndef\nghi"
@@ -1009,7 +1009,7 @@ mod tests {
         chunks_tx.unbounded_send("</new_text>").unwrap();
         chunks_tx.unbounded_send("<old_text>hall").unwrap();
         cx.run_until_parked();
-        assert_eq!(drain_events(&mut events), vec![]);
+        assert_eq!(drain_events(&mut events), Vec::new());
         assert_eq!(
             buffer.read_with(cx, |buffer, _| buffer.snapshot().text()),
             "abXcY\ndef\nghi"
@@ -1046,7 +1046,7 @@ mod tests {
         chunks_tx.unbounded_send("hallucinated new</new_").unwrap();
         chunks_tx.unbounded_send("text>").unwrap();
         cx.run_until_parked();
-        assert_eq!(drain_events(&mut events), vec![]);
+        assert_eq!(drain_events(&mut events), Vec::new());
         assert_eq!(
             buffer.read_with(cx, |buffer, _| buffer.snapshot().text()),
             "abXcY\ndef\nghi"
@@ -1063,7 +1063,7 @@ mod tests {
         chunks_tx.unbounded_send("i</old_text>").unwrap();
         chunks_tx.unbounded_send("<new_text>").unwrap();
         cx.run_until_parked();
-        assert_eq!(drain_events(&mut events), vec![]);
+        assert_eq!(drain_events(&mut events), Vec::new());
         assert_eq!(
             buffer.read_with(cx, |buffer, _| buffer.snapshot().text()),
             "abXcY\ndef\nghi"
@@ -1100,7 +1100,7 @@ mod tests {
             buffer.read_with(cx, |buffer, _| buffer.snapshot().text()),
             "abXcY\ndef\nGHI"
         );
-        assert_eq!(drain_events(&mut events), vec![]);
+        assert_eq!(drain_events(&mut events), Vec::new());
         assert_eq!(
             project.read_with(cx, |project, _| project.agent_location()),
             None
@@ -1198,7 +1198,7 @@ mod tests {
             buffer.read_with(cx, |buffer, _| buffer.snapshot().text()),
             "jkl\nmno\npqr"
         );
-        assert_eq!(drain_events(&mut events), vec![]);
+        assert_eq!(drain_events(&mut events), Vec::new());
         assert_eq!(
             project.read_with(cx, |project, _| project.agent_location()),
             None

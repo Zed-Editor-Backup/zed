@@ -1174,7 +1174,7 @@ fn consolidate_wrap_edits(edits: Vec<WrapEdit>) -> Vec<WrapEdit> {
         debug_assert_eq!(v.as_ptr(), _old_alloc_ptr, "Wrap edits were reallocated");
         v
     } else {
-        vec![]
+        Vec::new()
     }
 }
 

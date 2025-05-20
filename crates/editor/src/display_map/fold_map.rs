@@ -976,7 +976,7 @@ fn consolidate_inlay_edits(mut edits: Vec<InlayEdit>) -> Vec<InlayEdit> {
         debug_assert_eq!(_old_alloc_ptr, v.as_ptr(), "Inlay edits were reallocated");
         v
     } else {
-        vec![]
+        Vec::new()
     }
 }
 
@@ -1010,7 +1010,7 @@ fn consolidate_fold_edits(mut edits: Vec<FoldEdit>) -> Vec<FoldEdit> {
         v.push(first_edit.clone());
         v
     } else {
-        vec![]
+        Vec::new()
     }
 }
 
@@ -1534,7 +1534,7 @@ mod tests {
         let (mut inlay_map, inlay_snapshot) = InlayMap::new(buffer_snapshot.clone());
         let mut map = FoldMap::new(inlay_snapshot.clone()).0;
 
-        let (mut writer, _, _) = map.write(inlay_snapshot, vec![]);
+        let (mut writer, _, _) = map.write(inlay_snapshot, Vec::new());
         let (snapshot2, edits) = writer.fold(vec![
             (Point::new(0, 2)..Point::new(2, 2), FoldPlaceholder::test()),
             (Point::new(2, 4)..Point::new(4, 1), FoldPlaceholder::test()),
@@ -1593,14 +1593,14 @@ mod tests {
         let (snapshot4, _) = map.read(inlay_snapshot.clone(), inlay_edits);
         assert_eq!(snapshot4.text(), "123a⋯c123456eee");
 
-        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), vec![]);
+        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), Vec::new());
         writer.unfold_intersecting(Some(Point::new(0, 4)..Point::new(0, 4)), false);
-        let (snapshot5, _) = map.read(inlay_snapshot.clone(), vec![]);
+        let (snapshot5, _) = map.read(inlay_snapshot.clone(), Vec::new());
         assert_eq!(snapshot5.text(), "123a⋯c123456eee");
 
-        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), vec![]);
+        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), Vec::new());
         writer.unfold_intersecting(Some(Point::new(0, 4)..Point::new(0, 4)), true);
-        let (snapshot6, _) = map.read(inlay_snapshot, vec![]);
+        let (snapshot6, _) = map.read(inlay_snapshot, Vec::new());
         assert_eq!(snapshot6.text(), "123aaaaa\nbbbbbb\nccc123456eee");
     }
 
@@ -1615,27 +1615,27 @@ mod tests {
         {
             let mut map = FoldMap::new(inlay_snapshot.clone()).0;
 
-            let (mut writer, _, _) = map.write(inlay_snapshot.clone(), vec![]);
+            let (mut writer, _, _) = map.write(inlay_snapshot.clone(), Vec::new());
             writer.fold(vec![(5..8, FoldPlaceholder::test())]);
-            let (snapshot, _) = map.read(inlay_snapshot.clone(), vec![]);
+            let (snapshot, _) = map.read(inlay_snapshot.clone(), Vec::new());
             assert_eq!(snapshot.text(), "abcde⋯ijkl");
 
             // Create an fold adjacent to the start of the first fold.
-            let (mut writer, _, _) = map.write(inlay_snapshot.clone(), vec![]);
+            let (mut writer, _, _) = map.write(inlay_snapshot.clone(), Vec::new());
             writer.fold(vec![
                 (0..1, FoldPlaceholder::test()),
                 (2..5, FoldPlaceholder::test()),
             ]);
-            let (snapshot, _) = map.read(inlay_snapshot.clone(), vec![]);
+            let (snapshot, _) = map.read(inlay_snapshot.clone(), Vec::new());
             assert_eq!(snapshot.text(), "⋯b⋯ijkl");
 
             // Create an fold adjacent to the end of the first fold.
-            let (mut writer, _, _) = map.write(inlay_snapshot.clone(), vec![]);
+            let (mut writer, _, _) = map.write(inlay_snapshot.clone(), Vec::new());
             writer.fold(vec![
                 (11..11, FoldPlaceholder::test()),
                 (8..10, FoldPlaceholder::test()),
             ]);
-            let (snapshot, _) = map.read(inlay_snapshot.clone(), vec![]);
+            let (snapshot, _) = map.read(inlay_snapshot.clone(), Vec::new());
             assert_eq!(snapshot.text(), "⋯b⋯kl");
         }
 
@@ -1643,12 +1643,12 @@ mod tests {
             let mut map = FoldMap::new(inlay_snapshot.clone()).0;
 
             // Create two adjacent folds.
-            let (mut writer, _, _) = map.write(inlay_snapshot.clone(), vec![]);
+            let (mut writer, _, _) = map.write(inlay_snapshot.clone(), Vec::new());
             writer.fold(vec![
                 (0..2, FoldPlaceholder::test()),
                 (2..5, FoldPlaceholder::test()),
             ]);
-            let (snapshot, _) = map.read(inlay_snapshot, vec![]);
+            let (snapshot, _) = map.read(inlay_snapshot, Vec::new());
             assert_eq!(snapshot.text(), "⋯fghijkl");
 
             // Edit within one of the folds.
@@ -1669,14 +1669,14 @@ mod tests {
         let buffer_snapshot = buffer.read(cx).snapshot(cx);
         let (_, inlay_snapshot) = InlayMap::new(buffer_snapshot);
         let mut map = FoldMap::new(inlay_snapshot.clone()).0;
-        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), vec![]);
+        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), Vec::new());
         writer.fold(vec![
             (Point::new(0, 2)..Point::new(2, 2), FoldPlaceholder::test()),
             (Point::new(0, 4)..Point::new(1, 0), FoldPlaceholder::test()),
             (Point::new(1, 2)..Point::new(3, 2), FoldPlaceholder::test()),
             (Point::new(3, 1)..Point::new(4, 1), FoldPlaceholder::test()),
         ]);
-        let (snapshot, _) = map.read(inlay_snapshot, vec![]);
+        let (snapshot, _) = map.read(inlay_snapshot, Vec::new());
         assert_eq!(snapshot.text(), "aa⋯eeeee");
     }
 
@@ -1689,12 +1689,12 @@ mod tests {
         let (mut inlay_map, inlay_snapshot) = InlayMap::new(buffer_snapshot.clone());
         let mut map = FoldMap::new(inlay_snapshot.clone()).0;
 
-        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), vec![]);
+        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), Vec::new());
         writer.fold(vec![
             (Point::new(0, 2)..Point::new(2, 2), FoldPlaceholder::test()),
             (Point::new(3, 1)..Point::new(4, 1), FoldPlaceholder::test()),
         ]);
-        let (snapshot, _) = map.read(inlay_snapshot.clone(), vec![]);
+        let (snapshot, _) = map.read(inlay_snapshot.clone(), Vec::new());
         assert_eq!(snapshot.text(), "aa⋯cccc\nd⋯eeeee");
 
         let buffer_snapshot = buffer.update(cx, |buffer, cx| {
@@ -1714,14 +1714,14 @@ mod tests {
         let (_, inlay_snapshot) = InlayMap::new(buffer_snapshot.clone());
         let mut map = FoldMap::new(inlay_snapshot.clone()).0;
 
-        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), vec![]);
+        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), Vec::new());
         writer.fold(vec![
             (Point::new(0, 2)..Point::new(2, 2), FoldPlaceholder::test()),
             (Point::new(0, 4)..Point::new(1, 0), FoldPlaceholder::test()),
             (Point::new(1, 2)..Point::new(3, 2), FoldPlaceholder::test()),
             (Point::new(3, 1)..Point::new(4, 1), FoldPlaceholder::test()),
         ]);
-        let (snapshot, _) = map.read(inlay_snapshot.clone(), vec![]);
+        let (snapshot, _) = map.read(inlay_snapshot.clone(), Vec::new());
         let fold_ranges = snapshot
             .folds_in_range(Point::new(1, 0)..Point::new(1, 3))
             .map(|fold| {
@@ -1756,7 +1756,7 @@ mod tests {
         let (mut inlay_map, inlay_snapshot) = InlayMap::new(buffer_snapshot.clone());
         let mut map = FoldMap::new(inlay_snapshot.clone()).0;
 
-        let (mut initial_snapshot, _) = map.read(inlay_snapshot.clone(), vec![]);
+        let (mut initial_snapshot, _) = map.read(inlay_snapshot.clone(), Vec::new());
         let mut snapshot_edits = Vec::new();
 
         let mut next_inlay_id = 0;
@@ -2018,13 +2018,13 @@ mod tests {
         let (_, inlay_snapshot) = InlayMap::new(buffer_snapshot);
         let mut map = FoldMap::new(inlay_snapshot.clone()).0;
 
-        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), vec![]);
+        let (mut writer, _, _) = map.write(inlay_snapshot.clone(), Vec::new());
         writer.fold(vec![
             (Point::new(0, 2)..Point::new(2, 2), FoldPlaceholder::test()),
             (Point::new(3, 1)..Point::new(4, 1), FoldPlaceholder::test()),
         ]);
 
-        let (snapshot, _) = map.read(inlay_snapshot, vec![]);
+        let (snapshot, _) = map.read(inlay_snapshot, Vec::new());
         assert_eq!(snapshot.text(), "aa⋯cccc\nd⋯eeeee\nffffff\n");
         assert_eq!(
             snapshot
@@ -2095,7 +2095,7 @@ mod tests {
                     }
                     let inclusive = rng.r#gen();
                     log::info!("unfolding {:?} (inclusive: {})", to_unfold, inclusive);
-                    let (mut writer, snapshot, edits) = self.write(inlay_snapshot, vec![]);
+                    let (mut writer, snapshot, edits) = self.write(inlay_snapshot, Vec::new());
                     snapshot_edits.push((snapshot, edits));
                     let (snapshot, edits) = writer.unfold_intersecting(to_unfold, inclusive);
                     snapshot_edits.push((snapshot, edits));
@@ -2110,7 +2110,7 @@ mod tests {
                         to_fold.push((start..end, FoldPlaceholder::test()));
                     }
                     log::info!("folding {:?}", to_fold);
-                    let (mut writer, snapshot, edits) = self.write(inlay_snapshot, vec![]);
+                    let (mut writer, snapshot, edits) = self.write(inlay_snapshot, Vec::new());
                     snapshot_edits.push((snapshot, edits));
                     let (snapshot, edits) = writer.fold(to_fold);
                     snapshot_edits.push((snapshot, edits));

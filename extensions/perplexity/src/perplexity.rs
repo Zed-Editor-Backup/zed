@@ -29,7 +29,7 @@ impl zed::Extension for Perplexity {
         if query.is_empty() {
             return Ok(zed::SlashCommandOutput {
                 text: "Error: Query not provided. Please enter a question or topic.".to_string(),
-                sections: vec![],
+                sections: Vec::new(),
             });
         }
 
@@ -80,12 +80,12 @@ impl zed::Extension for Perplexity {
                 }
                 Ok(zed::SlashCommandOutput {
                     text: full_content,
-                    sections: vec![],
+                    sections: Vec::new(),
                 })
             }
             Err(e) => Ok(zed::SlashCommandOutput {
                 text: format!("API request failed. Error: {}. API Key: {}", e, api_key),
-                sections: vec![],
+                sections: Vec::new(),
             }),
         }
     }

@@ -492,7 +492,7 @@ fn render_markdown_table_row(
     is_header: bool,
     cx: &mut RenderContext,
 ) -> AnyElement {
-    let mut items = vec![];
+    let mut items = Vec::new();
 
     for (index, cell) in parsed.children.iter().enumerate() {
         let alignment = alignments
@@ -609,7 +609,7 @@ fn render_markdown_paragraph(parsed: &MarkdownParagraph, cx: &mut RenderContext)
 }
 
 fn render_markdown_text(parsed_new: &MarkdownParagraph, cx: &mut RenderContext) -> Vec<AnyElement> {
-    let mut any_element = vec![];
+    let mut any_element = Vec::new();
     // these values are cloned in-order satisfy borrow checker
     let syntax_theme = cx.syntax_theme.clone();
     let workspace_clone = cx.workspace.clone();

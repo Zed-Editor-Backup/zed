@@ -111,7 +111,7 @@ impl ScopeSelectorDelegate {
             scope_selector,
             language_registry,
             candidates,
-            matches: vec![],
+            matches: Vec::new(),
             selected_index: 0,
         }
     }

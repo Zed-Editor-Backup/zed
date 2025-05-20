@@ -107,8 +107,8 @@ fn send_args_to_instance(args: &Args) -> anyhow::Result<()> {
     let url = format!("zed-cli://{server_name}");
 
     let request = {
-        let mut paths = vec![];
-        let mut urls = vec![];
+        let mut paths = Vec::new();
+        let mut urls = Vec::new();
         for path in args.paths_or_urls.iter() {
             match std::fs::canonicalize(&path) {
                 Ok(path) => paths.push(path.to_string_lossy().to_string()),

@@ -74,7 +74,7 @@ pub struct StackFrame {
 impl From<dap::StackFrame> for StackFrame {
     fn from(stack_frame: dap::StackFrame) -> Self {
         Self {
-            scopes: vec![],
+            scopes: Vec::new(),
             dap: stack_frame,
         }
     }
@@ -195,7 +195,7 @@ impl LocalMode {
                 self.request(dap_command::SetBreakpoints {
                     source: client_source(path),
                     source_modified: None,
-                    breakpoints: vec![],
+                    breakpoints: Vec::new(),
                 })
             })
             .collect();
@@ -310,7 +310,7 @@ impl LocalMode {
         let session_id = self.client.id();
         for (path, breakpoints) in breakpoints {
             let breakpoints = if ignore_breakpoints {
-                vec![]
+                Vec::new()
             } else {
                 breakpoints
                     .into_iter()

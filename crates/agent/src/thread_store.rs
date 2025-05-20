@@ -215,7 +215,7 @@ impl ThreadStore {
             })
             .collect::<Vec<_>>();
         let default_user_rules_task = match prompt_store {
-            None => Task::ready(vec![]),
+            None => Task::ready(Vec::new()),
             Some(prompt_store) => prompt_store.read_with(cx, |prompt_store, cx| {
                 let prompts = prompt_store.default_prompt_metadata();
                 let load_tasks = prompts.into_iter().map(|prompt_metadata| {

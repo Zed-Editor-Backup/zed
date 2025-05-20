@@ -86,8 +86,8 @@ fn cover_or_next<I: Iterator<Item = (Range<usize>, Range<usize>)>>(
     range_filter: Option<&dyn Fn(Range<usize>, Range<usize>) -> bool>,
 ) -> Option<CandidateWithRanges> {
     let caret_offset = caret.to_offset(map, Bias::Left);
-    let mut covering = vec![];
-    let mut next_ones = vec![];
+    let mut covering = Vec::new();
+    let mut next_ones = Vec::new();
     let snapshot = &map.buffer_snapshot;
 
     if let Some(ranges) = candidates {

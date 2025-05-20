@@ -231,7 +231,7 @@ impl NewPathPrompt {
                 project,
                 tx: Some(tx),
                 selected_index: 0,
-                matches: vec![],
+                matches: Vec::new(),
                 cancel_flag: Arc::new(AtomicBool::new(false)),
                 last_selected_dir: None,
                 should_dismiss: true,

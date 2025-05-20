@@ -33,7 +33,7 @@ fn file_stem_to_key(stem: &str) -> SnippetKind {
 }
 
 fn file_to_snippets(file_contents: VsSnippetsFile) -> Vec<Arc<Snippet>> {
-    let mut snippets = vec![];
+    let mut snippets = Vec::new();
     for (name, snippet) in file_contents.snippets {
         let snippet_name = name.clone();
         let prefixes = snippet
@@ -148,7 +148,7 @@ impl GlobalSnippetWatcher {
         let provider = cx.new(|_cx| SnippetProvider {
             fs,
             snippets: Default::default(),
-            watch_tasks: vec![],
+            watch_tasks: Vec::new(),
         });
         provider.update(cx, |this, cx| {
             this.watch_directory(&global_snippets_dir, cx)

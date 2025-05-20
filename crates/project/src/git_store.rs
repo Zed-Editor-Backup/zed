@@ -2644,7 +2644,7 @@ impl RepositorySnapshot {
             project_id,
             id: self.id.to_proto(),
             abs_path: self.work_directory_abs_path.to_proto(),
-            entry_ids: vec![],
+            entry_ids: Vec::new(),
             scan_id: self.scan_id,
             is_last_update: true,
         }

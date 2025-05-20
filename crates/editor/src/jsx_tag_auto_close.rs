@@ -32,7 +32,7 @@ pub(crate) fn should_auto_close(
     edited_ranges: &[Range<Anchor>],
     config: &JsxTagAutoCloseConfig,
 ) -> Option<Vec<JsxTagCompletionState>> {
-    let mut to_auto_edit = vec![];
+    let mut to_auto_edit = Vec::new();
     for (index, edited_range) in edited_ranges.iter().enumerate() {
         let text = buffer
             .text_for_range(edited_range.clone())
@@ -415,7 +415,7 @@ pub(crate) fn handle_from(
                 .or_insert_with(|| JsxAutoCloseEditContext {
                     buffer: buffer.clone(),
                     config: config.clone(),
-                    edits: vec![],
+                    edits: Vec::new(),
                 })
                 .edits
                 .push(range);

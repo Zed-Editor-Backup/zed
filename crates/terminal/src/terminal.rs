@@ -2365,7 +2365,7 @@ mod tests {
             "hay File \"/zed/bad_py.py\", line 8 stack",
             vec!["File \"/zed/bad_py.py\", line 8"],
         );
-        re_test(crate::PYTHON_FILE_LINE_REGEX, "unrelated", vec![]);
+        re_test(crate::PYTHON_FILE_LINE_REGEX, "unrelated", Vec::new());
     }
 
     #[test]

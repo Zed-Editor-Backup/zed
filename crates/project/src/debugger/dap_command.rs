@@ -1688,7 +1688,7 @@ impl LocalDapCommand for SetExceptionBreakpoints {
             },
             SetExceptionBreakpoints::WithOptions { filters } => {
                 dap::SetExceptionBreakpointsArguments {
-                    filters: vec![],
+                    filters: Vec::new(),
                     filter_options: Some(filters.clone()),
                     exception_options: None,
                 }

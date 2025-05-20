@@ -24,7 +24,7 @@ impl Delegate {
                 .enumerate()
                 .map(|(id, string)| StringMatchCandidate::new(id, string))
                 .collect(),
-            matches: vec![],
+            matches: Vec::new(),
             selected_ix: 0,
         }
     }

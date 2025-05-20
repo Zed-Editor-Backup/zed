@@ -98,7 +98,7 @@ impl StackFrameList {
                     if show_collapsed {
                         frames.clone()
                     } else {
-                        vec![]
+                        Vec::new()
                     }
                 }
             })

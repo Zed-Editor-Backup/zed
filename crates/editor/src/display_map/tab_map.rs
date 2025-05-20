@@ -128,7 +128,7 @@ impl TabMap {
                 debug_assert_eq!(v.as_ptr(), _old_alloc_ptr, "Fold edits were reallocated");
                 v
             } else {
-                vec![]
+                Vec::new()
             };
 
             for fold_edit in fold_edits {
@@ -753,7 +753,7 @@ mod tests {
         log::info!("InlayMap text: {:?}", inlay_snapshot.text());
         let (mut fold_map, _) = FoldMap::new(inlay_snapshot.clone());
         fold_map.randomly_mutate(&mut rng);
-        let (fold_snapshot, _) = fold_map.read(inlay_snapshot, vec![]);
+        let (fold_snapshot, _) = fold_map.read(inlay_snapshot, Vec::new());
         log::info!("FoldMap text: {:?}", fold_snapshot.text());
         let (inlay_snapshot, _) = inlay_map.randomly_mutate(&mut 0, &mut rng);
         log::info!("InlayMap text: {:?}", inlay_snapshot.text());

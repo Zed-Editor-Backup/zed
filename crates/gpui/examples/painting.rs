@@ -13,7 +13,7 @@ struct PaintingViewer {
 
 impl PaintingViewer {
     fn new(_window: &mut Window, _cx: &mut Context<Self>) -> Self {
-        let mut lines = vec![];
+        let mut lines = Vec::new();
 
         // draw a Rust logo
         let mut builder = lyon::path::Path::svg_builder();
@@ -104,7 +104,7 @@ impl PaintingViewer {
 
         Self {
             default_lines: lines.clone(),
-            lines: vec![],
+            lines: Vec::new(),
             start: point(px(0.), px(0.)),
             _painting: false,
         }

@@ -276,7 +276,7 @@ impl TerminalInlineAssistant {
         Ok(cx.background_spawn(async move {
             let mut request_message = LanguageModelRequestMessage {
                 role: Role::User,
-                content: vec![],
+                content: Vec::new(),
                 cache: false,
             };
 

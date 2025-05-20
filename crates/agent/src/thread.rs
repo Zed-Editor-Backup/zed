@@ -1192,7 +1192,7 @@ impl Thread {
             thread_id: Some(self.id.to_string()),
             prompt_id: Some(self.last_prompt_id.to_string()),
             mode: None,
-            messages: vec![],
+            messages: Vec::new(),
             tools: Vec::new(),
             tool_choice: None,
             stop: Vec::new(),
@@ -1351,7 +1351,7 @@ impl Thread {
             thread_id: None,
             prompt_id: None,
             mode: None,
-            messages: vec![],
+            messages: Vec::new(),
             tools: Vec::new(),
             tool_choice: None,
             stop: Vec::new(),
@@ -1584,7 +1584,7 @@ impl Thread {
                                 let last_assistant_message_id = request_assistant_message_id
                                     .unwrap_or_else(|| {
                                         let new_assistant_message_id =
-                                            thread.insert_assistant_message(vec![], cx);
+                                            thread.insert_assistant_message(Vec::new(), cx);
                                         request_assistant_message_id =
                                             Some(new_assistant_message_id);
                                         new_assistant_message_id
@@ -3314,7 +3314,7 @@ fn main() {{
 
         // Send a message
         thread.update(cx, |thread, cx| {
-            thread.insert_user_message("Hi!", ContextLoadResult::default(), None, vec![], cx);
+            thread.insert_user_message("Hi!", ContextLoadResult::default(), None, Vec::new(), cx);
             thread.send_to_model(model.clone(), None, cx);
         });
 
@@ -3407,7 +3407,7 @@ fn main() {{
                 "How are you?",
                 ContextLoadResult::default(),
                 None,
-                vec![],
+                Vec::new(),
                 cx,
             );
             thread.send_to_model(model.clone(), None, cx);
@@ -3447,7 +3447,7 @@ fn main() {{
         cx: &mut TestAppContext,
     ) {
         thread.update(cx, |thread, cx| {
-            thread.insert_user_message("Hi!", ContextLoadResult::default(), None, vec![], cx);
+            thread.insert_user_message("Hi!", ContextLoadResult::default(), None, Vec::new(), cx);
             thread.send_to_model(model.clone(), None, cx);
         });
 

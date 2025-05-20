@@ -56,7 +56,7 @@ impl LinuxClient for HeadlessClient {
     }
 
     fn displays(&self) -> Vec<Rc<dyn PlatformDisplay>> {
-        vec![]
+        Vec::new()
     }
 
     fn primary_display(&self) -> Option<Rc<dyn PlatformDisplay>> {

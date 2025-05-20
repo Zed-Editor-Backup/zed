@@ -38,7 +38,9 @@ async fn test_invert_axis_on_panel_position_change(
 
     // Setup thread response
     client.on_request::<dap::requests::Threads, _>(move |_, _| {
-        Ok(dap::ThreadsResponse { threads: vec![] })
+        Ok(dap::ThreadsResponse {
+            threads: Vec::new(),
+        })
     });
 
     cx.run_until_parked();

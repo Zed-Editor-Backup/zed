@@ -404,10 +404,10 @@ pub fn into_google(
                     if !text.is_empty() {
                         vec![Part::TextPart(google_ai::TextPart { text })]
                     } else {
-                        vec![]
+                        Vec::new()
                     }
                 }
-                language_model::MessageContent::RedactedThinking(_) => vec![],
+                language_model::MessageContent::RedactedThinking(_) => Vec::new(),
                 language_model::MessageContent::Image(image) => {
                     vec![Part::InlineDataPart(google_ai::InlineDataPart {
                         inline_data: google_ai::GenerativeContentBlob {

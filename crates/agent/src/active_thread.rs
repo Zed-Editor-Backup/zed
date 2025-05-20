@@ -1414,9 +1414,9 @@ impl ActiveThread {
                         prompt_id: None,
                         mode: None,
                         messages: vec![request_message],
-                        tools: vec![],
+                        tools: Vec::new(),
                         tool_choice: None,
-                        stop: vec![],
+                        stop: Vec::new(),
                         temperature: AssistantSettings::temperature_for_model(
                             &configured_model.model,
                             cx,

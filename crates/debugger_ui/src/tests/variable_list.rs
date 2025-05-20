@@ -454,7 +454,7 @@ async fn test_fetch_variables_for_multiple_scopes(
                 );
 
                 // scope 2
-                let empty_vec: Vec<dap::Variable> = vec![];
+                let empty_vec: Vec<dap::Variable> = Vec::new();
                 assert_eq!(empty_vec, variables_by_scope[1].1);
 
                 variable_list.assert_visual_entries(vec![

@@ -481,7 +481,7 @@ impl DebugAdapter for FakeAdapter {
     ) -> Result<DebugAdapterBinary> {
         Ok(DebugAdapterBinary {
             command: "command".into(),
-            arguments: vec![],
+            arguments: Vec::new(),
             connection: None,
             envs: HashMap::default(),
             cwd: None,

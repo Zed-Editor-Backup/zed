@@ -276,7 +276,7 @@ fn manifest_from_old_manifest(
         indexed_docs_providers: BTreeMap::default(),
         snippets: None,
         capabilities: Vec::new(),
-        debug_adapters: vec![],
+        debug_adapters: Vec::new(),
     }
 }
 
@@ -292,18 +292,18 @@ mod tests {
             schema_version: SchemaVersion::ZERO,
             description: None,
             repository: None,
-            authors: vec![],
+            authors: Vec::new(),
             lib: Default::default(),
-            themes: vec![],
-            icon_themes: vec![],
-            languages: vec![],
+            themes: Vec::new(),
+            icon_themes: Vec::new(),
+            languages: Vec::new(),
             grammars: BTreeMap::default(),
             language_servers: BTreeMap::default(),
             context_servers: BTreeMap::default(),
             slash_commands: BTreeMap::default(),
             indexed_docs_providers: BTreeMap::default(),
             snippets: None,
-            capabilities: vec![],
+            capabilities: Vec::new(),
             debug_adapters: Default::default(),
         }
     }

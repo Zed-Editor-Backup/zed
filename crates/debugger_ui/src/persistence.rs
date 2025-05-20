@@ -324,7 +324,7 @@ pub(crate) fn deserialize_pane_layout(
 #[cfg(test)]
 impl SerializedPaneLayout {
     pub(crate) fn in_order(&self) -> Vec<SerializedPaneLayout> {
-        let mut panes = vec![];
+        let mut panes = Vec::new();
 
         Self::inner_in_order(&self, &mut panes);
         panes

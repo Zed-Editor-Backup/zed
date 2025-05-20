@@ -905,7 +905,7 @@ impl LocalLspStore {
                             _ => PromptLevel::Info,
                         },
                         message: params.message,
-                        actions: vec![],
+                        actions: Vec::new(),
                         response_channel: tx,
                         lsp_name: name.clone(),
                     };
@@ -2932,7 +2932,7 @@ impl LocalLspStore {
                             });
                             let local = this.as_local_mut().unwrap();
 
-                            let (mut edits, mut snippet_edits) = (vec![], vec![]);
+                            let (mut edits, mut snippet_edits) = (Vec::new(), Vec::new());
                             for edit in op.edits {
                                 match edit {
                                     Edit::Plain(edit) => {
@@ -4827,7 +4827,7 @@ impl LspStore {
                 }) == Some(true)
             })
         else {
-            return Task::ready(Ok(vec![]));
+            return Task::ready(Ok(Vec::new()));
         };
 
         self.request_lsp(
@@ -7618,7 +7618,7 @@ impl LspStore {
         let old_uri = lsp::Url::from_file_path(old_path).ok().map(String::from);
         let new_uri = lsp::Url::from_file_path(new_path).ok().map(String::from);
         cx.spawn(async move |cx| {
-            let mut tasks = vec![];
+            let mut tasks = Vec::new();
             this.update(cx, |this, cx| {
                 let local_store = this.as_local()?;
                 let old_uri = old_uri?;
@@ -8578,7 +8578,7 @@ impl LspStore {
             }
         };
 
-        let mut orphaned_worktrees = vec![];
+        let mut orphaned_worktrees = Vec::new();
         // Remove this server ID from all entries in the given worktree.
         local.language_server_ids.retain(|(worktree, _), ids| {
             if !ids.remove(&server_id) {

@@ -17,7 +17,7 @@ actions!(vim, [ToggleReplace, UndoReplace]);
 
 pub fn register(editor: &mut Editor, cx: &mut Context<Vim>) {
     Vim::action(editor, cx, |vim, _: &ToggleReplace, window, cx| {
-        vim.replacements = vec![];
+        vim.replacements = Vec::new();
         vim.start_recording(cx);
         vim.switch_mode(Mode::Replace, false, window, cx);
     });
@@ -91,7 +91,7 @@ impl Vim {
                 editor.set_clip_at_line_ends(false, cx);
                 let map = editor.snapshot(window, cx);
                 let selections = editor.selections.all::<Point>(cx);
-                let mut new_selections = vec![];
+                let mut new_selections = Vec::new();
                 let edits: Vec<(Range<Point>, String)> = selections
                     .into_iter()
                     .filter_map(|selection| {

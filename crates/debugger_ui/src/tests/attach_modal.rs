@@ -120,17 +120,17 @@ async fn test_show_attach_modal_and_select_process(
                         Candidate {
                             pid: 0,
                             name: "fake-binary-1".into(),
-                            command: vec![],
+                            command: Vec::new(),
                         },
                         Candidate {
                             pid: 3,
                             name: "real-binary-1".into(),
-                            command: vec![],
+                            command: Vec::new(),
                         },
                         Candidate {
                             pid: 1,
                             name: "fake-binary-2".into(),
-                            command: vec![],
+                            command: Vec::new(),
                         },
                     ]
                     .into_iter()

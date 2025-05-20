@@ -267,7 +267,7 @@ impl DispatchTree {
         let new_range = self.nodes.len()..self.nodes.len() + old_range.len();
 
         let mut contains_focus = false;
-        let mut source_stack = vec![];
+        let mut source_stack = Vec::new();
         for (source_node_id, source_node) in source
             .nodes
             .iter_mut()

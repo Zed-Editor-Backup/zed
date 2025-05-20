@@ -38,7 +38,7 @@ impl DiagnosticRenderer {
         };
         let primary = diagnostic_group[primary_ix].clone();
         let group_id = primary.diagnostic.group_id;
-        let mut results = vec![];
+        let mut results = Vec::new();
         for entry in diagnostic_group.iter() {
             if entry.diagnostic.is_primary {
                 let mut markdown = Self::markdown(&entry.diagnostic);

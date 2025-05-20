@@ -44,7 +44,7 @@ pub async fn seed(config: &Config, db: &Database, force: bool) -> anyhow::Result
         .context(format!("failed to load {}", seed_path.to_string_lossy()))?;
 
     let mut first_user = None;
-    let mut others = vec![];
+    let mut others = Vec::new();
 
     let flag_names = ["language-models"];
     let mut flags = Vec::new();

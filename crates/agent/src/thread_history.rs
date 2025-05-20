@@ -463,7 +463,7 @@ impl ThreadHistory {
                 .flat_map(|items| {
                     items
                         .iter()
-                        .map(|item| self.render_list_item(item.entry_index(), item, vec![], cx))
+                        .map(|item| self.render_list_item(item.entry_index(), item, Vec::new(), cx))
                 })
                 .collect(),
             SearchState::Searched { matches, .. } => matches[range]
@@ -481,9 +481,7 @@ impl ThreadHistory {
                     )
                 })
                 .collect(),
-            SearchState::Searching { .. } => {
-                vec![]
-            }
+            SearchState::Searching { .. } => Vec::new(),
         }
     }
 
@@ -629,7 +627,7 @@ impl HistoryEntryElement {
             agent_panel,
             selected: false,
             hovered: false,
-            highlight_positions: vec![],
+            highlight_positions: Vec::new(),
             timestamp_format: EntryTimeFormat::DateAndTime,
             on_hover: Box::new(|_, _, _| {}),
         }

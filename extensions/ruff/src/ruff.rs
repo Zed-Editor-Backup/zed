@@ -140,7 +140,7 @@ impl zed::Extension for RuffExtension {
         Ok(zed::Command {
             command: ruff_binary.path,
             args: ruff_binary.args.unwrap_or_else(|| vec!["server".into()]),
-            env: vec![],
+            env: Vec::new(),
         })
     }
 

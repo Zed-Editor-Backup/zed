@@ -341,7 +341,7 @@ mod tests {
         }
 
         // Try to connect to it a bunch of times at once
-        let mut guards = vec![];
+        let mut guards = Vec::new();
         for _ in 0..10 {
             let tmp_path = tempdir.path().to_path_buf();
             let guard = thread::spawn(move || {

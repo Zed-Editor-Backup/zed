@@ -113,7 +113,7 @@ impl zed::Extension for MyExtension {
         _args: Vec<String>,
     ) -> Result<Vec<SlashCommandArgumentCompletion>, String> {
         match command.name.as_str() {
-            "echo" => Ok(vec![]),
+            "echo" => Ok(Vec::new()),
             "pick-one" => Ok(vec![
                 SlashCommandArgumentCompletion {
                     label: "Option One".to_string(),

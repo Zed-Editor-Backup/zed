@@ -1000,8 +1000,8 @@ async fn test_server_restarts(
     assert_eq!(
         room_participants(&room_c, cx_c),
         RoomParticipants {
-            remote: vec![],
-            pending: vec![]
+            remote: Vec::new(),
+            pending: Vec::new()
         }
     );
 
@@ -1022,7 +1022,7 @@ async fn test_server_restarts(
                 "user_c".to_string(),
                 "user_d".to_string(),
             ],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
     assert_eq!(
@@ -1033,14 +1033,14 @@ async fn test_server_restarts(
                 "user_c".to_string(),
                 "user_d".to_string(),
             ],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
     assert_eq!(
         room_participants(&room_c, cx_c),
         RoomParticipants {
-            remote: vec![],
-            pending: vec![]
+            remote: Vec::new(),
+            pending: Vec::new()
         }
     );
     assert_eq!(
@@ -1051,7 +1051,7 @@ async fn test_server_restarts(
                 "user_b".to_string(),
                 "user_c".to_string(),
             ],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
 
@@ -1062,28 +1062,28 @@ async fn test_server_restarts(
         room_participants(&room_a, cx_a),
         RoomParticipants {
             remote: vec!["user_b".to_string(), "user_d".to_string()],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
     assert_eq!(
         room_participants(&room_b, cx_b),
         RoomParticipants {
             remote: vec!["user_a".to_string(), "user_d".to_string()],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
     assert_eq!(
         room_participants(&room_c, cx_c),
         RoomParticipants {
-            remote: vec![],
-            pending: vec![]
+            remote: Vec::new(),
+            pending: Vec::new()
         }
     );
     assert_eq!(
         room_participants(&room_d, cx_d),
         RoomParticipants {
             remote: vec!["user_a".to_string(), "user_b".to_string()],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
 
@@ -1097,28 +1097,28 @@ async fn test_server_restarts(
         room_participants(&room_a, cx_a),
         RoomParticipants {
             remote: vec!["user_b".to_string()],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
     assert_eq!(
         room_participants(&room_b, cx_b),
         RoomParticipants {
             remote: vec!["user_a".to_string()],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
     assert_eq!(
         room_participants(&room_c, cx_c),
         RoomParticipants {
-            remote: vec![],
-            pending: vec![]
+            remote: Vec::new(),
+            pending: Vec::new()
         }
     );
     assert_eq!(
         room_participants(&room_d, cx_d),
         RoomParticipants {
-            remote: vec![],
-            pending: vec![]
+            remote: Vec::new(),
+            pending: Vec::new()
         }
     );
 
@@ -1161,15 +1161,15 @@ async fn test_server_restarts(
     assert_eq!(
         room_participants(&room_a, cx_a),
         RoomParticipants {
-            remote: vec![],
-            pending: vec![]
+            remote: Vec::new(),
+            pending: Vec::new()
         }
     );
     assert_eq!(
         room_participants(&room_b, cx_b),
         RoomParticipants {
-            remote: vec![],
-            pending: vec![]
+            remote: Vec::new(),
+            pending: Vec::new()
         }
     );
 
@@ -1840,7 +1840,7 @@ async fn test_active_call_events(
         .await
         .unwrap();
     executor.run_until_parked();
-    assert_eq!(mem::take(&mut *events_a.borrow_mut()), vec![]);
+    assert_eq!(mem::take(&mut *events_a.borrow_mut()), Vec::new());
     assert_eq!(
         mem::take(&mut *events_b.borrow_mut()),
         vec![room::Event::RemoteProjectShared {
@@ -1875,7 +1875,7 @@ async fn test_active_call_events(
             worktree_root_names: vec!["b".to_string()]
         }]
     );
-    assert_eq!(mem::take(&mut *events_b.borrow_mut()), vec![]);
+    assert_eq!(mem::take(&mut *events_b.borrow_mut()), Vec::new());
 
     // Sharing a project twice is idempotent.
     let project_b_id_2 = active_call_b
@@ -1884,8 +1884,8 @@ async fn test_active_call_events(
         .unwrap();
     assert_eq!(project_b_id_2, project_b_id);
     executor.run_until_parked();
-    assert_eq!(mem::take(&mut *events_a.borrow_mut()), vec![]);
-    assert_eq!(mem::take(&mut *events_b.borrow_mut()), vec![]);
+    assert_eq!(mem::take(&mut *events_a.borrow_mut()), Vec::new());
+    assert_eq!(mem::take(&mut *events_b.borrow_mut()), Vec::new());
 
     // Unsharing a project should dispatch the RemoteProjectUnshared event.
     active_call_a
@@ -4229,7 +4229,7 @@ async fn test_collaborating_with_diagnostics(
         &lsp::PublishDiagnosticsParams {
             uri: lsp::Url::from_file_path(path!("/a/a.rs")).unwrap(),
             version: None,
-            diagnostics: vec![],
+            diagnostics: Vec::new(),
         },
     );
     executor.run_until_parked();
@@ -6310,14 +6310,14 @@ async fn test_join_call_after_screen_was_shared(
         room_participants(&room_a, cx_a),
         RoomParticipants {
             remote: vec!["user_b".to_string()],
-            pending: vec![],
+            pending: Vec::new(),
         }
     );
     assert_eq!(
         room_participants(&room_b, cx_b),
         RoomParticipants {
             remote: vec!["user_a".to_string()],
-            pending: vec![],
+            pending: Vec::new(),
         }
     );
 

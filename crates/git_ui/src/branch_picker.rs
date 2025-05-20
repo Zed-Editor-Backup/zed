@@ -202,7 +202,7 @@ pub struct BranchListDelegate {
 impl BranchListDelegate {
     fn new(repo: Option<Entity<Repository>>, style: BranchListStyle) -> Self {
         Self {
-            matches: vec![],
+            matches: Vec::new(),
             repo,
             style,
             all_branches: None,

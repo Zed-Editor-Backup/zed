@@ -572,7 +572,7 @@ mod tests {
     #[test]
     fn test_create_signature_help_markdown_string_8() {
         let signature_help = lsp::SignatureHelp {
-            signatures: vec![],
+            signatures: Vec::new(),
             active_signature: None,
             active_parameter: None,
         };

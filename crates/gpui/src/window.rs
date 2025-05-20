@@ -3752,7 +3752,7 @@ impl Window {
         let dispatch_tree = &self.rendered_frame.dispatch_tree;
 
         let Some(node_id) = dispatch_tree.focusable_node_id(focus_handle.id) else {
-            return vec![];
+            return Vec::new();
         };
         let context_stack: Vec<_> = dispatch_tree
             .dispatch_path(node_id)

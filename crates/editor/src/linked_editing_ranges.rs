@@ -89,7 +89,7 @@ pub(super) fn refresh_linked_ranges(
 
         let highlights = project
             .update(cx, |project, cx| {
-                let mut linked_edits_tasks = vec![];
+                let mut linked_edits_tasks = Vec::new();
 
                 for (buffer, start, end) in &applicable_selections {
                     let snapshot = buffer.read(cx).snapshot();

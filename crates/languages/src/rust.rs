@@ -141,7 +141,7 @@ impl LspAdapter for RustLspAdapter {
         Some(LanguageServerBinary {
             path,
             env: Some(env),
-            arguments: vec![],
+            arguments: Vec::new(),
         })
     }
 
@@ -1364,7 +1364,7 @@ mod tests {
                 Some(TargetInfo {
                     package_name: "my-custom-package".into(),
                     target_name: "my-custom-bin".into(),
-                    required_features: vec![],
+                    required_features: Vec::new(),
                     target_kind: TargetKind::Example,
                 }),
             ),

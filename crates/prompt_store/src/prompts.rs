@@ -486,7 +486,7 @@ mod test {
             root_name: "path".into(),
             rules_file: None,
         }];
-        let default_user_rules = vec![];
+        let default_user_rules = Vec::new();
         let project_context = ProjectContext::new(worktrees, default_user_rules);
         let prompt_builder = PromptBuilder::new(None).unwrap();
 

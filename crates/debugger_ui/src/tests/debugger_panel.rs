@@ -353,7 +353,7 @@ async fn test_handle_successful_run_in_terminal_reverse_request(
             kind: None,
             title: None,
             cwd: std::env::temp_dir().to_string_lossy().to_string(),
-            args: vec![],
+            args: Vec::new(),
             env: None,
             args_can_be_interpreted_by_shell: None,
         })

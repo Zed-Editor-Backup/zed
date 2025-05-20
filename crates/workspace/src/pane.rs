@@ -3063,7 +3063,7 @@ impl Pane {
 
     fn get_non_closeable_item_ids(&self, close_pinned: bool) -> Vec<EntityId> {
         if close_pinned {
-            return vec![];
+            return Vec::new();
         }
 
         self.items

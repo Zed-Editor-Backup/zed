@@ -96,7 +96,7 @@ impl NotebookEditor {
             .spawn_in(window, async move |_, _| notebook_language.await)
             .shared();
 
-        let mut cell_order = vec![]; // Vec<CellId>
+        let mut cell_order = Vec::new(); // Vec<CellId>
         let mut cell_map = HashMap::default(); // HashMap<CellId, Cell>
 
         for (index, cell) in notebook_item

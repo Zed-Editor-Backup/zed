@@ -1901,7 +1901,7 @@ async fn test_ignore_breakpoints(
     //         let called_set_breakpoints = called_set_breakpoints.clone();
     //         move |_, args| {
     //             assert_eq!("/project/test.txt", args.source.path.unwrap());
-    //             assert_eq!(args.breakpoints, Some(vec![]));
+    //             assert_eq!(args.breakpoints, Some(Vec::new()));
 
     //             called_set_breakpoints.store(true, Ordering::SeqCst);
 
@@ -2078,7 +2078,7 @@ async fn test_ignore_breakpoints(
     //         let called_set_breakpoints = called_set_breakpoints.clone();
     //         move |_, args| {
     //             assert_eq!("/project/test.txt", args.source.path.unwrap());
-    //             assert_eq!(args.breakpoints, Some(vec![]));
+    //             assert_eq!(args.breakpoints, Some(Vec::new()));
 
     //             called_set_breakpoints.store(true, Ordering::SeqCst);
 

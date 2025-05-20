@@ -439,7 +439,7 @@ impl Copilot {
             LanguageServerId(0),
             LanguageServerBinary {
                 path: "path/to/copilot".into(),
-                arguments: vec![],
+                arguments: Vec::new(),
                 env: None,
             },
             "copilot".into(),

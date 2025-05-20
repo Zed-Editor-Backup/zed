@@ -2808,7 +2808,7 @@ impl ProjectPanel {
             let mut visible_worktree_entries = Vec::new();
             let mut entry_iter =
                 GitTraversal::new(&repo_snapshots, worktree_snapshot.entries(true, 0));
-            let mut auto_folded_ancestors = vec![];
+            let mut auto_folded_ancestors = Vec::new();
             while let Some(entry) = entry_iter.entry() {
                 if auto_collapse_dirs && entry.kind.is_dir() {
                     auto_folded_ancestors.push(entry.id);

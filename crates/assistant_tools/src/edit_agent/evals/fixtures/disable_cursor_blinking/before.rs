@@ -5201,7 +5201,7 @@ impl Editor {
                                 maybe!({
                                     let project = editor.project.as_ref()?;
                                     let dap_store = project.read(cx).dap_store();
-                                    let mut scenarios = vec![];
+                                    let mut scenarios = Vec::new();
                                     let resolved_tasks = resolved_tasks.as_ref()?;
                                     let debug_adapter: SharedString = buffer
                                         .read(cx)
@@ -5229,7 +5229,7 @@ impl Editor {
                                 })
                                 .unwrap_or_default()
                             } else {
-                                vec![]
+                                Vec::new()
                             }
                         })?;
                         if let Ok(task) = editor.update_in(cx, |editor, window, cx| {
@@ -17381,7 +17381,7 @@ impl Editor {
                 .map(|range| range.start.to_point(&snapshot)..range.end.to_point(&snapshot))
                 .collect_vec()
         } else {
-            vec![]
+            Vec::new()
         }
     }
 
@@ -17473,7 +17473,7 @@ impl Editor {
     ) -> Vec<RangeInclusive<DisplayPoint>> {
         let mut results = Vec::new();
         let Some((_, ranges)) = self.background_highlights.get(&TypeId::of::<T>()) else {
-            return vec![];
+            return Vec::new();
         };
 
         let start_ix = match ranges.binary_search_by(|probe| {
@@ -19473,7 +19473,7 @@ fn snippet_completions(
         .collect();
 
     if scopes.is_empty() {
-        return Task::ready(Ok(vec![]));
+        return Task::ready(Ok(Vec::new()));
     }
 
     let snapshot = buffer.read(cx).text_snapshot();
@@ -19493,7 +19493,7 @@ fn snippet_completions(
             last_word = last_word.chars().rev().collect();
 
             if last_word.is_empty() {
-                return Ok(vec![]);
+                return Ok(Vec::new());
             }
 
             let as_offset = text::ToOffset::to_offset(&buffer_position, &snapshot);
@@ -20983,7 +20983,7 @@ impl BreakpointPromptEditor {
             edit_action,
             gutter_dimensions: Arc::new(Mutex::new(GutterDimensions::default())),
             block_ids: Default::default(),
-            _subscriptions: vec![],
+            _subscriptions: Vec::new(),
         }
     }
 

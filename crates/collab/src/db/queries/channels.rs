@@ -579,7 +579,7 @@ impl Database {
         let channel_ids = channels.iter().map(|c| c.id).collect::<Vec<_>>();
 
         let mut channel_ids_by_buffer_id = HashMap::default();
-        let mut latest_buffer_versions: Vec<ChannelBufferVersion> = vec![];
+        let mut latest_buffer_versions: Vec<ChannelBufferVersion> = Vec::new();
         let mut rows = buffer::Entity::find()
             .filter(buffer::Column::ChannelId.is_in(channel_ids.iter().copied()))
             .stream(tx)
@@ -599,7 +599,7 @@ impl Database {
                         replica_id: latest_replica_id as u32,
                     }]
                 } else {
-                    vec![]
+                    Vec::new()
                 },
             });
         }
@@ -862,7 +862,7 @@ impl Database {
         }
 
         if filter.is_empty() {
-            return Ok(vec![]);
+            return Ok(Vec::new());
         }
 
         Ok(channel::Entity::find()

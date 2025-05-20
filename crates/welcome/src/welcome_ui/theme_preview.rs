@@ -249,7 +249,7 @@ impl Component for ThemePreviewTile {
                             ),
                         ])]
                     } else {
-                        vec![]
+                        Vec::new()
                     }
                 })
                 .child(

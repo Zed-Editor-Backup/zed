@@ -1743,7 +1743,7 @@ impl RenderedText {
     }
 
     fn text_for_range(&self, range: Range<usize>) -> String {
-        let mut ret = vec![];
+        let mut ret = Vec::new();
 
         for line in self.lines.iter() {
             if range.start > line.source_end {

@@ -2779,7 +2779,7 @@ impl AgentPanel {
                     .and_then(|item| item.project_path(cx))
                     .into_iter()
                     .collect::<Vec<_>>();
-                this.handle_drop(project_paths, vec![], window, cx);
+                this.handle_drop(project_paths, Vec::new(), window, cx);
             }))
             .on_drop(
                 cx.listener(move |this, selection: &DraggedSelection, window, cx| {
@@ -2787,7 +2787,7 @@ impl AgentPanel {
                         .items()
                         .filter_map(|item| this.project.read(cx).path_for_entry(item.entry_id, cx))
                         .collect::<Vec<_>>();
-                    this.handle_drop(project_paths, vec![], window, cx);
+                    this.handle_drop(project_paths, Vec::new(), window, cx);
                 }),
             )
             .on_drop(cx.listener(move |this, paths: &ExternalPaths, window, cx| {
@@ -2799,8 +2799,8 @@ impl AgentPanel {
                     })
                     .collect::<Vec<_>>();
                 cx.spawn_in(window, async move |this, cx| {
-                    let mut paths = vec![];
-                    let mut added_worktrees = vec![];
+                    let mut paths = Vec::new();
+                    let mut added_worktrees = Vec::new();
                     let opened_paths = futures::future::join_all(tasks).await;
                     for entry in opened_paths {
                         if let Some((worktree, project_path)) = entry.log_err() {

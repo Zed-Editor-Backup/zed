@@ -14,7 +14,7 @@ fn test_sort_matches_local_variable_over_global_variable(_cx: &mut TestAppContex
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.2727272727272727,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "foo_bar_baz".to_string(),
             },
             is_snippet: false,
@@ -26,7 +26,7 @@ fn test_sort_matches_local_variable_over_global_variable(_cx: &mut TestAppContex
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.2727272727272727,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "foo_bar_qux".to_string(),
             },
             is_snippet: false,
@@ -38,7 +38,7 @@ fn test_sort_matches_local_variable_over_global_variable(_cx: &mut TestAppContex
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.22499999999999998,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "floorf64".to_string(),
             },
             is_snippet: false,
@@ -50,7 +50,7 @@ fn test_sort_matches_local_variable_over_global_variable(_cx: &mut TestAppContex
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.22499999999999998,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "floorf32".to_string(),
             },
             is_snippet: false,
@@ -62,7 +62,7 @@ fn test_sort_matches_local_variable_over_global_variable(_cx: &mut TestAppContex
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.22499999999999998,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "floorf16".to_string(),
             },
             is_snippet: false,
@@ -74,7 +74,7 @@ fn test_sort_matches_local_variable_over_global_variable(_cx: &mut TestAppContex
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.2,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "floorf128".to_string(),
             },
             is_snippet: false,
@@ -112,7 +112,7 @@ fn test_sort_matches_local_variable_over_global_variable(_cx: &mut TestAppContex
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.4363636363636364,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "foo_bar_baz".to_string(),
             },
             is_snippet: false,
@@ -124,7 +124,7 @@ fn test_sort_matches_local_variable_over_global_variable(_cx: &mut TestAppContex
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.4363636363636364,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "foo_bar_qux".to_string(),
             },
             is_snippet: false,
@@ -155,7 +155,7 @@ fn test_sort_matches_local_variable_over_global_enum(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.2727272727272727,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "ElementType".to_string(),
             },
             is_snippet: false,
@@ -167,7 +167,7 @@ fn test_sort_matches_local_variable_over_global_enum(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.25,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "element_type".to_string(),
             },
             is_snippet: false,
@@ -179,7 +179,7 @@ fn test_sort_matches_local_variable_over_global_enum(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.16363636363636364,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "simd_select".to_string(),
             },
             is_snippet: false,
@@ -191,7 +191,7 @@ fn test_sort_matches_local_variable_over_global_enum(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.16,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "while let".to_string(),
             },
             is_snippet: false,
@@ -219,7 +219,7 @@ fn test_sort_matches_local_variable_over_global_enum(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.4545454545454546,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "ElementType".to_string(),
             },
             is_snippet: false,
@@ -231,7 +231,7 @@ fn test_sort_matches_local_variable_over_global_enum(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.41666666666666663,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "element_type".to_string(),
             },
             is_snippet: false,
@@ -243,7 +243,7 @@ fn test_sort_matches_local_variable_over_global_enum(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.04714285714285713,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "REPLACEMENT_CHARACTER".to_string(),
             },
             is_snippet: false,
@@ -271,7 +271,7 @@ fn test_sort_matches_local_variable_over_global_enum(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.36363636363636365,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "ElementType".to_string(),
             },
             is_snippet: false,
@@ -283,7 +283,7 @@ fn test_sort_matches_local_variable_over_global_enum(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.0003333333333333333,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "element_type".to_string(),
             },
             is_snippet: false,
@@ -314,7 +314,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.36363636363636365,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable".to_string(),
             },
             is_snippet: false,
@@ -326,7 +326,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.26666666666666666,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable!(…)".to_string(),
             },
             is_snippet: true,
@@ -338,7 +338,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.24615384615384617,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unchecked_rem".to_string(),
             },
             is_snippet: false,
@@ -350,7 +350,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.19047619047619047,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable_unchecked".to_string(),
             },
             is_snippet: false,
@@ -373,7 +373,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.4545454545454546,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable".to_string(),
             },
             is_snippet: true,
@@ -385,7 +385,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.3333333333333333,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable!(…)".to_string(),
             },
             is_snippet: true,
@@ -397,7 +397,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.23809523809523808,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable_unchecked".to_string(),
             },
             is_snippet: true,
@@ -420,7 +420,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.6363636363636364,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable".to_string(),
             },
             is_snippet: false,
@@ -432,7 +432,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.4666666666666667,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable!(…)".to_string(),
             },
             is_snippet: true,
@@ -444,7 +444,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.3333333333333333,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable_unchecked".to_string(),
             },
             is_snippet: false,
@@ -467,7 +467,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.9090909090909092,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable".to_string(),
             },
             is_snippet: false,
@@ -479,7 +479,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.6666666666666666,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable!(…)".to_string(),
             },
             is_snippet: false,
@@ -491,7 +491,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.47619047619047616,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable_unchecked".to_string(),
             },
             is_snippet: false,
@@ -514,7 +514,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 1.0,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable".to_string(),
             },
             is_snippet: false,
@@ -526,7 +526,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.7333333333333333,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable!(…)".to_string(),
             },
             is_snippet: false,
@@ -538,7 +538,7 @@ fn test_sort_matches_for_unreachable(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.5238095238095237,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "unreachable_unchecked".to_string(),
             },
             is_snippet: false,
@@ -564,7 +564,7 @@ fn test_sort_matches_variable_and_constants_over_function(_cx: &mut TestAppConte
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 1.0,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "var".to_string(),
             },
             is_snippet: false,
@@ -576,7 +576,7 @@ fn test_sort_matches_variable_and_constants_over_function(_cx: &mut TestAppConte
             string_match: StringMatch {
                 candidate_id: 1,
                 score: 1.0,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "var".to_string(),
             },
             is_snippet: false,
@@ -602,7 +602,7 @@ fn test_sort_matches_variable_and_constants_over_function(_cx: &mut TestAppConte
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 1.0,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "var".to_string(),
             },
             is_snippet: false,
@@ -614,7 +614,7 @@ fn test_sort_matches_variable_and_constants_over_function(_cx: &mut TestAppConte
             string_match: StringMatch {
                 candidate_id: 1,
                 score: 1.0,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "var".to_string(),
             },
             is_snippet: false,
@@ -643,7 +643,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.3333333333333333,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onCut?".to_string(),
             },
             is_snippet: false,
@@ -655,7 +655,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.2857142857142857,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onPlay?".to_string(),
             },
             is_snippet: false,
@@ -667,7 +667,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.25,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "color?".to_string(),
             },
             is_snippet: false,
@@ -679,7 +679,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.25,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "defaultValue?".to_string(),
             },
             is_snippet: false,
@@ -691,7 +691,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.25,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "style?".to_string(),
             },
             is_snippet: false,
@@ -703,7 +703,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.20,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "className?".to_string(),
             },
             is_snippet: false,
@@ -729,7 +729,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.375,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onAbort?".to_string(),
             },
             is_snippet: false,
@@ -741,7 +741,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.2727272727272727,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onAuxClick?".to_string(),
             },
             is_snippet: false,
@@ -753,7 +753,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.23571428571428565,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onPlay?".to_string(),
             },
             is_snippet: false,
@@ -765,7 +765,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.23571428571428565,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onLoad?".to_string(),
             },
             is_snippet: false,
@@ -777,7 +777,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.23571428571428565,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onDrag?".to_string(),
             },
             is_snippet: false,
@@ -789,7 +789,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.22499999999999998,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onPause?".to_string(),
             },
             is_snippet: false,
@@ -801,7 +801,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.22499999999999998,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onPaste?".to_string(),
             },
             is_snippet: false,
@@ -813,7 +813,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.2,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onAnimationEnd?".to_string(),
             },
             is_snippet: false,
@@ -825,7 +825,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.2,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onAbortCapture?".to_string(),
             },
             is_snippet: false,
@@ -837,7 +837,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.1833333333333333,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onChange?".to_string(),
             },
             is_snippet: false,
@@ -849,7 +849,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.18,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onWaiting?".to_string(),
             },
             is_snippet: false,
@@ -861,7 +861,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.18,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onCanPlay?".to_string(),
             },
             is_snippet: false,
@@ -873,7 +873,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.1764705882352941,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onAnimationStart?".to_string(),
             },
             is_snippet: false,
@@ -885,7 +885,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.16666666666666666,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onAuxClickCapture?".to_string(),
             },
             is_snippet: false,
@@ -897,7 +897,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.16499999999999998,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onStalled?".to_string(),
             },
             is_snippet: false,
@@ -909,7 +909,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.16499999999999998,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onPlaying?".to_string(),
             },
             is_snippet: false,
@@ -921,7 +921,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.16499999999999998,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onDragEnd?".to_string(),
             },
             is_snippet: false,
@@ -933,7 +933,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.15000000000000002,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onInvalid?".to_string(),
             },
             is_snippet: false,
@@ -945,7 +945,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.15,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onDragOver?".to_string(),
             },
             is_snippet: false,
@@ -957,7 +957,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.15,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onDragExit?".to_string(),
             },
             is_snippet: false,
@@ -969,7 +969,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.14285714285714285,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onAnimationIteration?".to_string(),
             },
             is_snippet: false,
@@ -981,7 +981,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.13846153846153847,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onRateChange?".to_string(),
             },
             is_snippet: false,
@@ -993,7 +993,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.13749999999999996,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onLoadStart?".to_string(),
             },
             is_snippet: false,
@@ -1005,7 +1005,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.13749999999999996,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onDragStart?".to_string(),
             },
             is_snippet: false,
@@ -1017,7 +1017,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.13749999999999996,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onDragLeave?".to_string(),
             },
             is_snippet: false,
@@ -1029,7 +1029,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.13749999999999996,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onDragEnter?".to_string(),
             },
             is_snippet: false,
@@ -1041,7 +1041,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.13636363636363635,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onAnimationEndCapture?".to_string(),
             },
             is_snippet: false,
@@ -1053,7 +1053,7 @@ fn test_sort_matches_for_jsx_event_handler(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.12692307692307692,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "onLoadedData?".to_string(),
             },
             is_snippet: false,
@@ -1095,7 +1095,7 @@ fn test_sort_matches_for_snippets(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.2,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "println".to_string(),
             },
             is_snippet: false,
@@ -1107,7 +1107,7 @@ fn test_sort_matches_for_snippets(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.2,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "println!(…)".to_string(),
             },
             is_snippet: true,
@@ -1133,7 +1133,7 @@ fn test_sort_matches_for_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 1.0,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "set_text".to_string(),
             },
             is_snippet: false,
@@ -1145,7 +1145,7 @@ fn test_sort_matches_for_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.32000000000000006,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "set_placeholder_text".to_string(),
             },
             is_snippet: false,
@@ -1157,7 +1157,7 @@ fn test_sort_matches_for_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.32,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "set_text_style_refinement".to_string(),
             },
             is_snippet: false,
@@ -1169,7 +1169,7 @@ fn test_sort_matches_for_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.16666666666666666,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "set_context_menu_options".to_string(),
             },
             is_snippet: false,
@@ -1181,7 +1181,7 @@ fn test_sort_matches_for_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.08695652173913043,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_to_next_word_end".to_string(),
             },
             is_snippet: false,
@@ -1193,7 +1193,7 @@ fn test_sort_matches_for_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.07692307692307693,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_to_next_subword_end".to_string(),
             },
             is_snippet: false,
@@ -1205,7 +1205,7 @@ fn test_sort_matches_for_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.06956521739130435,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "set_custom_context_menu".to_string(),
             },
             is_snippet: false,
@@ -1217,7 +1217,7 @@ fn test_sort_matches_for_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.06,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_to_end_of_excerpt".to_string(),
             },
             is_snippet: false,
@@ -1229,7 +1229,7 @@ fn test_sort_matches_for_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.055384615384615386,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_to_start_of_excerpt".to_string(),
             },
             is_snippet: false,
@@ -1241,7 +1241,7 @@ fn test_sort_matches_for_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.0464516129032258,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_to_start_of_next_excerpt".to_string(),
             },
             is_snippet: false,
@@ -1253,7 +1253,7 @@ fn test_sort_matches_for_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.04363636363636363,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_to_end_of_previous_excerpt".to_string(),
             },
             is_snippet: false,
@@ -1293,7 +1293,7 @@ fn test_sort_matches_for_prefix_matches(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.12631578947368421,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_to_beginning".to_string(),
             },
             is_snippet: false,
@@ -1305,7 +1305,7 @@ fn test_sort_matches_for_prefix_matches(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.15000000000000002,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "set_collapse_matches".to_string(),
             },
             is_snippet: false,
@@ -1317,7 +1317,7 @@ fn test_sort_matches_for_prefix_matches(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.21428571428571427,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "set_autoindent".to_string(),
             },
             is_snippet: false,
@@ -1329,7 +1329,7 @@ fn test_sort_matches_for_prefix_matches(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.11538461538461539,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "set_all_diagnostics_active".to_string(),
             },
             is_snippet: false,
@@ -1341,7 +1341,7 @@ fn test_sort_matches_for_prefix_matches(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.1142857142857143,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_to_end_of_line".to_string(),
             },
             is_snippet: false,
@@ -1353,7 +1353,7 @@ fn test_sort_matches_for_prefix_matches(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.15000000000000002,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_all".to_string(),
             },
             is_snippet: false,
@@ -1365,7 +1365,7 @@ fn test_sort_matches_for_prefix_matches(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.13636363636363635,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_line".to_string(),
             },
             is_snippet: false,
@@ -1377,7 +1377,7 @@ fn test_sort_matches_for_prefix_matches(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.13636363636363635,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_left".to_string(),
             },
             is_snippet: false,
@@ -1389,7 +1389,7 @@ fn test_sort_matches_for_prefix_matches(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.13636363636363635,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "select_down".to_string(),
             },
             is_snippet: false,
@@ -1427,7 +1427,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.6000000000000001,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await".to_string(),
             },
             is_snippet: false,
@@ -1439,7 +1439,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 35,
                 score: 0.375,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.ne".to_string(),
             },
             is_snippet: false,
@@ -1451,7 +1451,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 34,
                 score: 0.375,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.eq".to_string(),
             },
             is_snippet: false,
@@ -1463,7 +1463,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 18,
                 score: 0.375,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.or".to_string(),
             },
             is_snippet: false,
@@ -1475,7 +1475,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 21,
                 score: 0.3333333333333333,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.zip".to_string(),
             },
             is_snippet: false,
@@ -1487,7 +1487,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 20,
                 score: 0.3333333333333333,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.xor".to_string(),
             },
             is_snippet: false,
@@ -1499,7 +1499,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 15,
                 score: 0.3333333333333333,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.and".to_string(),
             },
             is_snippet: false,
@@ -1511,7 +1511,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 9,
                 score: 0.3333333333333333,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.map".to_string(),
             },
             is_snippet: false,
@@ -1523,7 +1523,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 47,
                 score: 0.30000000000000004,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.take".to_string(),
             },
             is_snippet: false,
@@ -1557,7 +1557,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 1.0,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await".to_string(),
             },
             is_snippet: false,
@@ -1569,7 +1569,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 35,
                 score: 0.625,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.ne".to_string(),
             },
             is_snippet: false,
@@ -1581,7 +1581,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 34,
                 score: 0.625,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.eq".to_string(),
             },
             is_snippet: false,
@@ -1593,7 +1593,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 18,
                 score: 0.625,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.or".to_string(),
             },
             is_snippet: false,
@@ -1605,7 +1605,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 21,
                 score: 0.5555555555555556,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.zip".to_string(),
             },
             is_snippet: false,
@@ -1617,7 +1617,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 20,
                 score: 0.5555555555555556,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.xor".to_string(),
             },
             is_snippet: false,
@@ -1629,7 +1629,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 15,
                 score: 0.5555555555555556,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.and".to_string(),
             },
             is_snippet: false,
@@ -1641,7 +1641,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 9,
                 score: 0.5555555555555556,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.map".to_string(),
             },
             is_snippet: false,
@@ -1653,7 +1653,7 @@ fn test_sort_matches_for_await(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 47,
                 score: 0.5,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "await.take".to_string(),
             },
             is_snippet: false,
@@ -1691,7 +1691,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 211,
                 score: 0.5,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init__".to_string(),
             },
             is_snippet: false,
@@ -1703,7 +1703,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.5,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init__".to_string(),
             },
             is_snippet: false,
@@ -1715,7 +1715,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 215,
                 score: 0.23529411764705882,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__instancecheck__".to_string(),
             },
             is_snippet: false,
@@ -1727,7 +1727,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 213,
                 score: 0.23529411764705882,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init_subclass__".to_string(),
             },
             is_snippet: false,
@@ -1739,7 +1739,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 4,
                 score: 0.23529411764705882,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__instancecheck__".to_string(),
             },
             is_snippet: false,
@@ -1751,7 +1751,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 2,
                 score: 0.23529411764705882,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init_subclass__".to_string(),
             },
             is_snippet: false,
@@ -1782,7 +1782,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 9,
                 score: 0.625,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init__".to_string(),
             },
             is_snippet: false,
@@ -1794,7 +1794,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.625,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init__".to_string(),
             },
             is_snippet: false,
@@ -1806,7 +1806,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 10,
                 score: 0.29411764705882354,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init_subclass__".to_string(),
             },
             is_snippet: false,
@@ -1818,7 +1818,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1,
                 score: 0.29411764705882354,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init_subclass__".to_string(),
             },
             is_snippet: false,
@@ -1847,7 +1847,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 7,
                 score: 0.75,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init__".to_string(),
             },
             is_snippet: false,
@@ -1859,7 +1859,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.75,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init__".to_string(),
             },
             is_snippet: false,
@@ -1871,7 +1871,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 8,
                 score: 0.3529411764705882,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init_subclass__".to_string(),
             },
             is_snippet: false,
@@ -1883,7 +1883,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1,
                 score: 0.3529411764705882,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init_subclass__".to_string(),
             },
             is_snippet: false,
@@ -1912,7 +1912,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 4,
                 score: 0.875,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init__".to_string(),
             },
             is_snippet: false,
@@ -1924,7 +1924,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.875,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init__".to_string(),
             },
             is_snippet: false,
@@ -1936,7 +1936,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 5,
                 score: 0.4117647058823529,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init_subclass__".to_string(),
             },
             is_snippet: false,
@@ -1948,7 +1948,7 @@ fn test_sort_matches_for_python_init(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1,
                 score: 0.4117647058823529,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "__init_subclass__".to_string(),
             },
             is_snippet: false,
@@ -1981,7 +1981,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 67,
                 score: 0.75,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "into".to_string(),
             },
             is_snippet: false,
@@ -1993,7 +1993,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 68,
                 score: 0.30000000000000004,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "try_into".to_string(),
             },
             is_snippet: false,
@@ -2005,7 +2005,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 108,
                 score: 0.2571428571428571,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "println".to_string(),
             },
             is_snippet: true,
@@ -2017,7 +2017,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 73,
                 score: 0.24,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "clone_into".to_string(),
             },
             is_snippet: false,
@@ -2029,7 +2029,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1,
                 score: 0.23076923076923078,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "into_searcher".to_string(),
             },
             is_snippet: false,
@@ -2041,7 +2041,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 109,
                 score: 0.22499999999999998,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "eprintln".to_string(),
             },
             is_snippet: true,
@@ -2063,7 +2063,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 65,
                 score: 1.0,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "into".to_string(),
             },
             is_snippet: false,
@@ -2075,7 +2075,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 66,
                 score: 0.4,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "try_into".to_string(),
             },
             is_snippet: false,
@@ -2087,7 +2087,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 71,
                 score: 0.32,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "clone_into".to_string(),
             },
             is_snippet: false,
@@ -2099,7 +2099,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 0,
                 score: 0.3076923076923077,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "into_searcher".to_string(),
             },
             is_snippet: false,
@@ -2111,7 +2111,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 27,
                 score: 0.09,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "split_terminator".to_string(),
             },
             is_snippet: false,
@@ -2123,7 +2123,7 @@ fn test_sort_matches_for_rust_into(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 28,
                 score: 0.08470588235294117,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "rsplit_terminator".to_string(),
             },
             is_snippet: false,
@@ -2149,7 +2149,7 @@ fn test_sort_matches_for_variable_over_function(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 33,
                 score: 0.6666666666666666,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "serialize".to_string(),
             },
             is_snippet: false,
@@ -2161,7 +2161,7 @@ fn test_sort_matches_for_variable_over_function(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 32,
                 score: 0.6666666666666666,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "serialize".to_string(),
             },
             is_snippet: false,
@@ -2173,7 +2173,7 @@ fn test_sort_matches_for_variable_over_function(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 103,
                 score: 0.3529411764705882,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "serialization_key".to_string(),
             },
             is_snippet: false,
@@ -2185,7 +2185,7 @@ fn test_sort_matches_for_variable_over_function(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 18,
                 score: 0.3529411764705882,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "serialize_version".to_string(),
             },
             is_snippet: false,
@@ -2197,7 +2197,7 @@ fn test_sort_matches_for_variable_over_function(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 65,
                 score: 0.32727272727272727,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "deserialize".to_string(),
             },
             is_snippet: false,
@@ -2231,7 +2231,7 @@ fn test_sort_matches_for_local_methods_over_library(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1200,
                 score: 0.5555555555555556,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "setISODay".to_string(),
             },
             is_snippet: false,
@@ -2243,7 +2243,7 @@ fn test_sort_matches_for_local_methods_over_library(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1216,
                 score: 0.5,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "setISOWeek".to_string(),
             },
             is_snippet: false,
@@ -2255,7 +2255,7 @@ fn test_sort_matches_for_local_methods_over_library(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1232,
                 score: 0.3571428571428571,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "setISOWeekYear".to_string(),
             },
             is_snippet: false,
@@ -2267,7 +2267,7 @@ fn test_sort_matches_for_local_methods_over_library(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1217,
                 score: 0.3571428571428571,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "setISOWeekYear".to_string(),
             },
             is_snippet: false,
@@ -2279,7 +2279,7 @@ fn test_sort_matches_for_local_methods_over_library(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 53,
                 score: 0.3333333333333333,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "setIsRefreshing".to_string(),
             },
             is_snippet: false,
@@ -2291,7 +2291,7 @@ fn test_sort_matches_for_local_methods_over_library(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1180,
                 score: 0.2571428571428571,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "setFips".to_string(),
             },
             is_snippet: false,
@@ -2326,7 +2326,7 @@ fn test_sort_matches_for_priotize_not_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1115,
                 score: 1.0,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "Item".to_string(),
             },
             is_snippet: false,
@@ -2338,7 +2338,7 @@ fn test_sort_matches_for_priotize_not_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1108,
                 score: 1.0,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "Item".to_string(),
             },
             is_snippet: false,
@@ -2350,7 +2350,7 @@ fn test_sort_matches_for_priotize_not_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 26,
                 score: 0.8,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "items".to_string(),
             },
             is_snippet: false,
@@ -2362,7 +2362,7 @@ fn test_sort_matches_for_priotize_not_exact_match(_cx: &mut TestAppContext) {
             string_match: StringMatch {
                 candidate_id: 1138,
                 score: 0.5,
-                positions: vec![],
+                positions: Vec::new(),
                 string: "ItemText".to_string(),
             },
             is_snippet: false,

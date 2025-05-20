@@ -46,9 +46,9 @@ impl Vim {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
-        let mut starts = vec![];
-        let mut ends = vec![];
-        let mut reversed = vec![];
+        let mut starts = Vec::new();
+        let mut ends = Vec::new();
+        let mut reversed = Vec::new();
 
         self.update_editor(window, cx, |vim, editor, window, cx| {
             let (map, selections) = editor.selections.all_display(cx);

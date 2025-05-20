@@ -1030,7 +1030,7 @@ mod tests {
         let _ = messages_ended_rx.await;
         assert!(
             server_conn
-                .send(WebSocketMessage::Binary(vec![].into()))
+                .send(WebSocketMessage::Binary(Vec::new().into()))
                 .await
                 .is_err()
         );

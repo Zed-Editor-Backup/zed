@@ -38,7 +38,7 @@ impl Navigable {
     pub fn new(child: AnyElement) -> Self {
         Self {
             child,
-            selectable_children: vec![],
+            selectable_children: Vec::new(),
         }
     }
 

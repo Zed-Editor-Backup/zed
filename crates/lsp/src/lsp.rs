@@ -1266,7 +1266,7 @@ impl LanguageServer {
                         uri,
                         name: String::default(),
                     }],
-                    removed: vec![],
+                    removed: Vec::new(),
                 },
             };
             self.notify::<DidChangeWorkspaceFolders>(&params).ok();
@@ -1292,7 +1292,7 @@ impl LanguageServer {
         if was_removed {
             let params = DidChangeWorkspaceFoldersParams {
                 event: WorkspaceFoldersChangeEvent {
-                    added: vec![],
+                    added: Vec::new(),
                     removed: vec![WorkspaceFolder {
                         uri,
                         name: String::default(),
@@ -1682,7 +1682,7 @@ mod tests {
             LanguageServerId(0),
             LanguageServerBinary {
                 path: "path/to/language-server".into(),
-                arguments: vec![],
+                arguments: Vec::new(),
                 env: None,
             },
             "the-lsp".to_string(),
@@ -1739,7 +1739,7 @@ mod tests {
         fake.notify::<notification::PublishDiagnostics>(&PublishDiagnosticsParams {
             uri: Url::from_str("file://b/c").unwrap(),
             version: Some(5),
-            diagnostics: vec![],
+            diagnostics: Vec::new(),
         });
         assert_eq!(message_rx.recv().await.unwrap().message, "ok");
         assert_eq!(

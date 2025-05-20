@@ -649,7 +649,7 @@ impl DapStore {
     }
 
     pub fn shutdown_sessions(&mut self, cx: &mut Context<Self>) -> Task<()> {
-        let mut tasks = vec![];
+        let mut tasks = Vec::new();
         for session_id in self.sessions.keys().cloned().collect::<Vec<_>>() {
             tasks.push(self.shutdown_session(session_id, cx));
         }

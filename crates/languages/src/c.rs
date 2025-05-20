@@ -32,7 +32,7 @@ impl super::LspAdapter for CLspAdapter {
         let path = delegate.which(Self::SERVER_NAME.as_ref()).await?;
         Some(LanguageServerBinary {
             path,
-            arguments: vec![],
+            arguments: Vec::new(),
             env: None,
         })
     }
@@ -104,7 +104,7 @@ impl super::LspAdapter for CLspAdapter {
         Ok(LanguageServerBinary {
             path: binary_path,
             env: None,
-            arguments: vec![],
+            arguments: Vec::new(),
         })
     }
 
@@ -310,7 +310,7 @@ impl super::LspAdapter for CLspAdapter {
                 .map(move |diag| {
                     let range =
                         language::range_to_lsp(diag.range.to_point_utf16(&snapshot)).unwrap();
-                    let mut tags = vec![];
+                    let mut tags = Vec::new();
                     if diag.diagnostic.is_unnecessary {
                         tags.push(DiagnosticTag::UNNECESSARY);
                     }
@@ -345,7 +345,7 @@ async fn get_cached_server_binary(container_dir: PathBuf) -> Option<LanguageServ
             Ok(LanguageServerBinary {
                 path: clangd_bin,
                 env: None,
-                arguments: vec![],
+                arguments: Vec::new(),
             })
         } else {
             Err(anyhow!(

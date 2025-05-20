@@ -1599,7 +1599,7 @@ impl SearchableItem for Editor {
     ) {
         let text = self.buffer.read(cx);
         let text = text.snapshot(cx);
-        let mut edits = vec![];
+        let mut edits = Vec::new();
         let mut last_point: Option<Point> = None;
 
         for m in matches {
@@ -1696,7 +1696,7 @@ impl SearchableItem for Editor {
         let search_within_ranges = self
             .background_highlights
             .get(&TypeId::of::<SearchWithinRange>())
-            .map_or(vec![], |(_color, ranges)| {
+            .map_or(Vec::new(), |(_color, ranges)| {
                 ranges.iter().cloned().collect::<Vec<_>>()
             });
 

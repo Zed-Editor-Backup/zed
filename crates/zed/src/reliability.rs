@@ -377,7 +377,7 @@ pub fn monitor_main_thread_hangs(
                                 ip: frame.ip() as usize,
                                 symbol_addr: frame.symbol_address() as usize,
                                 base: frame.module_base_address().map(|addr| addr as usize),
-                                symbols: vec![],
+                                symbols: Vec::new(),
                             };
 
                             backtrace::resolve_frame(&frame, |symbol| {

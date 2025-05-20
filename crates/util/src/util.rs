@@ -1054,7 +1054,7 @@ mod tests {
 
     #[test]
     fn test_extend_sorted() {
-        let mut vec = vec![];
+        let mut vec = Vec::new();
 
         extend_sorted(&mut vec, vec![21, 17, 13, 8, 1, 0], 5, |a, b| b.cmp(a));
         assert_eq!(vec, &[21, 17, 13, 8, 1]);

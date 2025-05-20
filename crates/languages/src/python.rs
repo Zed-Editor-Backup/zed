@@ -948,7 +948,7 @@ impl LspAdapter for PyLspAdapter {
             Some(LanguageServerBinary {
                 path: pylsp_bin,
                 env: Some(env),
-                arguments: vec![],
+                arguments: Vec::new(),
             })
         } else {
             let venv = toolchains
@@ -1020,7 +1020,7 @@ impl LspAdapter for PyLspAdapter {
         Ok(LanguageServerBinary {
             path: pylsp,
             env: None,
-            arguments: vec![],
+            arguments: Vec::new(),
         })
     }
 
@@ -1034,7 +1034,7 @@ impl LspAdapter for PyLspAdapter {
         Some(LanguageServerBinary {
             path: pylsp,
             env: None,
-            arguments: vec![],
+            arguments: Vec::new(),
         })
     }
 

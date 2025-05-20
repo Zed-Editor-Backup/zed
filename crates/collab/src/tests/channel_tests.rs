@@ -468,7 +468,7 @@ async fn test_channel_room(
         room_participants(&room_a, cx_a),
         RoomParticipants {
             remote: vec!["user_b".to_string()],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
 
@@ -479,7 +479,7 @@ async fn test_channel_room(
         room_participants(&room_b, cx_b),
         RoomParticipants {
             remote: vec!["user_a".to_string()],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
 
@@ -563,7 +563,7 @@ async fn test_channel_room(
         room_participants(&room_a, cx_a),
         RoomParticipants {
             remote: vec!["user_b".to_string()],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
 
@@ -574,7 +574,7 @@ async fn test_channel_room(
         room_participants(&room_b, cx_b),
         RoomParticipants {
             remote: vec!["user_a".to_string()],
-            pending: vec![]
+            pending: Vec::new()
         }
     );
 }

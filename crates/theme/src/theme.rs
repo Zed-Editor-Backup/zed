@@ -249,7 +249,7 @@ pub fn refine_theme_family(theme_family_content: ThemeFamilyContent) -> ThemeFam
         id: id.clone(),
         name: name.clone().into(),
         author: author.clone().into(),
-        themes: vec![],
+        themes: Vec::new(),
         scales: default_color_scales(),
     };
 

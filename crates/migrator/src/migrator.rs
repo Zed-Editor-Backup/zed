@@ -34,7 +34,7 @@ fn migrate(text: &str, patterns: MigrationPatterns, query: &Query) -> Result<Opt
     let mut cursor = tree_sitter::QueryCursor::new();
     let mut matches = cursor.matches(query, syntax_tree.root_node(), text.as_bytes());
 
-    let mut edits = vec![];
+    let mut edits = Vec::new();
     while let Some(mat) = matches.next() {
         if let Some((_, callback)) = patterns.get(mat.pattern_index) {
             edits.extend(callback(&text, &mat, query));

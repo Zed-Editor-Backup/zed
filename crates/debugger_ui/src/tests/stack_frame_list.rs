@@ -52,7 +52,7 @@ async fn test_fetch_initial_stack_frames_and_go_to_stack_frame(
     let cx = &mut VisualTestContext::from_window(*workspace, cx);
     let session = start_debug_session(&workspace, cx, |_| {}).unwrap();
     let client = session.update(cx, |session, _| session.adapter_client().unwrap());
-    client.on_request::<Scopes, _>(move |_, _| Ok(dap::ScopesResponse { scopes: vec![] }));
+    client.on_request::<Scopes, _>(move |_, _| Ok(dap::ScopesResponse { scopes: Vec::new() }));
 
     client.on_request::<Threads, _>(move |_, _| {
         Ok(dap::ThreadsResponse {
@@ -222,7 +222,7 @@ async fn test_select_stack_frame(executor: BackgroundExecutor, cx: &mut TestAppC
         })
     });
 
-    client.on_request::<Scopes, _>(move |_, _| Ok(dap::ScopesResponse { scopes: vec![] }));
+    client.on_request::<Scopes, _>(move |_, _| Ok(dap::ScopesResponse { scopes: Vec::new() }));
 
     let stack_frames = vec![
         StackFrame {
@@ -469,7 +469,7 @@ async fn test_collapsed_entries(executor: BackgroundExecutor, cx: &mut TestAppCo
         })
     });
 
-    client.on_request::<Scopes, _>(move |_, _| Ok(dap::ScopesResponse { scopes: vec![] }));
+    client.on_request::<Scopes, _>(move |_, _| Ok(dap::ScopesResponse { scopes: Vec::new() }));
 
     let stack_frames = vec![
         StackFrame {

@@ -788,7 +788,7 @@ impl DirectoryLister {
             DirectoryLister::Local(fs) => {
                 let fs = fs.clone();
                 cx.background_spawn(async move {
-                    let mut results = vec![];
+                    let mut results = Vec::new();
                     let expanded = shellexpand::tilde(&path);
                     let query = Path::new(expanded.as_ref());
                     let mut response = fs.read_dir(query).await?;
@@ -3582,7 +3582,7 @@ impl Project {
         let snapshot = buffer_handle.read(cx).snapshot();
 
         let Some(root_node) = snapshot.syntax_root_ancestor(range.end) else {
-            return Task::ready(Ok(vec![]));
+            return Task::ready(Ok(Vec::new()));
         };
 
         let row = snapshot

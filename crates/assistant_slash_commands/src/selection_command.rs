@@ -68,7 +68,7 @@ impl SlashCommand for SelectionCommand {
         _window: &mut Window,
         cx: &mut App,
     ) -> Task<SlashCommandResult> {
-        let mut events = vec![];
+        let mut events = Vec::new();
 
         let Some(creases) = workspace
             .update(cx, |workspace, cx| {

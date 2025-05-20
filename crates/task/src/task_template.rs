@@ -836,7 +836,7 @@ mod tests {
                 VariableName::File.template_value(),
                 VariableName::Symbol.template_value(),
             ),
-            args: vec![],
+            args: Vec::new(),
             env: HashMap::from_iter([
                 (
                     "TASK_ENV_VAR1".to_string(),

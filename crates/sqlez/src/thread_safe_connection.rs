@@ -274,7 +274,7 @@ mod test {
 
     #[test]
     fn many_initialize_and_migrate_queries_at_once() {
-        let mut handles = vec![];
+        let mut handles = Vec::new();
 
         enum TestDomain {}
         impl Domain for TestDomain {

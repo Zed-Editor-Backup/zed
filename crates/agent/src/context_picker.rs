@@ -520,11 +520,11 @@ impl ContextPicker {
 
     fn recent_entries(&self, cx: &mut App) -> Vec<RecentEntry> {
         let Some(workspace) = self.workspace.upgrade() else {
-            return vec![];
+            return Vec::new();
         };
 
         let Some(context_store) = self.context_store.upgrade() else {
-            return vec![];
+            return Vec::new();
         };
 
         recent_context_picker_entries(

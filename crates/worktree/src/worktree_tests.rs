@@ -771,7 +771,7 @@ async fn test_file_scan_inclusions(cx: &mut TestAppContext) {
     cx.update(|cx| {
         cx.update_global::<SettingsStore, _>(|store, cx| {
             store.update_user_settings::<WorktreeSettings>(cx, |project_settings| {
-                project_settings.file_scan_exclusions = Some(vec![]);
+                project_settings.file_scan_exclusions = Some(Vec::new());
                 project_settings.file_scan_inclusions = Some(vec![
                     "node_modules/**/package.json".to_string(),
                     "**/.DS_Store".to_string(),
@@ -895,7 +895,7 @@ async fn test_file_scan_inclusions_reindexes_on_setting_change(cx: &mut TestAppC
     cx.update(|cx| {
         cx.update_global::<SettingsStore, _>(|store, cx| {
             store.update_user_settings::<WorktreeSettings>(cx, |project_settings| {
-                project_settings.file_scan_exclusions = Some(vec![]);
+                project_settings.file_scan_exclusions = Some(Vec::new());
                 project_settings.file_scan_inclusions = Some(vec!["node_modules/**".to_string()]);
             });
         });
@@ -927,8 +927,8 @@ async fn test_file_scan_inclusions_reindexes_on_setting_change(cx: &mut TestAppC
     cx.update(|cx| {
         cx.update_global::<SettingsStore, _>(|store, cx| {
             store.update_user_settings::<WorktreeSettings>(cx, |project_settings| {
-                project_settings.file_scan_exclusions = Some(vec![]);
-                project_settings.file_scan_inclusions = Some(vec![]);
+                project_settings.file_scan_exclusions = Some(Vec::new());
+                project_settings.file_scan_inclusions = Some(Vec::new());
             });
         });
     });

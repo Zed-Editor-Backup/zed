@@ -532,7 +532,7 @@ impl Render for ExecutionView {
             .children(match self.status {
                 ExecutionStatus::Executing => vec![status],
                 ExecutionStatus::Queued => vec![status],
-                _ => vec![],
+                _ => Vec::new(),
             })
             .into_any_element()
     }

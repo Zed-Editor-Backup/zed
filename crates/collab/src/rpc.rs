@@ -2508,7 +2508,7 @@ async fn fuzzy_search_users(
 ) -> Result<()> {
     let query = request.query;
     let users = match query.len() {
-        0 => vec![],
+        0 => Vec::new(),
         1 | 2 => session
             .db()
             .await

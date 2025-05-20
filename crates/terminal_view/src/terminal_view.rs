@@ -1824,7 +1824,7 @@ impl SearchableItem for TerminalView {
             self.terminal()
                 .update(cx, |term, cx| term.find_matches(s, cx))
         } else {
-            Task::ready(vec![])
+            Task::ready(Vec::new())
         }
     }
 

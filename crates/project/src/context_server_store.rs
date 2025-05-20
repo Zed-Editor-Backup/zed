@@ -851,7 +851,7 @@ mod tests {
 
         // Ensure that mcp-1 is not restarted when the configuration was not changed
         {
-            let _server_events = assert_server_events(&store, vec![], cx);
+            let _server_events = assert_server_events(&store, Vec::new(), cx);
             set_context_server_configuration(
                 vec![(
                     server_1_id.0.clone(),

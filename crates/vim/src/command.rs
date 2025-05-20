@@ -84,7 +84,7 @@ impl VimOption {
             if let Some(opt) = Self::from(option) {
                 prefix_of_options.push(opt)
             } else {
-                return vec![];
+                return Vec::new();
             }
         }
 
@@ -99,7 +99,7 @@ impl VimOption {
                         options.iter().map(|opt| opt.to_string()).join(" ")
                     ),
                     action: VimSet { options }.boxed_clone(),
-                    positions: vec![],
+                    positions: Vec::new(),
                 }
             })
             .collect()

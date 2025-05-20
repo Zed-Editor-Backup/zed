@@ -355,12 +355,12 @@ impl ProjectDiff {
             self.multibuffer.update(cx, |multibuffer, cx| {
                 multibuffer.clear(cx);
             });
-            return vec![];
+            return Vec::new();
         };
 
         let mut previous_paths = self.multibuffer.read(cx).paths().collect::<HashSet<_>>();
 
-        let mut result = vec![];
+        let mut result = Vec::new();
         repo.update(cx, |repo, cx| {
             for entry in repo.cached_status() {
                 if !entry.status.has_changes() {

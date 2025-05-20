@@ -193,7 +193,7 @@ impl ToolchainStore {
                 })
                 .collect()
         } else {
-            vec![]
+            Vec::new()
         };
         let toolchains = if let Some(toolchains) = toolchains {
             toolchains
@@ -209,7 +209,7 @@ impl ToolchainStore {
                 })
                 .collect::<Vec<_>>()
         } else {
-            vec![]
+            Vec::new()
         };
 
         Ok(proto::ListToolchainsResponse {

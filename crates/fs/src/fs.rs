@@ -722,7 +722,7 @@ impl Fs for RealFs {
                     })
                     .chain(futures::stream::once(async move {
                         drop(handles);
-                        vec![]
+                        Vec::new()
                     })),
             ),
             watcher,

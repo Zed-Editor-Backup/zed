@@ -157,7 +157,7 @@ impl Database {
                     sender_id: row.sender_id.to_proto(),
                     body: row.body,
                     timestamp: row.sent_at.assume_utc().unix_timestamp() as u64,
-                    mentions: vec![],
+                    mentions: Vec::new(),
                     nonce: Some(proto::Nonce {
                         upper_half: nonce.0,
                         lower_half: nonce.1,

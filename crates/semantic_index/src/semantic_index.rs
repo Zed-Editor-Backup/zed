@@ -287,7 +287,7 @@ mod tests {
             let store = SettingsStore::test(cx);
             cx.set_global(store);
             language::init(cx);
-            cx.update_flags(false, vec![]);
+            cx.update_flags(false, Vec::new());
             Project::init_settings(cx);
             SettingsStore::update(cx, |store, cx| {
                 store.update_user_settings::<AllLanguageSettings>(cx, |_| {});
@@ -337,7 +337,7 @@ mod tests {
 
         cx.update(|cx| {
             // This functionality is staff-flagged.
-            cx.update_flags(true, vec![]);
+            cx.update_flags(true, Vec::new());
         });
 
         let temp_dir = tempfile::tempdir().unwrap();

@@ -227,10 +227,10 @@ fn main() -> Result<()> {
     };
 
     let exit_status = Arc::new(Mutex::new(None));
-    let mut paths = vec![];
-    let mut urls = vec![];
+    let mut paths = Vec::new();
+    let mut urls = Vec::new();
     let mut stdin_tmp_file: Option<fs::File> = None;
-    let mut anonymous_fd_tmp_files = vec![];
+    let mut anonymous_fd_tmp_files = Vec::new();
 
     for path in args.paths_with_position.iter() {
         if path.starts_with("zed://")

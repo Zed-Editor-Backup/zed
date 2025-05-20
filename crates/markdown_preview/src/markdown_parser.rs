@@ -61,7 +61,7 @@ impl<'a> MarkdownParser<'a> {
             file_location_directory,
             language_registry,
             cursor: 0,
-            parsed: vec![],
+            parsed: Vec::new(),
         }
     }
 
@@ -204,11 +204,11 @@ impl<'a> MarkdownParser<'a> {
         let mut strikethrough_depth = 0;
         let mut link: Option<Link> = None;
         let mut image: Option<Image> = None;
-        let mut region_ranges: Vec<Range<usize>> = vec![];
-        let mut regions: Vec<ParsedRegion> = vec![];
-        let mut highlights: Vec<(Range<usize>, MarkdownHighlight)> = vec![];
-        let mut link_urls: Vec<String> = vec![];
-        let mut link_ranges: Vec<Range<usize>> = vec![];
+        let mut region_ranges: Vec<Range<usize>> = Vec::new();
+        let mut regions: Vec<ParsedRegion> = Vec::new();
+        let mut highlights: Vec<(Range<usize>, MarkdownHighlight)> = Vec::new();
+        let mut link_urls: Vec<String> = Vec::new();
+        let mut link_ranges: Vec<Range<usize>> = Vec::new();
 
         loop {
             if self.eof() {
@@ -354,9 +354,9 @@ impl<'a> MarkdownParser<'a> {
                                 regions: regions.clone(),
                             });
                             text = String::new();
-                            highlights = vec![];
-                            region_ranges = vec![];
-                            regions = vec![];
+                            highlights = Vec::new();
+                            region_ranges = Vec::new();
+                            regions = Vec::new();
                             markdown_text_like.push(parsed_regions);
                         }
                         image = Image::identify(
@@ -438,8 +438,8 @@ impl<'a> MarkdownParser<'a> {
         let (_event, source_range) = self.previous().unwrap();
         let source_range = source_range.clone();
         let mut header = ParsedMarkdownTableRow::new();
-        let mut body = vec![];
-        let mut current_row = vec![];
+        let mut body = Vec::new();
+        let mut current_row = Vec::new();
         let mut in_header = true;
         let column_alignments = alignment.iter().map(Self::convert_alignment).collect();
 
@@ -656,7 +656,7 @@ impl<'a> MarkdownParser<'a> {
         let source_range = source_range.clone();
         let mut nested_depth = 1;
 
-        let mut children: Vec<ParsedMarkdownElement> = vec![];
+        let mut children: Vec<ParsedMarkdownElement> = Vec::new();
 
         while !self.eof() {
             let block = self.parse_block().await;
@@ -1023,7 +1023,7 @@ Some other content
         let expected_table = table(
             0..48,
             row(vec![text("Header 1", 1..11), text("Header 2", 12..22)]),
-            vec![],
+            Vec::new(),
         );
 
         assert_eq!(
@@ -1187,7 +1187,7 @@ Some other content
                 list_item(133..140, 4, Unordered, vec![p("Inner", 135..140)]),
                 list_item(143..159, 2, Ordered(2), vec![p("Goodbyte", 146..154)]),
                 list_item(160..180, 3, Unordered, vec![p("Next item empty", 165..180)]),
-                list_item(186..190, 3, Unordered, vec![]),
+                list_item(186..190, 3, Unordered, Vec::new()),
                 list_item(191..197, 1, Unordered, vec![p("Last", 193..197)]),
             ]
         );
@@ -1404,7 +1404,7 @@ fn main() {
                 Some("rust".to_string()),
                 "fn main() {\n    return 0;\n}",
                 0..39,
-                Some(vec![])
+                Some(Vec::new())
             )]
         );
     }

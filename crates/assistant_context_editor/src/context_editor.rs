@@ -1237,8 +1237,8 @@ impl ContextEditor {
                 render: render_block(MessageMetadata::from(message)),
                 render_in_minimap: false,
             };
-            let mut new_blocks = vec![];
-            let mut block_index_to_message = vec![];
+            let mut new_blocks = Vec::new();
+            let mut block_index_to_message = Vec::new();
             for message in self.context.read(cx).messages(cx) {
                 if let Some(_) = blocks_to_remove.remove(&message.id) {
                     // This is an old message that we might modify.
@@ -1395,7 +1395,7 @@ impl ContextEditor {
         let project = context_editor_view.read(cx).project.clone();
 
         let paths = match action {
-            InsertDraggedFiles::ProjectPaths(paths) => Task::ready((paths.clone(), vec![])),
+            InsertDraggedFiles::ProjectPaths(paths) => Task::ready((paths.clone(), Vec::new())),
             InsertDraggedFiles::ExternalFiles(paths) => {
                 let tasks = paths
                     .clone()
@@ -1404,8 +1404,8 @@ impl ContextEditor {
                     .collect::<Vec<_>>();
 
                 cx.background_spawn(async move {
-                    let mut paths = vec![];
-                    let mut worktrees = vec![];
+                    let mut paths = Vec::new();
+                    let mut worktrees = Vec::new();
 
                     let opened_paths = futures::future::join_all(tasks).await;
 
@@ -1440,7 +1440,7 @@ impl ContextEditor {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
-        let mut file_slash_command_args = vec![];
+        let mut file_slash_command_args = Vec::new();
         for project_path in opened_paths.into_iter() {
             let Some(worktree) = self
                 .project

@@ -806,7 +806,7 @@ mod tests {
             log.keep_edits_in_range(buffer.clone(), Point::new(0, 0)..Point::new(4, 3), cx)
         });
         cx.run_until_parked();
-        assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
+        assert_eq!(unreviewed_hunks(&action_log, cx), Vec::new());
     }
 
     #[gpui::test(iterations = 10)]
@@ -891,7 +891,7 @@ mod tests {
             log.keep_edits_in_range(buffer.clone(), Point::new(1, 0)..Point::new(1, 0), cx)
         });
         cx.run_until_parked();
-        assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
+        assert_eq!(unreviewed_hunks(&action_log, cx), Vec::new());
     }
 
     #[gpui::test(iterations = 10)]
@@ -988,7 +988,7 @@ mod tests {
             log.keep_edits_in_range(buffer.clone(), Point::new(0, 0)..Point::new(1, 0), cx)
         });
         cx.run_until_parked();
-        assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
+        assert_eq!(unreviewed_hunks(&action_log, cx), Vec::new());
     }
 
     #[gpui::test(iterations = 10)]
@@ -1047,7 +1047,7 @@ mod tests {
             log.keep_edits_in_range(buffer.clone(), 0..5, cx)
         });
         cx.run_until_parked();
-        assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
+        assert_eq!(unreviewed_hunks(&action_log, cx), Vec::new());
     }
 
     #[gpui::test(iterations = 10)]
@@ -1101,7 +1101,7 @@ mod tests {
             .await
             .unwrap();
         cx.run_until_parked();
-        assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
+        assert_eq!(unreviewed_hunks(&action_log, cx), Vec::new());
         assert_eq!(
             buffer.read_with(cx, |buffer, _cx| buffer.text()),
             "Lorem ipsum dolor"
@@ -1181,7 +1181,7 @@ mod tests {
             .await
             .unwrap();
         cx.run_until_parked();
-        assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
+        assert_eq!(unreviewed_hunks(&action_log, cx), Vec::new());
         assert_eq!(
             buffer.read_with(cx, |buffer, _cx| buffer.text()),
             "Lorem ipsum dolor"
@@ -1295,7 +1295,7 @@ mod tests {
             .await
             .unwrap();
         cx.run_until_parked();
-        assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
+        assert_eq!(unreviewed_hunks(&action_log, cx), Vec::new());
     }
 
     #[gpui::test(iterations = 10)]
@@ -1430,7 +1430,7 @@ mod tests {
             buffer.read_with(cx, |buffer, _| buffer.text()),
             "abc\ndef\nghi\njkl\nmno"
         );
-        assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
+        assert_eq!(unreviewed_hunks(&action_log, cx), Vec::new());
     }
 
     #[gpui::test(iterations = 10)]
@@ -1506,7 +1506,7 @@ mod tests {
             buffer.read_with(cx, |buffer, _| buffer.text()),
             "abc\ndef\nghi\njkl\nmno"
         );
-        assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
+        assert_eq!(unreviewed_hunks(&action_log, cx), Vec::new());
     }
 
     #[gpui::test(iterations = 10)]
@@ -1563,7 +1563,7 @@ mod tests {
         cx.run_until_parked();
         assert_eq!(buffer.read_with(cx, |buffer, _| buffer.text()), "content");
         assert!(fs.is_file(path!("/dir/file").as_ref()).await);
-        assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
+        assert_eq!(unreviewed_hunks(&action_log, cx), Vec::new());
     }
 
     #[gpui::test(iterations = 10)]
@@ -1618,7 +1618,7 @@ mod tests {
             .unwrap();
         cx.run_until_parked();
         assert!(!fs.is_file(path!("/dir/new_file").as_ref()).await);
-        assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
+        assert_eq!(unreviewed_hunks(&action_log, cx), Vec::new());
     }
 
     #[gpui::test(iterations = 100)]

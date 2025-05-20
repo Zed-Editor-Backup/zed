@@ -1414,7 +1414,7 @@ impl SlashCommand for FakeSlashCommand {
         _window: &mut Window,
         _cx: &mut App,
     ) -> Task<Result<Vec<ArgumentCompletion>>> {
-        Task::ready(Ok(vec![]))
+        Task::ready(Ok(Vec::new()))
     }
 
     fn requires_argument(&self) -> bool {
@@ -1433,7 +1433,7 @@ impl SlashCommand for FakeSlashCommand {
     ) -> Task<SlashCommandResult> {
         Task::ready(Ok(SlashCommandOutput {
             text: format!("Executed fake command: {}", self.0),
-            sections: vec![],
+            sections: Vec::new(),
             run_commands_in_text: false,
         }
         .to_event_stream()))

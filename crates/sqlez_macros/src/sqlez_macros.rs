@@ -48,7 +48,7 @@ fn create_error(
 }
 
 fn make_sql(tokens: TokenStream) -> (Vec<(usize, Span)>, String) {
-    let mut sql_tokens = vec![];
+    let mut sql_tokens = Vec::new();
     flatten_stream(tokens, &mut sql_tokens);
     // Lookup of spans by offset at the end of the token
     let mut spans: Vec<(usize, Span)> = Vec::new();

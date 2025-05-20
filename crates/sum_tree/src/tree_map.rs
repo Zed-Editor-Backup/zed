@@ -353,7 +353,7 @@ mod tests {
     #[test]
     fn test_basic() {
         let mut map = TreeMap::default();
-        assert_eq!(map.iter().collect::<Vec<_>>(), vec![]);
+        assert_eq!(map.iter().collect::<Vec<_>>(), Vec::new());
 
         map.insert(3, "c");
         assert_eq!(map.get(&3), Some(&"c"));
@@ -388,7 +388,7 @@ mod tests {
 
         map.remove(&1);
         assert_eq!(map.get(&1), None);
-        assert_eq!(map.iter().collect::<Vec<_>>(), vec![]);
+        assert_eq!(map.iter().collect::<Vec<_>>(), Vec::new());
 
         map.insert(4, "d");
         map.insert(5, "e");

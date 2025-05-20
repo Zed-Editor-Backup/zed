@@ -337,7 +337,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(0, 0), lsp::Position::new(0, 4)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
         executor.advance_clock(COPILOT_DEBOUNCE_TIMEOUT);
         cx.update_editor(|editor, window, cx| {
@@ -374,7 +374,7 @@ mod tests {
                 two
                 three
             "},
-            vec![],
+            Vec::new(),
         ));
         handle_copilot_completion_request(
             &copilot_lsp,
@@ -383,7 +383,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(0, 0), lsp::Position::new(0, 4)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
         executor.advance_clock(COPILOT_DEBOUNCE_TIMEOUT);
         cx.update_editor(|editor, _, cx| {
@@ -412,7 +412,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(0, 0), lsp::Position::new(0, 5)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
         executor.advance_clock(COPILOT_DEBOUNCE_TIMEOUT);
         cx.update_editor(|editor, window, cx| {
@@ -489,7 +489,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(1, 0), lsp::Position::new(1, 2)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
 
         cx.update_editor(|editor, window, cx| {
@@ -561,7 +561,7 @@ mod tests {
                 two
                 three
             "},
-            vec![],
+            Vec::new(),
         ));
         handle_copilot_completion_request(
             &copilot_lsp,
@@ -570,7 +570,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(0, 0), lsp::Position::new(0, 4)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
         executor.advance_clock(COPILOT_DEBOUNCE_TIMEOUT);
         cx.update_editor(|editor, window, cx| {
@@ -603,7 +603,7 @@ mod tests {
                 two
                 three
             "},
-            vec![],
+            Vec::new(),
         ));
         handle_copilot_completion_request(
             &copilot_lsp,
@@ -612,7 +612,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(0, 0), lsp::Position::new(0, 4)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
         executor.advance_clock(COPILOT_DEBOUNCE_TIMEOUT);
         cx.update_editor(|editor, window, cx| {
@@ -684,7 +684,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(1, 0), lsp::Position::new(1, 2)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
         cx.update_editor(|editor, window, cx| {
             editor.next_edit_prediction(&Default::default(), window, cx)
@@ -763,7 +763,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(1, 0), lsp::Position::new(1, 5)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
         _ = editor.update(cx, |editor, window, cx| {
             // Ensure copilot suggestions are shown for the first excerpt.
@@ -789,7 +789,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(1, 0), lsp::Position::new(1, 6)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
         _ = editor.update(cx, |editor, window, cx| {
             // Move to another excerpt, ensuring the suggestion gets cleared.
@@ -871,7 +871,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(1, 0), lsp::Position::new(1, 2)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
         cx.update_editor(|editor, window, cx| {
             editor.next_edit_prediction(&Default::default(), window, cx)
@@ -901,7 +901,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(1, 0), lsp::Position::new(1, 3)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
         executor.advance_clock(COPILOT_DEBOUNCE_TIMEOUT);
         cx.update_editor(|editor, _, cx| {
@@ -928,7 +928,7 @@ mod tests {
                 range: lsp::Range::new(lsp::Position::new(1, 0), lsp::Position::new(1, 4)),
                 ..Default::default()
             }],
-            vec![],
+            Vec::new(),
         );
         executor.advance_clock(COPILOT_DEBOUNCE_TIMEOUT);
         cx.update_editor(|editor, _, cx| {

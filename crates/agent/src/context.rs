@@ -552,7 +552,7 @@ impl FetchedUrlContext {
     }
 
     pub fn load(self) -> Task<Option<(AgentContext, Vec<Entity<Buffer>>)>> {
-        Task::ready(Some((AgentContext::FetchedUrl(self), vec![])))
+        Task::ready(Some((AgentContext::FetchedUrl(self), Vec::new())))
     }
 }
 
@@ -601,7 +601,7 @@ impl ThreadContextHandle {
                 text,
                 handle: self,
             });
-            Some((context, vec![]))
+            Some((context, Vec::new()))
         })
     }
 }
@@ -648,7 +648,7 @@ impl TextThreadContextHandle {
             text: text.into(),
             handle: self,
         });
-        Task::ready(Some((context, vec![])))
+        Task::ready(Some((context, Vec::new())))
     }
 }
 
@@ -713,7 +713,7 @@ impl RulesContextHandle {
                 title,
                 text,
             });
-            Some((context, vec![]))
+            Some((context, Vec::new()))
         })
     }
 }
@@ -771,7 +771,7 @@ impl ImageContext {
     pub fn load(self, cx: &App) -> Task<Option<(AgentContext, Vec<Entity<Buffer>>)>> {
         cx.background_spawn(async move {
             self.image_task.clone().await;
-            Some((AgentContext::Image(self), vec![]))
+            Some((AgentContext::Image(self), Vec::new()))
         })
     }
 }

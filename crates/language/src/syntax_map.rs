@@ -1337,7 +1337,7 @@ fn get_injections(
                     if combined {
                         combined_injection_ranges
                             .entry(language.id)
-                            .or_insert_with(|| (language.clone(), vec![]))
+                            .or_insert_with(|| (language.clone(), Vec::new()))
                             .1
                             .extend(content_ranges);
                     } else {

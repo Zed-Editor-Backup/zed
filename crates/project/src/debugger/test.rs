@@ -58,6 +58,8 @@ fn register_default_handlers(session: &Session, client: &Arc<DebugAdapterClient>
     client.on_request::<dap::requests::Disconnect, _>(move |_, _| Ok(()));
 
     client.on_request::<dap::requests::Threads, _>(move |_, _| {
-        Ok(dap::ThreadsResponse { threads: vec![] })
+        Ok(dap::ThreadsResponse {
+            threads: Vec::new(),
+        })
     });
 }

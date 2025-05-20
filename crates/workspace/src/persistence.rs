@@ -1125,7 +1125,7 @@ impl WorkspaceDb {
             .unwrap_or_else(|| {
                 SerializedPaneGroup::Pane(SerializedPane {
                     active: true,
-                    children: vec![],
+                    children: Vec::new(),
                     pinned_count: 0,
                 })
             }))
@@ -2108,7 +2108,7 @@ mod tests {
         };
 
         let ssh_project = db
-            .get_or_create_ssh_project("my-host".to_string(), Some(1234), vec![], None)
+            .get_or_create_ssh_project("my-host".to_string(), Some(1234), Vec::new(), None)
             .await
             .unwrap();
 
@@ -2308,7 +2308,7 @@ mod tests {
         ]
         .into_iter()
         .map(|(host, user)| async {
-            db.get_or_create_ssh_project(host.to_string(), None, vec![], Some(user.to_string()))
+            db.get_or_create_ssh_project(host.to_string(), None, Vec::new(), Some(user.to_string()))
                 .await
                 .unwrap()
         })

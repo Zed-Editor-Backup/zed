@@ -708,7 +708,7 @@ fn main() {
                     });
                     cx.new(|cx| InputExample {
                         text_input,
-                        recent_keystrokes: vec![],
+                        recent_keystrokes: Vec::new(),
                         focus_handle: cx.focus_handle(),
                     })
                 },

@@ -203,7 +203,7 @@ impl VariableList {
             return;
         };
 
-        let mut entries = vec![];
+        let mut entries = Vec::new();
         let scopes: Vec<_> = self.session.update(cx, |session, cx| {
             session.scopes(stack_frame_id, cx).iter().cloned().collect()
         });

@@ -864,9 +864,9 @@ mod tests {
                 content: vec![MessageContent::Text("message".into())],
                 cache: false,
             }],
-            tools: vec![],
+            tools: Vec::new(),
             tool_choice: None,
-            stop: vec![],
+            stop: Vec::new(),
             temperature: None,
         };
 

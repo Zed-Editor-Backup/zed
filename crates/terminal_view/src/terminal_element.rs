@@ -210,8 +210,8 @@ impl TerminalElement {
         cx: &App,
     ) -> (Vec<LayoutCell>, Vec<LayoutRect>) {
         let theme = cx.theme();
-        let mut cells = vec![];
-        let mut rects = vec![];
+        let mut cells = Vec::new();
+        let mut rects = Vec::new();
 
         let mut cur_rect: Option<LayoutRect> = None;
         let mut cur_alac_color = None;

@@ -280,7 +280,7 @@ There's a way get custom completion items from rust-analyzer, that will transfor
               "vec!": {
                 "postfix": "vec",
                 "body": ["vec![${receiver}]"],
-                "description": "vec![]",
+                "description": "Vec::new()",
                 "scope": "expr"
               }
             }

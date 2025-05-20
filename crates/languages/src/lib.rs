@@ -116,7 +116,7 @@ pub fn init(languages: Arc<LanguageRegistry>, node: NodeRuntime, cx: &mut App) {
         },
         LanguageInfo {
             name: "diff",
-            adapters: vec![],
+            adapters: Vec::new(),
             ..Default::default()
         },
         LanguageInfo {
@@ -151,12 +151,12 @@ pub fn init(languages: Arc<LanguageRegistry>, node: NodeRuntime, cx: &mut App) {
         },
         LanguageInfo {
             name: "markdown",
-            adapters: vec![],
+            adapters: Vec::new(),
             ..Default::default()
         },
         LanguageInfo {
             name: "markdown-inline",
-            adapters: vec![],
+            adapters: Vec::new(),
             ..Default::default()
         },
         LanguageInfo {
@@ -196,7 +196,7 @@ pub fn init(languages: Arc<LanguageRegistry>, node: NodeRuntime, cx: &mut App) {
         },
         LanguageInfo {
             name: "regex",
-            adapters: vec![],
+            adapters: Vec::new(),
             ..Default::default()
         },
         LanguageInfo {

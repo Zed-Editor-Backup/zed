@@ -32,7 +32,7 @@ pub fn app_menus() -> Vec<Menu> {
                 MenuItem::separator(),
                 MenuItem::submenu(Menu {
                     name: "Services".into(),
-                    items: vec![],
+                    items: Vec::new(),
                 }),
                 MenuItem::separator(),
                 MenuItem::action("Extensions", zed_actions::Extensions::default()),

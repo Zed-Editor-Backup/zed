@@ -385,7 +385,7 @@ fn build_code_label(
     language: &Arc<Language>,
 ) -> Option<CodeLabel> {
     let mut text = String::new();
-    let mut runs = vec![];
+    let mut runs = Vec::new();
 
     for span in &label.spans {
         match span {

@@ -1667,7 +1667,7 @@ fn test_set_excerpts_for_buffer(cx: &mut TestAppContext) {
     );
 
     multibuffer.update(cx, |multibuffer, cx| {
-        multibuffer.set_excerpts_for_path(path1.clone(), buf1.clone(), vec![], 2, cx);
+        multibuffer.set_excerpts_for_path(path1.clone(), buf1.clone(), Vec::new(), 2, cx);
     });
 
     assert_excerpts_match(&multibuffer, cx, "");
@@ -1755,7 +1755,7 @@ fn test_set_excerpts_for_buffer(cx: &mut TestAppContext) {
     );
 
     multibuffer.update(cx, |multibuffer, cx| {
-        multibuffer.set_excerpts_for_path(path1.clone(), buf1.clone(), vec![], 2, cx);
+        multibuffer.set_excerpts_for_path(path1.clone(), buf1.clone(), Vec::new(), 2, cx);
     });
 
     multibuffer.update(cx, |multibuffer, cx| {
@@ -2603,7 +2603,7 @@ async fn test_random_multibuffer(cx: &mut TestAppContext, mut rng: StdRng) {
                 });
             }
             20..=29 if !reference.excerpts.is_empty() => {
-                let mut ids_to_remove = vec![];
+                let mut ids_to_remove = Vec::new();
                 for _ in 0..rng.gen_range(1..=3) {
                     let Some(excerpt) = reference.excerpts.choose(&mut rng) else {
                         break;
@@ -3203,7 +3203,7 @@ fn test_summaries_for_anchors(cx: &mut TestAppContext) {
     let diff_2 = cx.new(|cx| BufferDiff::new_with_base_text(base_text_2, &buffer_2, cx));
     cx.run_until_parked();
 
-    let mut ids = vec![];
+    let mut ids = Vec::new();
     let multibuffer = cx.new(|cx| {
         let mut multibuffer = MultiBuffer::new(Capability::ReadWrite);
         multibuffer.set_all_diff_hunks_expanded(cx);

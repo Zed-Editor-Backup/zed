@@ -1795,7 +1795,9 @@ def process_data(untyped_param, typed_param: int, another_typed: str):
                 },
             ],
         }),
-        _ => Ok(dap::VariablesResponse { variables: vec![] }),
+        _ => Ok(dap::VariablesResponse {
+            variables: Vec::new(),
+        }),
     });
 
     client

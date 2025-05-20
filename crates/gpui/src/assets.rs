@@ -24,7 +24,7 @@ impl AssetSource for () {
     }
 
     fn list(&self, _path: &str) -> Result<Vec<SharedString>> {
-        Ok(vec![])
+        Ok(Vec::new())
     }
 }
 

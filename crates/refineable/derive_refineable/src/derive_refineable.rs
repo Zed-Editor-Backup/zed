@@ -19,7 +19,7 @@ pub fn derive_refineable(input: TokenStream) -> TokenStream {
     let refineable_attr = attrs.iter().find(|attr| attr.path.is_ident("refineable"));
 
     let mut impl_debug_on_refinement = false;
-    let mut refinement_traits_to_derive = vec![];
+    let mut refinement_traits_to_derive = Vec::new();
 
     if let Some(refineable_attr) = refineable_attr {
         if let Ok(syn::Meta::List(meta_list)) = refineable_attr.parse_meta() {

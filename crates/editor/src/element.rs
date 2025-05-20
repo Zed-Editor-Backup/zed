@@ -2486,7 +2486,7 @@ impl EditorElement {
         cx: &mut App,
     ) -> Vec<Option<(AnyElement, gpui::Point<Pixels>)>> {
         if self.editor.read(cx).disable_expand_excerpt_buttons {
-            return vec![];
+            return Vec::new();
         }
 
         let editor_font_size = self.style.text.font_size.to_pixels(window.rem_size()) * 1.2;
@@ -4310,7 +4310,7 @@ impl EditorElement {
         let render_diff_hunk_controls = editor.read(cx).render_diff_hunk_controls.clone();
         let point_for_position = position_map.point_for_position(window.mouse_position());
 
-        let mut controls = vec![];
+        let mut controls = Vec::new();
 
         let active_positions = [
             Some(point_for_position.previous_valid),
@@ -5441,7 +5441,7 @@ impl EditorElement {
     ) -> Vec<PaintQuad> {
         const LIMIT: usize = 100;
         if !EditorSettings::get_global(cx).scrollbar.cursors || layout.cursors.len() > LIMIT {
-            return vec![];
+            return Vec::new();
         }
         let cursor_ranges = layout
             .cursors
@@ -7953,7 +7953,7 @@ impl Element for EditorElement {
                             cx,
                         )
                     } else {
-                        vec![]
+                        Vec::new()
                     };
 
                     self.layout_signature_help(
@@ -8070,7 +8070,7 @@ impl Element for EditorElement {
                     });
 
                     let diff_hunk_controls = if is_read_only {
-                        vec![]
+                        Vec::new()
                     } else {
                         self.layout_diff_hunk_controls(
                             start_row..end_row,

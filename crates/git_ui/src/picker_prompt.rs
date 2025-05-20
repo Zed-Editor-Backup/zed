@@ -105,7 +105,7 @@ impl PickerPromptDelegate {
         Self {
             prompt,
             all_options: options,
-            matches: vec![],
+            matches: Vec::new(),
             selected_index: 0,
             max_match_length: max_chars,
             tx: Some(tx),

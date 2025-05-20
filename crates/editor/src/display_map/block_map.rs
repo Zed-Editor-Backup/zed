@@ -3017,7 +3017,7 @@ mod tests {
                         .collect::<Vec<_>>();
 
                     let (inlay_snapshot, inlay_edits) =
-                        inlay_map.sync(buffer_snapshot.clone(), vec![]);
+                        inlay_map.sync(buffer_snapshot.clone(), Vec::new());
                     let (fold_snapshot, fold_edits) = fold_map.read(inlay_snapshot, inlay_edits);
                     let (tab_snapshot, tab_edits) =
                         tab_map.sync(fold_snapshot, fold_edits, tab_size);
@@ -3056,7 +3056,7 @@ mod tests {
                         .collect::<HashSet<_>>();
 
                     let (inlay_snapshot, inlay_edits) =
-                        inlay_map.sync(buffer_snapshot.clone(), vec![]);
+                        inlay_map.sync(buffer_snapshot.clone(), Vec::new());
                     let (fold_snapshot, fold_edits) = fold_map.read(inlay_snapshot, inlay_edits);
                     let (tab_snapshot, tab_edits) =
                         tab_map.sync(fold_snapshot, fold_edits, tab_size);
@@ -3077,7 +3077,7 @@ mod tests {
                         continue;
                     }
                     let (inlay_snapshot, inlay_edits) =
-                        inlay_map.sync(buffer_snapshot.clone(), vec![]);
+                        inlay_map.sync(buffer_snapshot.clone(), Vec::new());
                     let (fold_snapshot, fold_edits) = fold_map.read(inlay_snapshot, inlay_edits);
                     let (tab_snapshot, tab_edits) =
                         tab_map.sync(fold_snapshot, fold_edits, tab_size);
@@ -3439,7 +3439,7 @@ mod tests {
                 let end_row = rng.gen_range(1..=expected_lines.len());
                 let start_row = rng.gen_range(0..end_row);
 
-                let mut expected_longest_rows_in_range = vec![];
+                let mut expected_longest_rows_in_range = Vec::new();
                 let mut longest_line_len_in_range = 0;
 
                 let mut row = start_row as u32;

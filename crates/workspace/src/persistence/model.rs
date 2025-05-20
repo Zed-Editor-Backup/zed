@@ -632,7 +632,7 @@ mod tests {
             PathBuf::from("b"),
             PathBuf::from("c"),
         ]);
-        let order = vec![];
+        let order = Vec::new();
         let serialized =
             SerializedWorkspaceLocation::Local(LocalPaths(paths.clone()), LocalPathsOrder(order));
         assert_eq!(serialized.sorted_paths(), paths);

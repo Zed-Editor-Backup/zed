@@ -683,9 +683,9 @@ async fn test_outline(cx: &mut gpui::TestAppContext) {
     assert_eq!(
         search(&outline, "oon", cx).await,
         &[
-            ("mod module", vec![]),                    // included as the parent of a match
-            ("enum LoginState", vec![]),               // included as the parent of a match
-            ("LoggingOn", vec![1, 7, 8]),              // matches
+            ("mod module", Vec::new()),      // included as the parent of a match
+            ("enum LoginState", Vec::new()), // included as the parent of a match
+            ("LoggingOn", vec![1, 7, 8]),    // matches
             ("impl Drop for Person", vec![7, 18, 19]), // matches in two disjoint names
         ]
     );
@@ -694,7 +694,7 @@ async fn test_outline(cx: &mut gpui::TestAppContext) {
         search(&outline, "dp p", cx).await,
         &[
             ("impl Drop for Person", vec![5, 8, 9, 14]),
-            ("fn drop", vec![]),
+            ("fn drop", Vec::new()),
         ]
     );
     assert_eq!(
@@ -706,7 +706,7 @@ async fn test_outline(cx: &mut gpui::TestAppContext) {
         &[
             ("impl Eq for Person", vec![0, 1, 2, 3, 4]),
             ("impl Drop for Person", vec![0, 1, 2, 3, 4]),
-            ("fn drop", vec![]),
+            ("fn drop", Vec::new()),
         ]
     );
 
@@ -1069,7 +1069,7 @@ fn test_enclosing_bracket_ranges(cx: &mut App) {
                 }
             }
             let fˇoo = 1;"},
-        vec![],
+        Vec::new(),
     );
 
     // Regression test: avoid crash when querying at the end of the buffer.
@@ -1081,7 +1081,7 @@ fn test_enclosing_bracket_ranges(cx: &mut App) {
                 }
             }
             let foo = 1;ˇ"},
-        vec![],
+        Vec::new(),
     );
 }
 
@@ -2779,7 +2779,7 @@ async fn test_preview_edits(cx: &mut TestAppContext) {
             false
         }"
         },
-        vec![],
+        Vec::new(),
         true,
         cx,
         |hl| {

@@ -596,7 +596,7 @@ impl<T: RandomizedTest> TestPlan<T> {
                     .stale_server_resource_ids(environment, server.id())
                     .await
                     .unwrap();
-                assert_eq!(stale_room_ids, vec![]);
+                assert_eq!(stale_room_ids, Vec::new());
             }
 
             ServerOperation::MutateClients {

@@ -31,7 +31,7 @@ pub async fn collect_matching<F>(dir: &Path, predicate: F) -> Vec<PathBuf>
 where
     F: Fn(&Path) -> bool,
 {
-    let mut matching = vec![];
+    let mut matching = Vec::new();
 
     if let Some(mut entries) = fs::read_dir(dir).await.log_err() {
         while let Some(entry) = entries.next().await {

@@ -8558,7 +8558,7 @@ async fn test_document_format_during_save(cx: &mut TestAppContext) {
                     lsp::Url::from_file_path(path!("/file.rs")).unwrap()
                 );
                 assert_eq!(params.options.tab_size, 8);
-                Ok(Some(vec![]))
+                Ok(Some(Vec::new()))
             });
         let save = editor
             .update_in(cx, |editor, window, cx| {
@@ -8913,7 +8913,7 @@ async fn test_range_format_during_save(cx: &mut TestAppContext) {
                 lsp::Url::from_file_path(path!("/file.rs")).unwrap()
             );
             assert_eq!(params.options.tab_size, 8);
-            Ok(Some(vec![]))
+            Ok(Some(Vec::new()))
         })
         .next()
         .await;
@@ -17353,7 +17353,7 @@ async fn test_display_diff_hunks(cx: &mut TestAppContext) {
     );
 
     let project = Project::test(fs, [path!("/test").as_ref()], cx).await;
-    let mut buffers = vec![];
+    let mut buffers = Vec::new();
     for i in 1..=3 {
         let buffer = project
             .update(cx, |project, cx| {
@@ -17912,7 +17912,7 @@ async fn test_find_enclosing_node_with_task(cx: &mut TestAppContext) {
         editor.tasks.insert(
             (buffer.read(cx).remote_id(), 3),
             RunnableTasks {
-                templates: vec![],
+                templates: Vec::new(),
                 offset: snapshot.anchor_before(43),
                 column: 0,
                 extra_variables: HashMap::default(),
@@ -17922,7 +17922,7 @@ async fn test_find_enclosing_node_with_task(cx: &mut TestAppContext) {
         editor.tasks.insert(
             (buffer.read(cx).remote_id(), 8),
             RunnableTasks {
-                templates: vec![],
+                templates: Vec::new(),
                 offset: snapshot.anchor_before(86),
                 column: 0,
                 extra_variables: HashMap::default(),
@@ -18910,7 +18910,7 @@ async fn test_breakpoint_toggling(cx: &mut TestAppContext) {
     });
 
     assert_eq!(0, breakpoints.len());
-    assert_breakpoint(&breakpoints, &abs_path, vec![]);
+    assert_breakpoint(&breakpoints, &abs_path, Vec::new());
 }
 
 #[gpui::test]
@@ -18997,7 +18997,7 @@ async fn test_log_breakpoint_editing(cx: &mut TestAppContext) {
             .clone()
     });
 
-    assert_breakpoint(&breakpoints, &abs_path, vec![]);
+    assert_breakpoint(&breakpoints, &abs_path, Vec::new());
 
     editor.update_in(cx, |editor, window, cx| {
         editor.toggle_breakpoint(&actions::ToggleBreakpoint, window, cx);

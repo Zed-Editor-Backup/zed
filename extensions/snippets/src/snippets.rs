@@ -101,7 +101,7 @@ impl zed::Extension for SnippetExtension {
     ) -> Result<zed::Command> {
         Ok(zed::Command {
             command: self.language_server_binary_path(language_server_id, worktree)?,
-            args: vec![],
+            args: Vec::new(),
             env: vec![("SCLS_CONFIG_SUBDIRECTORY".to_owned(), "zed".to_owned())],
         })
     }

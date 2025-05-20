@@ -262,7 +262,7 @@ impl CompletionsMenu {
             .map(|(id, completion)| StringMatch {
                 candidate_id: id,
                 score: 1.,
-                positions: vec![],
+                positions: Vec::new(),
                 string: completion.clone(),
             })
             .collect::<Vec<_>>();

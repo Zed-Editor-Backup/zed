@@ -221,7 +221,7 @@ impl ToolchainSelectorDelegate {
         Self {
             toolchain_selector,
             candidates: Default::default(),
-            matches: vec![],
+            matches: Vec::new(),
             selected_index: 0,
             workspace,
             worktree_id,

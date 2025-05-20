@@ -223,7 +223,7 @@ pub enum ChatMessageContent {
 
 impl ChatMessageContent {
     pub fn empty() -> Self {
-        ChatMessageContent::Multipart(vec![])
+        ChatMessageContent::Multipart(Vec::new())
     }
 }
 

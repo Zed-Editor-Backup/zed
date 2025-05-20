@@ -1235,7 +1235,7 @@ impl GitRepository for RealGitRepository {
                     .trim()
                     .to_owned();
 
-                let mut remote_branches = vec![];
+                let mut remote_branches = Vec::new();
                 let mut add_if_matching = async |remote_head: &str| {
                     if let Ok(merge_base) = git_cmd(&["merge-base", &head, remote_head]).await {
                         if merge_base.trim() == head {

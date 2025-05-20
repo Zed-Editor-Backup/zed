@@ -6545,7 +6545,7 @@ pub fn join_channel(
             // no open workspaces, make one to show the error in (blergh)
             let (window_handle, _) = cx
                 .update(|cx| {
-                    Workspace::new_local(vec![], app_state.clone(), requesting_window, None, cx)
+                    Workspace::new_local(Vec::new(), app_state.clone(), requesting_window, None, cx)
                 })?
                 .await?;
 
@@ -6603,7 +6603,7 @@ pub async fn get_any_active_workspace(
     // find an existing workspace to focus and show call controls
     let active_window = activate_any_workspace_window(&mut cx);
     if active_window.is_none() {
-        cx.update(|cx| Workspace::new_local(vec![], app_state.clone(), None, None, cx))?
+        cx.update(|cx| Workspace::new_local(Vec::new(), app_state.clone(), None, None, cx))?
             .await?;
     }
     activate_any_workspace_window(&mut cx).context("could not open zed")
@@ -6927,8 +6927,8 @@ async fn open_ssh_project_inner(
             })?
             .await;
     }
-    let mut project_paths_to_open = vec![];
-    let mut project_path_errors = vec![];
+    let mut project_paths_to_open = Vec::new();
+    let mut project_path_errors = Vec::new();
 
     for path in paths {
         let result = cx

@@ -199,7 +199,7 @@ impl PickerDelegate for OpenPathDelegate {
                             }
                         }
                         Err(err) => DirectoryState {
-                            match_candidates: vec![],
+                            match_candidates: Vec::new(),
                             path: dir,
                             error: Some(err.to_string().into()),
                         },

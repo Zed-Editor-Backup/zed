@@ -693,7 +693,7 @@ async fn test_chat_editing(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext)
                 MessageParams {
                     text: "Updated body without a mention".into(),
                     reply_to_message_id: None,
-                    mentions: vec![],
+                    mentions: Vec::new(),
                 },
                 cx,
             )
