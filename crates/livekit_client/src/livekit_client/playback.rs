@@ -1,4 +1,4 @@
-use anyhow::{Context as _, Result, anyhow};
+use anyhow::{Context as _, Result};
 
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait as _};
 use futures::channel::mpsc::UnboundedSender;
