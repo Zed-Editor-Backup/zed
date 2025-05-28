@@ -1,6 +1,6 @@
 use crate::{
     language_model_selector::{
-        LanguageModelSelector, LanguageModelSelectorPopoverMenu, ToggleModelSelector,
+        LanguageModelSelector, ToggleModelSelector, language_model_selector,
     },
     max_mode_tooltip::MaxModeTooltip,
 };
@@ -43,7 +43,7 @@ use language_model::{
     Role,
 };
 use multi_buffer::MultiBufferRow;
-use picker::Picker;
+use picker::{Picker, popover_menu::PickerPopoverMenu};
 use project::{Project, Worktree};
 use project::{ProjectPath, lsp_store::LocalLspAdapterDelegate};
 use rope::Point;
@@ -283,7 +283,7 @@ impl ContextEditor {
             slash_menu_handle: Default::default(),
             dragged_file_worktrees: Vec::new(),
             language_model_selector: cx.new(|cx| {
-                LanguageModelSelector::new(
+                language_model_selector(
                     |cx| LanguageModelRegistry::read_global(cx).default_model(),
                     move |model, cx| {
                         update_settings_file::<AgentSettings>(
@@ -2110,36 +2110,39 @@ impl ContextEditor {
             None => SharedString::from("No model selected"),
         };
 
-        LanguageModelSelectorPopoverMenu::new(
-            self.language_model_selector.clone(),
-            ButtonLike::new("active-model")
-                .style(ButtonStyle::Subtle)
-                .child(
-                    h_flex()
-                        .gap_0p5()
-                        .child(
-                            Label::new(model_name)
-                                .size(LabelSize::Small)
-                                .color(Color::Muted),
-                        )
-                        .child(
-                            Icon::new(IconName::ChevronDown)
-                                .color(Color::Muted)
-                                .size(IconSize::XSmall),
-                        ),
-                ),
-            move |window, cx| {
-                Tooltip::for_action_in(
-                    "Change Model",
-                    &ToggleModelSelector,
-                    &focus_handle,
-                    window,
-                    cx,
-                )
-            },
-            gpui::Corner::BottomLeft,
-        )
-        .with_handle(self.language_model_selector_menu_handle.clone())
+        cx.new(|cx| {
+            PickerPopoverMenu::new(
+                self.language_model_selector.clone(),
+                ButtonLike::new("active-model")
+                    .style(ButtonStyle::Subtle)
+                    .child(
+                        h_flex()
+                            .gap_0p5()
+                            .child(
+                                Label::new(model_name)
+                                    .size(LabelSize::Small)
+                                    .color(Color::Muted),
+                            )
+                            .child(
+                                Icon::new(IconName::ChevronDown)
+                                    .color(Color::Muted)
+                                    .size(IconSize::XSmall),
+                            ),
+                    ),
+                move |window, cx| {
+                    Tooltip::for_action_in(
+                        "Change Model",
+                        &ToggleModelSelector,
+                        &focus_handle,
+                        window,
+                        cx,
+                    )
+                },
+                gpui::Corner::BottomLeft,
+                cx,
+            )
+            .with_handle(self.language_model_selector_menu_handle.clone())
+        })
     }
 
     fn render_last_error(&self, cx: &mut Context<Self>) -> Option<AnyElement> {
