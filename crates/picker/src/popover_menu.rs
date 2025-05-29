@@ -3,12 +3,11 @@ use gpui::{
 };
 use ui::{
     App, ButtonCommon, Context, FluentBuilder as _, IntoElement, PopoverMenu, PopoverMenuHandle,
-    PopoverTrigger, Render, RenderOnce, Window, px,
+    PopoverTrigger, Render, Window, px,
 };
 
 use crate::{Picker, PickerDelegate};
 
-#[derive(IntoElement)]
 pub struct PickerPopoverMenu<T, TT, P>
 where
     T: PopoverTrigger + ButtonCommon,
@@ -52,27 +51,6 @@ where
     }
 }
 
-impl<T, TT, P> RenderOnce for PickerPopoverMenu<T, TT, P>
-where
-    T: PopoverTrigger + ButtonCommon,
-    TT: Fn(&mut Window, &mut App) -> AnyView + 'static,
-    P: PickerDelegate,
-{
-    fn render(self, _window: &mut Window, _cx: &mut App) -> impl IntoElement {
-        let picker = self.picker.clone();
-
-        PopoverMenu::new("popover-menu")
-            .menu(move |_window, _cx| Some(picker.clone()))
-            .trigger_with_tooltip(self.trigger, self.tooltip)
-            .anchor(self.anchor)
-            .when_some(self.handle.clone(), |menu, handle| menu.with_handle(handle))
-            .offset(gpui::Point {
-                x: px(0.0),
-                y: px(-2.0),
-            })
-    }
-}
-
 impl<T, TT, P> EventEmitter<DismissEvent> for PickerPopoverMenu<T, TT, P>
 where
     T: PopoverTrigger + ButtonCommon,
@@ -99,6 +77,15 @@ where
     P: PickerDelegate,
 {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        self.picker.clone()
+        let picker = self.picker.clone();
+        PopoverMenu::new("popover-menu")
+            .menu(move |_window, _cx| Some(picker.clone()))
+            .trigger_with_tooltip(self.trigger, self.tooltip)
+            .anchor(self.anchor)
+            .when_some(self.handle.clone(), |menu, handle| menu.with_handle(handle))
+            .offset(gpui::Point {
+                x: px(0.0),
+                y: px(-2.0),
+            })
     }
 }
