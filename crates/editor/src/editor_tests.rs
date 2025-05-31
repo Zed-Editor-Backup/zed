@@ -20016,7 +20016,7 @@ println!("5");
     pane_1
         .update_in(cx, |pane, window, cx| {
             pane.close_inactive_items(&CloseInactiveItems::default(), window, cx)
-                .unwrap()
+                .detach()
         })
         .await;
     drop(editor_1);
@@ -20052,7 +20052,7 @@ println!("5");
     pane_2
         .update_in(cx, |pane, window, cx| {
             pane.close_inactive_items(&CloseInactiveItems::default(), window, cx)
-                .unwrap()
+                .detach()
         })
         .await;
     drop(editor_2);
