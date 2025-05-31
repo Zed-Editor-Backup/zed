@@ -2348,7 +2348,6 @@ impl LocalLspStore {
                     });
                 (false, lsp_delegate, servers)
             });
-        dbg!("?", buffer_id, servers.len());
         let servers_and_adapters = servers
             .into_iter()
             .filter_map(|server_node| {
@@ -3489,6 +3488,7 @@ pub struct LspStore {
         HashMap<WorktreeId, HashMap<Arc<Path>, HashMap<LanguageServerId, DiagnosticSummary>>>,
 }
 
+#[derive(Debug)]
 pub enum LspStoreEvent {
     LanguageServerAdded(LanguageServerId, LanguageServerName, Option<WorktreeId>),
     LanguageServerRemoved(LanguageServerId),
@@ -4245,7 +4245,6 @@ impl LspStore {
 
             if let Some(local) = self.as_local_mut() {
                 if local.registered_buffers.contains_key(&buffer_id) {
-                    dbg!("????????????", buffer_id);
                     local.register_buffer_with_language_servers(buffer_entity, cx);
                 }
             }
