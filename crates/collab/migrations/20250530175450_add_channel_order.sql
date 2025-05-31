@@ -13,4 +13,4 @@ SET channel_order = (
 );
 
 -- Create index for efficient ordering queries
-CREATE INDEX "index_channels_on_parent_path_and_order" ON "channels" ("parent_path", "channel_order");
+CREATE INDEX CONCURRENTLY "index_channels_on_parent_path_and_order" ON "channels" ("parent_path", "channel_order");
