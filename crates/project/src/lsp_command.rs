@@ -2468,11 +2468,10 @@ impl LspCommand for GetCodeActions {
             relevant_diagnostics.push(entry.to_lsp_diagnostic_stub()?);
         }
 
-        let supported =
-            Self::supported_code_action_kinds(language_server.adapter_server_capabilities());
-
         let only = if let Some(requested) = &self.kinds {
-            if let Some(supported_kinds) = supported {
+            if let Some(supported_kinds) =
+                Self::supported_code_action_kinds(language_server.adapter_server_capabilities())
+            {
                 let server_supported = supported_kinds.into_iter().collect::<HashSet<_>>();
 
                 let filtered = requested
@@ -2485,7 +2484,7 @@ impl LspCommand for GetCodeActions {
                 Some(requested.clone())
             }
         } else {
-            supported
+            None
         };
 
         Ok(lsp::CodeActionParams {
@@ -2509,6 +2508,7 @@ impl LspCommand for GetCodeActions {
         server_id: LanguageServerId,
         cx: AsyncApp,
     ) -> Result<Vec<CodeAction>> {
+        dbg!(&actions);
         let requested_kinds_set = if let Some(kinds) = self.kinds {
             Some(kinds.into_iter().collect::<HashSet<_>>())
         } else {
@@ -2654,8 +2654,8 @@ impl GetCodeActions {
             Some(lsp::CodeActionProviderCapability::Options(CodeActionOptions {
                 code_action_kinds: Some(supported_action_kinds),
                 ..
-            })) => Some(supported_action_kinds.clone()),
-            _ => capabilities.code_action_kinds,
+            })) => Some(dbg!(supported_action_kinds.clone())),
+            _ => dbg!(capabilities.code_action_kinds),
         }
     }
 
