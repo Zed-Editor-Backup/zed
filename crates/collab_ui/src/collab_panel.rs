@@ -46,7 +46,6 @@ actions!(
     [
         ToggleFocus,
         Remove,
-        Secondary,
         CollapseSelectedChannel,
         ExpandSelectedChannel,
         StartMoveChannel,
@@ -2003,7 +2002,7 @@ impl CollabPanel {
 
     fn show_inline_context_menu(
         &mut self,
-        _: &Secondary,
+        _: &menu::SecondaryConfirm,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
