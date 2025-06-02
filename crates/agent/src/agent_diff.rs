@@ -1372,7 +1372,8 @@ impl AgentDiff {
             | ThreadEvent::ToolFinished { .. }
             | ThreadEvent::CheckpointChanged
             | ThreadEvent::ToolConfirmationNeeded
-            | ThreadEvent::CancelEditing => {}
+            | ThreadEvent::CancelEditing
+            | ThreadEvent::ProfileChanged => {}
         }
     }
 

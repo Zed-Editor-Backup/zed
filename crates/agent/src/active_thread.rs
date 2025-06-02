@@ -1135,6 +1135,10 @@ impl ActiveThread {
                     cx,
                 );
             }
+            ThreadEvent::ProfileChanged => {
+                self.save_thread(cx);
+                cx.notify();
+            }
         }
     }
 
