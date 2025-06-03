@@ -247,8 +247,9 @@ impl PickerDelegate for OpenPathDelegate {
                     Some(lister.list_directory(dir.clone(), cx))
                 }
             }
-            DirectoryState::Create { .. } => Some(lister.list_directory(dir.clone(), cx)),
-            DirectoryState::None { .. } => Some(lister.list_directory(dir.clone(), cx)),
+            DirectoryState::Create { .. } | DirectoryState::None { .. } => {
+                Some(lister.list_directory(dir.clone(), cx))
+            }
         };
         self.cancel_flag.store(true, atomic::Ordering::Release);
         self.cancel_flag = Arc::new(AtomicBool::new(false));
