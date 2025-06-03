@@ -261,6 +261,7 @@ impl PickerDelegate for RulePickerDelegate {
         let rule = self.matches.get(ix)?;
         let default = rule.default;
         let prompt_id = rule.id;
+
         let element = ListItem::new(ix)
             .inset(true)
             .spacing(ListItemSpacing::Sparse)
@@ -272,9 +273,10 @@ impl PickerDelegate for RulePickerDelegate {
                     .child(Label::new(rule.title.clone().unwrap_or("Untitled".into()))),
             )
             .end_slot::<IconButton>(default.then(|| {
-                IconButton::new("toggle-default-rule", IconName::SparkleFilled)
+                IconButton::new("toggle-default-rule", IconName::StarFilled)
                     .toggle_state(true)
                     .icon_color(Color::Accent)
+                    .icon_size(IconSize::Small)
                     .shape(IconButtonShape::Square)
                     .tooltip(Tooltip::text("Remove from Default Rules"))
                     .on_click(cx.listener(move |_, _, _, cx| {
@@ -283,7 +285,7 @@ impl PickerDelegate for RulePickerDelegate {
             }))
             .end_hover_slot(
                 h_flex()
-                    .gap_2()
+                    .gap_1()
                     .child(if prompt_id.is_built_in() {
                         div()
                             .id("built-in-rule")
@@ -299,8 +301,9 @@ impl PickerDelegate for RulePickerDelegate {
                             })
                             .into_any()
                     } else {
-                        IconButton::new("delete-rule", IconName::Trash)
+                        IconButton::new("delete-rule", IconName::TrashAlt)
                             .icon_color(Color::Muted)
+                            .icon_size(IconSize::Small)
                             .shape(IconButtonShape::Square)
                             .tooltip(Tooltip::text("Delete Rule"))
                             .on_click(cx.listener(move |_, _, _, cx| {
@@ -309,16 +312,27 @@ impl PickerDelegate for RulePickerDelegate {
                             .into_any_element()
                     })
                     .child(
-                        IconButton::new("toggle-default-rule", IconName::Sparkle)
+                        IconButton::new("toggle-default-rule", IconName::Star)
                             .toggle_state(default)
-                            .selected_icon(IconName::SparkleFilled)
+                            .selected_icon(IconName::StarFilled)
                             .icon_color(if default { Color::Accent } else { Color::Muted })
+                            .icon_size(IconSize::Small)
                             .shape(IconButtonShape::Square)
-                            .tooltip(Tooltip::text(if default {
-                                "Remove from Default Rules"
-                            } else {
-                                "Add to Default Rules"
-                            }))
+                            .map(|this| {
+                                if default {
+                                    this.tooltip(Tooltip::text("Remove from Default Rules"))
+                                } else {
+                                    this.tooltip(move |window, cx| {
+                                        Tooltip::with_meta(
+                                            "Add to Default Rules",
+                                            None,
+                                            "Always included in every thread.",
+                                            window,
+                                            cx,
+                                        )
+                                    })
+                                }
+                            })
                             .on_click(cx.listener(move |_, _, _, cx| {
                                 cx.emit(RulePickerEvent::ToggledDefault { prompt_id })
                             })),
@@ -1014,10 +1028,10 @@ impl RulesLibrary {
                         .child(
                             h_flex()
                                 .group("active-editor-header")
-                                .py_1()
-                                .px_2()
+                                .pt_2()
+                                .px_2p5()
+                                .gap_2()
                                 .justify_between()
-                                .debug_bg_blue()
                                 .child(
                                     div()
                                         .w_full()
@@ -1061,10 +1075,8 @@ impl RulesLibrary {
                                 )
                                 .child(
                                     h_flex()
-                                        .debug_bg_red()
                                         .h_full()
-                                        .flex_1()
-                                        .gap(DynamicSpacing::Base08.rems(cx))
+                                        .gap(DynamicSpacing::Base04.rems(cx))
                                         .children(rule_editor.token_count.map(|token_count| {
                                             let token_count: SharedString =
                                                 token_count.to_string().into();
@@ -1073,6 +1085,7 @@ impl RulesLibrary {
 
                                             div()
                                                 .id("token_count")
+                                                .mr_1()
                                                 .tooltip(move |window, cx| {
                                                     Tooltip::with_meta(
                                                         "Token Estimation",
@@ -1115,6 +1128,7 @@ impl RulesLibrary {
                                                 .into_any()
                                         } else {
                                             IconButton::new("delete-rule", IconName::TrashAlt)
+                                                .shape(IconButtonShape::Square)
                                                 .tooltip(move |window, cx| {
                                                     Tooltip::for_action(
                                                         "Delete Rule",
@@ -1130,7 +1144,8 @@ impl RulesLibrary {
                                                 .into_any_element()
                                         })
                                         .child(
-                                            IconButton::new("duplicate-rule", IconName::BookCopy)
+                                            IconButton::new("duplicate-rule", IconName::Copy)
+                                                .shape(IconButtonShape::Square)
                                                 .tooltip(move |window, cx| {
                                                     Tooltip::for_action(
                                                         "Duplicate Rule",
@@ -1148,6 +1163,7 @@ impl RulesLibrary {
                                         )
                                         .child(
                                             IconButton::new("toggle-default-rule", IconName::Star)
+                                                .shape(IconButtonShape::Square)
                                                 .toggle_state(rule_metadata.default)
                                                 .selected_icon(IconName::StarFilled)
                                                 .icon_color(if rule_metadata.default {
@@ -1155,11 +1171,23 @@ impl RulesLibrary {
                                                 } else {
                                                     Color::Muted
                                                 })
-                                                .tooltip(Tooltip::text(if rule_metadata.default {
-                                                    "Remove from Default Rules"
-                                                } else {
-                                                    "Add to Default Rules"
-                                                }))
+                                                .map(|this| {
+                                                    if rule_metadata.default {
+                                                        this.tooltip(Tooltip::text(
+                                                            "Remove from Default Rules",
+                                                        ))
+                                                    } else {
+                                                        this.tooltip(move |window, cx| {
+                                                            Tooltip::with_meta(
+                                                                "Add to Default Rules",
+                                                                None,
+                                                                "Always included in every thread.",
+                                                                window,
+                                                                cx,
+                                                            )
+                                                        })
+                                                    }
+                                                })
                                                 .on_click(|_, window, cx| {
                                                     window.dispatch_action(
                                                         Box::new(ToggleDefaultRule),
@@ -1179,7 +1207,7 @@ impl RulesLibrary {
                                 .child(
                                     h_flex()
                                         .py_2()
-                                        .pl_2()
+                                        .pl_2p5()
                                         .h_full()
                                         .flex_1()
                                         .child(rule_editor.body_editor.clone()),
