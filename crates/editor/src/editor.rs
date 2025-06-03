@@ -8961,7 +8961,9 @@ impl Editor {
                             })
                         })
                         .collect::<Vec<_>>();
-                    tabstop_ranges.sort_unstable_by(|a, b| a.start.cmp(&b.start, snapshot));
+                    // Sort in reverse order so that the first range is the newest created
+                    // selection. Completions will use it and autoscroll will prioritize it.
+                    tabstop_ranges.sort_unstable_by(|a, b| b.start.cmp(&a.start, snapshot));
 
                     Tabstop {
                         is_end_tabstop,
