@@ -294,6 +294,7 @@ pub enum DebugStackFrameLine {}
 enum DocumentHighlightRead {}
 enum DocumentHighlightWrite {}
 enum InputComposition {}
+enum PendingInput {}
 enum SelectedTextHighlight {}
 
 pub enum ConflictsOuter {}
@@ -1760,6 +1761,8 @@ impl Editor {
         cx.on_focus_out(&focus_handle, window, Self::handle_focus_out)
             .detach();
         cx.on_blur(&focus_handle, window, Self::handle_blur)
+            .detach();
+        cx.observe_pending_input(window, Self::observe_pending_input)
             .detach();
 
         let show_indent_guides = if matches!(mode, EditorMode::SingleLine { .. }) {
@@ -19355,6 +19358,84 @@ impl Editor {
         self.discard_inline_completion(false, cx);
         cx.emit(EditorEvent::Blurred);
         cx.notify();
+    }
+
+    pub fn observe_pending_input(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        let mut pending: String = window
+            .pending_input_keystrokes()
+            .into_iter()
+            .flatten()
+            .filter_map(|keystroke| {
+                if keystroke.modifiers.is_subset_of(&Modifiers::shift()) {
+                    Some(keystroke.key_char.clone().unwrap_or(keystroke.key.clone()))
+                } else {
+                    None
+                }
+            })
+            .collect();
+        if !self.input_enabled || self.read_only || !self.focus_handle.is_focused(window) {
+            pending = "".to_string();
+        }
+
+        let transaction = self.transact(window, cx, |this, window, cx| {
+            let existing_pending = this
+                .text_highlights::<PendingInput>(cx)
+                .map(|(_, ranges)| ranges.iter().cloned().collect::<Vec<_>>());
+            if existing_pending.is_none() && pending.is_empty() {
+                return;
+            }
+
+            let ranges = if let Some(existing_ranges) = existing_pending {
+                let edits = existing_ranges
+                    .iter()
+                    .map(|range| (range.clone(), pending.clone()));
+                this.edit(edits, cx);
+                existing_ranges
+            } else {
+                let ranges = this
+                    .selections
+                    .all::<usize>(cx)
+                    .into_iter()
+                    .map(|selection| selection.start..selection.start + pending.len())
+                    .collect::<Vec<_>>();
+                this.insert(&pending, window, cx);
+                let snapshot = this.snapshot(window, cx);
+                ranges
+                    .into_iter()
+                    .map(|range| {
+                        snapshot.buffer_snapshot.anchor_after(range.start)
+                            ..snapshot.buffer_snapshot.anchor_before(range.end)
+                    })
+                    .collect()
+            };
+            if pending.is_empty() {
+                this.clear_highlights::<PendingInput>(cx);
+            } else {
+                this.highlight_text::<PendingInput>(
+                    ranges,
+                    HighlightStyle {
+                        underline: Some(UnderlineStyle {
+                            thickness: px(1.),
+                            color: None,
+                            wavy: false,
+                        }),
+                        ..Default::default()
+                    },
+                    cx,
+                );
+            }
+        });
+
+        self.ime_transaction = self.ime_transaction.or(transaction);
+        if let Some(transaction) = self.ime_transaction {
+            self.buffer.update(cx, |buffer, cx| {
+                buffer.group_until_transaction(transaction, cx);
+            });
+        }
+
+        if self.text_highlights::<PendingInput>(cx).is_none() {
+            self.ime_transaction.take();
+        }
     }
 
     pub fn register_action<A: Action>(
