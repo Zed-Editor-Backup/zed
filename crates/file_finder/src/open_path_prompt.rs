@@ -247,13 +247,7 @@ impl PickerDelegate for OpenPathDelegate {
                     Some(lister.list_directory(dir.clone(), cx))
                 }
             }
-            DirectoryState::Create { parent_path, .. } => {
-                if parent_path == &dir {
-                    None
-                } else {
-                    Some(lister.list_directory(dir.clone(), cx))
-                }
-            }
+            DirectoryState::Create { .. } => Some(lister.list_directory(dir.clone(), cx)),
             DirectoryState::None { .. } => Some(lister.list_directory(dir.clone(), cx)),
         };
         self.cancel_flag.store(true, atomic::Ordering::Release);
@@ -365,6 +359,21 @@ impl PickerDelegate for OpenPathDelegate {
                             string: m.path.string.clone(),
                         })
                         .collect();
+                    this.delegate.directory_state =
+                        match &this.delegate.directory_state {
+                            DirectoryState::None { create: false }
+                            | DirectoryState::List { .. } => DirectoryState::List {
+                                parent_path: dir.clone(),
+                                entries: new_entries,
+                                error: None,
+                            },
+                            DirectoryState::None { create: true }
+                            | DirectoryState::Create { .. } => DirectoryState::Create {
+                                parent_path: dir.clone(),
+                                user_input: None,
+                                entries: new_entries,
+                            },
+                        };
                     cx.notify();
                 })
                 .ok();
