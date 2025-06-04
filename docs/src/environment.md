@@ -90,3 +90,34 @@ These language server processes always inherit Zed's process environment. But, d
 
 - If the language server was found in the project environment's `$PATH`, then the project environment's is passed along to the language server process. Where the project environment comes from depends on how the project was opened, via CLI or not. See previous point on look-up of language servers.
 - If the language servers was not found in the project environment, Zed tries to install it globally and start it globally. In that case, the process will inherit Zed's process environment, and — if the project was opened via ClI — from the CLI.
+
+### GITHUB_TOKEN
+
+The `GITHUB_TOKEN` environment variable is used to authenticate requests to GitHub's API. This is particularly useful for avoiding rate limits when downloading language servers, extensions, or other resources from GitHub. This is also necessary if you have a GitHub Enterprise account, as there are increased permissions required to access avatars and other resources related to enterprise user accounts.
+
+Without authentication, GitHub limits API requests to 60 per hour per IP address. With a valid `GITHUB_TOKEN`, this limit increases to 5,000 requests per hour.
+
+#### Setting up GITHUB_TOKEN
+
+1. Create a GitHub Personal Access Token:
+
+   - Go to GitHub Settings → Developer settings → Personal access tokens
+   - Create a new token (classic or fine-grained)
+   - No special scopes are required for public repository access
+
+2. Set the environment variable before starting Zed:
+   ```bash
+   export GITHUB_TOKEN=your_personal_access_token
+   zed
+   ```
+
+The token will be automatically used for requests to:
+
+- `api.github.com`
+- `github.com`
+- `avatars.githubusercontent.com`
+- `raw.githubusercontent.com`
+- `uploads.github.com`
+- `gist.github.com`
+
+This helps prevent "API rate limit exceeded" errors when installing or updating language servers that are downloaded from GitHub releases.
